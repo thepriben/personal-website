@@ -3,10 +3,11 @@ layout: default
 title: Tech Publications
 ---
 
-#### Tech Books
+### Tech Books
 
 <div class="lines">
 
-* *Framework PyQt — Développez vos interfaces graphiques en Python avec PyQt6*, Éditions ENI, June 2025, ISBN 978-2-409-05005-3, 357 p.
+* *Framework PyQt — Développez vos interfaces graphiques en Python avec PyQt6*,  
+  Éditions ENI — June 2025 — ISBN 978-2-409-05005-3 — 357 p.
 
 </div>
