@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Benoît Prieur — Livres
+title: Tech Publications
 ---
 
 #### Tech Books
