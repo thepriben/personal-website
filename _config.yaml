@@ -1,0 +1,6 @@
+title: "Tech Publications"
+description: "Tech Books, Articles & Videos"
+theme: null
+markdown: kramdown
+kramdown:
+  input: GFM
