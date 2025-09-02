@@ -1,0 +1,134 @@
+
+body {
+  margin: 0;
+  font-family: 'Times New Roman';
+  background: #fff;
+  color: #000;
+}
+
+header {
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  gap: 0.5rem; 
+  padding: 0.5rem;
+  text-align: center;
+}
+
+nav a {
+  flex: 1 1 auto; 
+  min-width: 120px; 
+  text-decoration: none;
+  color: gray;
+  font-family: Georgia, serif;
+  font-size: 0.6rem;
+  text-align: center;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.main {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+img.index {
+  max-width: 25%;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.caption {
+  font-size: 0.7rem;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.experience-box {
+  background-color: #ffffff;
+  padding: 10px;
+  margin: 40px auto;
+  width: 80%; 
+  border-radius: 10px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.books-section {
+  font-size: 0.55rem;
+}
+
+.books-section table {
+  color: gray;
+  border-collapse: collapse; 
+  margin-left: auto; 
+  margin-right: auto;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.55rem;
+}
+
+.books-section td {
+  padding: 10px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.books-section img {
+  max-width: 100px;
+  border-radius: 5px;
+}
+
+    .drapeau-france {
+  display: inline-block;
+  width: 15px;
+  height: 10px;
+  background: linear-gradient(to right, blue 33.33%, white 33.33%, white 66.66%, red 66.66%);
+  border: 0px solid black;
+}
+
+.drapeau-espagne {
+  display: inline-block;
+  width: 15px;  
+  height: 10px;
+  background: linear-gradient(to bottom, red 25%, yellow 25%, yellow 75%, red 75%);
+  border: 0px solid black;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 13px;
+  color: white;
+}
+
+a {
+  color: gray;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h2 {
+  color: gray;
+  font-size: 0.55rem;
+  font-weight: normal;
+  font-family: Georgia, serif;
+}
+
+li {
+  line-height: 1.6;
+}
