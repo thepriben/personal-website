@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   font-family: 'Times New Roman';
@@ -12,16 +13,16 @@ header {
 
 nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; 
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.5rem; 
   padding: 0.5rem;
   text-align: center;
 }
 
 nav a {
-  flex: 1 1 auto;
-  min-width: 120px;
+  flex: 1 1 auto; 
+  min-width: 120px; 
   text-decoration: none;
   color: gray;
   font-family: Georgia, serif;
@@ -59,7 +60,7 @@ img.index {
   background-color: #ffffff;
   padding: 10px;
   margin: 40px auto;
-  width: 80%;
+  width: 80%; 
   border-radius: 10px;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
 }
@@ -70,8 +71,8 @@ img.index {
 
 .books-section table {
   color: gray;
-  border-collapse: collapse;
-  margin-left: auto;
+  border-collapse: collapse; 
+  margin-left: auto; 
   margin-right: auto;
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 0.55rem;
@@ -88,7 +89,7 @@ img.index {
   border-radius: 5px;
 }
 
-.drapeau-france {
+    .drapeau-france {
   display: inline-block;
   width: 15px;
   height: 10px;
@@ -98,7 +99,7 @@ img.index {
 
 .drapeau-espagne {
   display: inline-block;
-  width: 15px;
+  width: 15px;  
   height: 10px;
   background: linear-gradient(to bottom, red 25%, yellow 25%, yellow 75%, red 75%);
   border: 0px solid black;
@@ -133,20 +134,21 @@ li {
 }
 
 footer {
-  margin-top: 20px;
-  text-align: center;
-  padding: 12px;
+  margin-top: 50px;
+  margin-left: 25px;
+  margin-right: 25px;
+  text-align: left;
+  padding: 25px;
   font-size: 13px;
-  color: #555;
-  border-top: 1px dotted #bbb;
-  border-bottom: 1px dotted #bbb;
+  border-top: 1px solid #ccc;
+  background: #fff;
 }
 
 footer a {
-  color: inherit;
+  color: gray;      
   text-decoration: none;
 }
 
 footer a:hover {
-  text-decoration: underline;
+  text-decoration: underline; 
 }
