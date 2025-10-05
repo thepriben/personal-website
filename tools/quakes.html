@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Q8WHXGDDWG');
+  </script>
+  <title>Last 10 Earthquakes in Los Angeles</title>
+  <meta name="description" content="Live map of the last 5 earthquakes near Los Angeles">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #map {
+      width: 100%;
+      height: calc(100vh - 120px);
+    }
+
+    .controls {
+      position: absolute;
+      z-index: 1000;
+      top: 70px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 8px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      font-size: 14px;
+    }
+
+    .legend {
+      position: absolute;
+      z-index: 1000;
+      bottom: 50px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Nouvelle palette jaune → orange → rouge */
+    .dot.m0 {
+      background: #fff7bc;
+    }
+
+    /* light yellow */
+    .dot.m2 {
+      background: #fee391;
+    }
+
+    /* pale yellow */
+    .dot.m3 {
+      background: #fec44f;
+    }
+
+    /* orange-yellow */
+    .dot.m4 {
+      background: #fe9929;
+    }
+
+    /* orange */
+    .dot.m5 {
+      background: #cc4c02;
+    }
+
+    /* dark orange-brown */
+
+    footer {
+      border-top: 1px dotted #999;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    footer a {
+      font-size: 13px;
+      color: #333;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../tech_books.html">Tech Books</a>
+      <a href="../tech_articles.html">Tech Articles</a>
+      <a href="../tech_videos.html">Tech Videos</a>
+    </nav>
+  </header>
+
+  <div id="map"></div>
+
+  <div class="controls">
+    <strong>Last 5 earthquakes (~150 km from LA)</strong>
+    <button id="refreshBtn">↻ Refresh</button>
+    <span id="updated">—</span>
+  </div>
+
+  <div class="legend">
+    <div><strong>Magnitude (Mw)</strong></div>
+    <div><span class="dot m0"></span> &lt; 2.0</div>
+    <div><span class="dot m2"></span> 2.0–2.9</div>
+    <div><span class="dot m3"></span> 3.0–3.9</div>
+    <div><span class="dot m4"></span> 4.0–4.9</div>
+    <div><span class="dot m5"></span> ≥ 5.0</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
+    </script>
+  <script>
+    const LA = { lat: 34.0522, lon: -118.2437 };
+    const R_KM = 150;
+    const USGS_URL = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&limit=5&latitude=${LA.lat}&longitude=${LA.lon}&maxradiuskm=${R_KM}&eventtype=earthquake`;
+
+    const map = L.map('map').setView([LA.lat, LA.lon], 8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let markersLayer = L.layerGroup().addTo(map);
+
+    function magClass(m) {
+      if (m >= 5) return 'm5';
+      if (m >= 4) return 'm4';
+      if (m >= 3) return 'm3';
+      if (m >= 2) return 'm2';
+      return 'm0';
+    }
+    function circleStyle(mag) {
+      const base = 1200;
+      const r = Math.max(200, base * Math.pow(Math.max(mag, 0.1), 1.5));
+      return { radius: r / (map.getZoom() * 2.5), color: '#222', weight: 0.8, fillOpacity: 0.65 };
+    }
+    function formatPopup(props, coords) {
+      const tz = 'America/Los_Angeles';
+      const dt = new Date(props.time);
+      const local = dt.toLocaleString('en-US', { timeZone: tz, hour12: false });
+      const depthKm = (coords[2] || 0).toFixed(1);
+      const mag = (props.mag ?? '—');
+      const place = props.place || '—';
+      const url = props.url || props.detail || '#';
+      return `
+      <div style="min-width:220px;">
+        <div><strong>Magnitude Mw ${mag}</strong></div>
+        <div><strong>When:</strong> ${local} (LA time)</div>
+        <div><strong>Depth:</strong> ${depthKm} km</div>
+        <div><strong>Location:</strong> ${place}</div>
+        <a href="${url}" target="_blank">USGS Details</a>
+      </div>`;
+    }
+    async function loadQuakes() {
+      try {
+        document.getElementById('updated').textContent = 'loading…';
+        const res = await fetch(USGS_URL, { cache: 'no-store' });
+        const data = await res.json();
+        markersLayer.clearLayers();
+        const bounds = [];
+        (data.features || []).forEach(f => {
+          const props = f.properties || {};
+          const [lon, lat, depth] = f.geometry.coordinates;
+          const mag = props.mag ?? 0;
+          const marker = L.circleMarker([lat, lon], circleStyle(mag));
+          const colorMap = {
+            m0: '#fff7bc',
+            m2: '#fee391',
+            m3: '#fec44f',
+            m4: '#fe9929',
+            m5: '#cc4c02'
+          };
+          marker.setStyle({ fillColor: colorMap[magClass(mag)] });
+          marker.bindPopup(formatPopup(props, [lon, lat, depth]));
+          marker.addTo(markersLayer);
+          bounds.push([lat, lon]);
+        });
+        if (bounds.length) map.fitBounds(L.latLngBounds(bounds).pad(0.2));
+        document.getElementById('updated').textContent = `Updated: ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })}`;
+      } catch {
+        document.getElementById('updated').textContent = 'error loading';
+      }
+    }
+    document.getElementById('refreshBtn').addEventListener('click', loadQuakes);
+    loadQuakes();
+    setInterval(loadQuakes, 60000);
+  </script>
+</body>
+
+</html>
