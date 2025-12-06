@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Google tag (gtag.js) -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Live map of the last 5 earthquakes near Los Angeles" />
+  <title>Last 10 Earthquakes in Los Angeles</title>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    function gtag() {
+      dataLayer.push(arguments);
+    }
     gtag('js', new Date());
     gtag('config', 'G-Q8WHXGDDWG');
   </script>
-  <title>Last 10 Earthquakes in Los Angeles</title>
-  <meta name="description" content="Live map of the last 5 earthquakes near Los Angeles">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -65,27 +65,21 @@
       background: #fff7bc;
     }
 
-    /* light yellow */
     .dot.m2 {
       background: #fee391;
     }
 
-    /* pale yellow */
     .dot.m3 {
       background: #fec44f;
     }
 
-    /* orange-yellow */
     .dot.m4 {
       background: #fe9929;
     }
 
-    /* orange */
     .dot.m5 {
       background: #cc4c02;
     }
-
-    /* dark orange-brown */
 
     footer {
       border-top: 1px dotted #999;
@@ -114,30 +108,30 @@
       <a href="../tech_books.html">Tech Books</a>
       <a href="../tech_articles.html">Tech Articles</a>
       <a href="../tech_videos.html">Tech Videos</a>
-      <a href="../tools.html">Tools & resources</a>
+      <a href="../tools.html">Tools &amp; Resources</a>
     </nav>
   </header>
 
-  <div id="map"></div>
+  <main>
+    <div id="map"></div>
 
-  <div class="controls">
-    <strong>Last 5 earthquakes (~150 km from LA)</strong>
-    <button id="refreshBtn">↻ Refresh</button>
-    <span id="updated">—</span>
-  </div>
+    <div class="controls">
+      <strong>Last 5 earthquakes (~150 km from LA)</strong>
+      <button id="refreshBtn">↻ Refresh</button>
+      <span id="updated">—</span>
+    </div>
 
-  <div class="legend">
-    <div><strong>Magnitude (Mw)</strong></div>
-    <div><span class="dot m0"></span> &lt; 2.0</div>
-    <div><span class="dot m2"></span> 2.0–2.9</div>
-    <div><span class="dot m3"></span> 3.0–3.9</div>
-    <div><span class="dot m4"></span> 4.0–4.9</div>
-    <div><span class="dot m5"></span> ≥ 5.0</div>
-  </div>
+    <div class="legend">
+      <div><strong>Magnitude (Mw)</strong></div>
+      <div><span class="dot m0"></span> &lt; 2.0</div>
+      <div><span class="dot m2"></span> 2.0–2.9</div>
+      <div><span class="dot m3"></span> 3.0–3.9</div>
+      <div><span class="dot m4"></span> 4.0–4.9</div>
+      <div><span class="dot m5"></span> ≥ 5.0</div>
+    </div>
+  </main>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
-    </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     const LA = { lat: 34.0522, lon: -118.2437 };
     const R_KM = 150;

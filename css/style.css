@@ -1,37 +1,181 @@
-
 body {
   margin: 0;
-  font-family: 'Times New Roman';
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Segoe UI",
+    sans-serif;
   background: #fff;
-  color: #000;
+  color: #9ca3af;
+  line-height: 1.7;
+  font-size: 16px;
 }
 
 header {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #e5e7eb;
   background: #fff;
 }
 
 nav {
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem; 
-  padding: 0.5rem;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
   text-align: center;
 }
 
 nav a {
-  flex: 1 1 auto; 
-  min-width: 120px; 
+  flex: 1 1 auto;
+  min-width: 120px;
   text-decoration: none;
-  color: gray;
-  font-family: Georgia, serif;
-  font-size: 0.6rem;
+  color: #9ca3af;
+  font-family: inherit;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   text-align: center;
 }
 
 nav a:hover {
   text-decoration: underline;
+}
+
+.experience-box {
+  background-color: #fff;
+  padding: 16px;
+  margin: 40px auto;
+  width: 80%;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.books-section {
+  font-size: 0.8rem;
+}
+
+table.books-section {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.books-section tr {
+  border-bottom: 1px dotted rgba(156, 163, 175, 0.4);
+}
+
+table.books-section tr:last-child {
+  border-bottom: none;
+}
+
+table.books-section td {
+  padding: 20px 8px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.books-section h2,
+table.books-section td > i:first-of-type {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-left: 2px solid rgba(156, 163, 175, 0.7);
+  padding-left: 6px;
+  color: #989ba1;
+}
+
+.books-section h2 {
+  margin: 20px 0 8px;
+}
+
+table.books-section td > i:first-of-type {
+  margin-bottom: 0.35rem;
+}
+
+.books-section ul {
+  margin: 0.25rem 0 0 1rem;
+  padding: 0;
+}
+
+.books-section img {
+  max-width: 140px;
+  border-radius: 5px;
+  display: block;
+  margin-left: auto;
+}
+
+.books-section sup a {
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.footnote {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.drapeau-france {
+  display: inline-block;
+  width: 15px;
+  height: 10px;
+  background: linear-gradient(
+    to right,
+    blue 33.33%,
+    white 33.33%,
+    white 66.66%,
+    red 66.66%
+  );
+  border: 0;
+  vertical-align: middle;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
+.drapeau-espagne {
+  display: inline-block;
+  width: 15px;
+  height: 10px;
+  background: linear-gradient(
+    to bottom,
+    red 33.33%,
+    yellow 25%,
+    yellow 75%,
+    red 66.66%
+  );
+  border: 0;
+  vertical-align: middle;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: white;
+  background: #9ca3af;
+}
+
+a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3 {
+  font-family: inherit;
+  color: #9ca3af;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .main {
@@ -41,94 +185,16 @@ nav a:hover {
   text-align: center;
 }
 
-img.index {
-  max-width: 25%;
+.main img.index {
+  display: block;
+  max-width: 220px;
   height: auto;
   border-radius: 10px;
-  margin-top: 1rem;
+  margin: 1rem auto 0 auto;
 }
 
 .caption {
-  font-size: 0.7rem;
-  color: #666;
-  font-style: italic;
-  text-align: center;
+  font-size: 0.75rem;
   margin-top: 0.5rem;
-}
-
-.experience-box {
-  background-color: #ffffff;
-  padding: 10px;
-  margin: 40px auto;
-  width: 80%; 
-  border-radius: 10px;
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
-}
-
-.books-section {
-  font-size: 0.55rem;
-}
-
-.books-section table {
-  color: gray;
-  border-collapse: collapse; 
-  margin-left: auto; 
-  margin-right: auto;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: 0.55rem;
-}
-
-.books-section td {
-  padding: 10px;
-  vertical-align: top;
-  text-align: left;
-}
-
-.books-section img {
-  max-width: 100px;
-  border-radius: 5px;
-}
-
-    .drapeau-france {
-  display: inline-block;
-  width: 15px;
-  height: 10px;
-  background: linear-gradient(to right, blue 33.33%, white 33.33%, white 66.66%, red 66.66%);
-  border: 0px solid black;
-}
-
-.drapeau-espagne {
-  display: inline-block;
-  width: 15px;  
-  height: 10px;
-  background: linear-gradient(to bottom, red 25%, yellow 25%, yellow 75%, red 75%);
-  border: 0px solid black;
-}
-
-.tag {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 5px;
-  font-size: 13px;
-  color: white;
-}
-
-a {
-  color: gray;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-h2 {
-  color: gray;
-  font-size: 0.55rem;
-  font-weight: normal;
-  font-family: Georgia, serif;
-}
-
-li {
-  line-height: 1.6;
+  text-align: center;
 }
