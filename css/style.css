@@ -97,6 +97,23 @@ table.books-section td.cover-placeholder {
   min-height: 1px;
 }
 
+/* Articles: utiliser toute la largeur et masquer la colonne jaquette */
+body.page-articles .experience-box {
+  width: min(1100px, calc(100% - 32px));
+}
+
+body.page-articles table.books-section {
+  table-layout: auto;
+}
+
+body.page-articles table.books-section td.info-cell {
+  width: 100%;
+}
+
+body.page-articles table.books-section td.cover-cell {
+  display: none;
+}
+
 .books-section h2,
 table.books-section td > i:first-of-type {
   display: inline-block;
