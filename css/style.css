@@ -19,6 +19,17 @@ body {
   scrollbar-gutter: stable;
 }
 
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+small {
+  font-family: inherit;
+}
+
 header {
   border-bottom: 1px solid #e5e7eb;
   background: #fff;
@@ -173,6 +184,10 @@ table.books-section td > i:first-of-type {
   vertical-align: middle;
   margin-left: 4px;
   margin-bottom: 4px;
+}
+
+.flag-keep {
+  white-space: nowrap;
 }
 
 .drapeau-espagne {
