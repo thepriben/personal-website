@@ -209,6 +209,75 @@ table.books-section td > i:first-of-type {
   margin-bottom: 4px;
 }
 
+.drapeau-royaume-uni {
+  display: inline-block;
+  width: 15px;
+  height: 10px;
+  background:
+    linear-gradient(
+      to right,
+      transparent 43%,
+      #C8102E 43%,
+      #C8102E 57%,
+      transparent 57%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 43%,
+      #C8102E 43%,
+      #C8102E 57%,
+      transparent 57%
+    ),
+    linear-gradient(
+      to right,
+      transparent 36%,
+      #FFFFFF 36%,
+      #FFFFFF 64%,
+      transparent 64%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 36%,
+      #FFFFFF 36%,
+      #FFFFFF 64%,
+      transparent 64%
+    ),
+    linear-gradient(
+      45deg,
+      transparent 45%,
+      #C8102E 45%,
+      #C8102E 55%,
+      transparent 55%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 45%,
+      #C8102E 45%,
+      #C8102E 55%,
+      transparent 55%
+    ),
+    linear-gradient(
+      45deg,
+      transparent 38%,
+      #FFFFFF 38%,
+      #FFFFFF 62%,
+      transparent 62%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 38%,
+      #FFFFFF 38%,
+      #FFFFFF 62%,
+      transparent 62%
+    ),
+    #012169;
+  background-repeat: no-repeat;
+  border: 0;
+  vertical-align: middle;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
 .tag {
   display: inline-block;
   padding: 2px 8px;
@@ -243,6 +312,56 @@ h3 {
   text-align: center;
 }
 
+.last-book {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 1.6rem auto 0;
+  padding: 1.1rem 1.35rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.last-book .tag {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #9ca3af;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.last-book img.index {
+  margin: 0;
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
+}
+
+.last-book .caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+}
+
+.last-book-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.last-book-meta {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.last-book .book-title {
+  font-weight: 400;
+}
+
 .main img.index {
   display: block;
   max-width: 220px;
@@ -255,4 +374,50 @@ h3 {
   font-size: 0.75rem;
   margin-top: 0.5rem;
   text-align: center;
+}
+
+.language-note {
+  margin: 0.75rem auto 0;
+  padding: 0.5rem 0.75rem;
+  max-width: 340px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+  font-size: 0.7rem;
+  color: #6b7280;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.language-note p {
+  margin: 0;
+}
+
+.language-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.language-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 0.65rem;
+  color: #6b7280;
+  letter-spacing: 0.01em;
+}
+
+.language-pill .drapeau-royaume-uni,
+.language-pill .drapeau-espagne {
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  flex: 0 0 auto;
 }
