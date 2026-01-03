@@ -321,7 +321,8 @@ h3 {
   padding: 1.1rem 1.35rem 1.25rem;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
-  background: #f9fafb;
+  background: #fff;
+  max-width: 340px;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
 }
 
