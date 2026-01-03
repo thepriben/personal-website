@@ -318,11 +318,13 @@ h3 {
   align-items: center;
   gap: 0.45rem;
   margin: 1.6rem auto 0;
-  padding: 1.1rem 1.35rem 1.25rem;
+  padding: 1.1rem 0.75rem 1.25rem;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
   background: #fff;
+  width: 340px;
   max-width: 340px;
+  box-sizing: border-box;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
 }
 
@@ -380,7 +382,9 @@ h3 {
 .language-note {
   margin: 0.75rem auto 0;
   padding: 0.5rem 0.75rem;
+  width: 340px;
   max-width: 340px;
+  box-sizing: border-box;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   background: #f9fafb;
