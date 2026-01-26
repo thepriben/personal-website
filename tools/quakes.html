@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Live map of the last 5 earthquakes near Los Angeles" />
-  <title>Last 10 Earthquakes in Los Angeles</title>
+  <title>Last 5 Earthquakes in Los Angeles</title>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -89,20 +89,20 @@
       background: #cc4c02;
     }
 
-    footer {
+    .quakes-footer {
       border-top: 1px dotted #999;
       text-align: center;
       padding: 10px;
       font-size: 14px;
     }
 
-    footer a {
+    .quakes-footer a {
       font-size: 13px;
       color: #333;
       text-decoration: none;
     }
 
-    footer a:hover {
+    .quakes-footer a:hover {
       text-decoration: underline;
     }
   </style>
@@ -215,6 +215,12 @@
     loadQuakes();
     setInterval(loadQuakes, 60000);
   </script>
-</body>
 
+  <footer>
+    <a href="https://orcid.org/0000-0003-0786-0049" target="_blank" rel="noopener" class="footer-orcid">
+      <img src="../images/orcid.svg" alt="ORCID logo" />
+      0000-0003-0786-0049
+    </a>
+  </footer>
+</body>
 </html>
