@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Tech articles by Benoît Prieur" />
-  <title>Tech Articles</title>
+  <meta name="description" content="Tech articles and book chapters by Benoît Prieur" />
+  <title>Tech Articles/Chapters</title>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -21,18 +21,27 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="tech_books.html">Tech Books</a>
-      <a href="tech_articles.html">Tech Articles</a>
+      <a href="tech_articles.html">Tech Articles/Chapters</a>
       <a href="tech_videos.html">Tech Videos</a>
     </nav>
   </header>
 
   <main>
+    <nav class="section-nav">
+      <a href="#ai">AI</a>
+      <span class="sep">·</span>
+      <a href="#quantum">Quantum</a>
+      <span class="sep">·</span>
+      <a href="#software">Software</a>
+      <span class="sep">·</span>
+      <a href="#vintage">Vintage</a>
+    </nav>
     <div class="experience-box books-section">
       <table class="books-section">
         <tbody>
           <tr>
             <td class="books-section info-cell">
-              <h2>AI &amp; Natural Language Processing (NLP)</h2>
+              <h2 id="ai">AI &amp; Natural Language Processing (NLP)</h2>
               <ul>
                 <li><i>Genkit Go : orchestrer des services IA en langage Go avec Google AI</i>, 2025,
                   <i>Programmez!</i> hors-série n°21, pp. 56-58 (<a
@@ -59,7 +68,7 @@
           </tr>
           <tr>
             <td class="books-section info-cell">
-              <h2>Quantum</h2>
+              <h2 id="quantum">Quantum</h2>
               <ul>
                 <li><i>« Quantum-Backed Integrity for Industrial Blockchain Events: A Secure Logging Framework Using Qiskit and Ethereum »</i>. In: Barbaresco, F., Gerin, F. (eds) Quantum Engineering Sciences and Technologies for Industry and Services. QUEST-IS 2025. Communications in Computer and Information Science, vol 2744, pp. 346-351. Springer, Cham, 2026 (<a href="https://doi.org/10.1007/978-3-032-13855-2_32">doi</a>). <span class="drapeau-royaume-uni"></span>
                 </li>
@@ -99,7 +108,7 @@
           </tr>
           <tr>
             <td class="books-section info-cell">
-              <h2>Software programming</h2>
+              <h2 id="software">Software programming</h2>
               <ul>
                 <li><i>Construire une application d’entraînement aux échecs avec PyQt6, python-chess et Stockfish</i>, 2025,
                   <i>Programmez!</i> n°272, pp. 31-33 (<a
@@ -135,7 +144,7 @@
           </tr>
           <tr>
             <td class="books-section info-cell">
-              <h2>Vintage computing</h2>
+              <h2 id="vintage">Vintage computing</h2>
               <ul>
                 <li><i>À la découverte du musée Apple de Prague</i>, 2020, <i>Technosaures</i> n°2, pp.13-15 (<a
                     href="https://www.programmez.com/technosaures/technosaures-2">link</a>).</li>
@@ -153,8 +162,7 @@
 
   <footer>
     <a href="https://orcid.org/0000-0003-0786-0049" target="_blank" rel="noopener" class="footer-orcid">
-      <img src="images/orcid.svg" alt="ORCID logo" />
-      0000-0003-0786-0049
+      <img src="images/orcid.svg" alt="ORCID" />
     </a>
   </footer>
 </body>

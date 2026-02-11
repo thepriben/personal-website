@@ -27,6 +27,7 @@ main {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #d1d5db transparent;
+  scroll-behavior: smooth;
 }
 
 main::-webkit-scrollbar {
@@ -199,6 +200,32 @@ table.books-section td > i:first-of-type {
   margin-top: 12px;
   font-size: 0.75rem;
   color: #9ca3af;
+}
+
+/* Section navigation */
+.section-nav {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 0.75rem 0;
+  text-align: center;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.section-nav a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.section-nav a:hover {
+  color: #6b7280;
+  text-decoration: underline;
+}
+
+.section-nav .sep {
+  color: #d1d5db;
+  margin: 0 0.1rem;
 }
 
 .drapeau-france {
@@ -465,26 +492,13 @@ footer {
   flex-shrink: 0;
   padding: 1rem;
   border-top: 1px solid #e5e7eb;
-  text-align: center;
   background: #fff;
-}
-
-.footer-orcid {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: #9ca3af;
-  text-decoration: none;
-  font-size: 0.65rem;
-  transition: color 0.2s ease;
-}
-
-.footer-orcid:hover {
-  color: #6b7280;
-  text-decoration: none;
+  display: flex;
+  justify-content: center;
 }
 
 .footer-orcid img {
+  display: block;
   width: 24px;
   height: 24px;
 }
