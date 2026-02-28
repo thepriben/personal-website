@@ -1,5 +1,12 @@
 (function () {
-  const STORAGE_KEY = 'theme';
+  var STORAGE_KEY = 'theme';
+  function getIconPaths() {
+    var btn = document.getElementById('theme-toggle');
+    if (btn && btn.dataset.iconSun) {
+      return { sun: btn.dataset.iconSun, moon: btn.dataset.iconMoon };
+    }
+    return { sun: 'images/sun.svg', moon: 'images/moon.svg' };
+  }
 
   function getStoredTheme() {
     return localStorage.getItem(STORAGE_KEY);
@@ -16,20 +23,30 @@
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(STORAGE_KEY, theme);
+    updateIcon(theme);
+  }
+
+  function updateIcon(theme) {
+    var img = document.getElementById('theme-icon');
+    if (img) {
+      var paths = getIconPaths();
+      img.src = theme === 'dark' ? paths.sun : paths.moon;
+    }
   }
 
   function toggleTheme() {
-    const current = getTheme();
-    const next = current === 'light' ? 'dark' : 'light';
+    var current = getTheme();
+    var next = current === 'light' ? 'dark' : 'light';
     setTheme(next);
   }
 
-  // Init on load (avoids flash when combined with inline script in head)
   setTheme(getTheme());
 
-  // Attach click handler when DOM is ready
   document.addEventListener('DOMContentLoaded', function () {
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.addEventListener('click', toggleTheme);
+    var btn = document.getElementById('theme-toggle');
+    if (btn) {
+      btn.addEventListener('click', toggleTheme);
+      updateIcon(getTheme());
+    }
   });
 })();
