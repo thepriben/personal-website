@@ -14,16 +14,25 @@
     gtag('js', new Date());
     gtag('config', 'G-Q8WHXGDDWG');
   </script>
+  <script>
+    (function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+  </script>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="tech_books.html">Tech Books</a>
-      <a href="tech_articles.html">Tech Articles/Chapters</a>
-      <a href="tech_videos.html">Tech Videos</a>
-    </nav>
+    <div class="header-inner">
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="tech_books.html">Tech Books</a>
+        <a href="tech_articles.html">Tech Articles/Chapters</a>
+        <a href="tech_videos.html">Tech Videos</a>
+      </nav>
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="icon-sun"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+        <span class="icon-moon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      </button>
+    </div>
   </header>
 
   <main>
@@ -52,5 +61,6 @@
       <img src="images/orcid.svg" alt="ORCID" />
     </a>
   </footer>
+  <script src="js/theme.js" defer></script>
 </body>
 </html>
