@@ -15,7 +15,7 @@
     gtag('config', 'G-Q8WHXGDDWG');
   </script>
   <script>
-    (function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+    (function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
   </script>
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -62,17 +62,20 @@
   </main>
 
   <footer>
-    <a href="https://orcid.org/0000-0003-0786-0049" target="_blank" rel="noopener" class="footer-orcid">
+    <a href="https://www.linkedin.com/in/benoitprieur/" target="_blank" rel="noopener" class="footer-linkedin" aria-label="LinkedIn">
+      <img src="images/linkedin.svg" alt="LinkedIn" width="24" height="24" />
+    </a>
+    <a href="https://orcid.org/0000-0003-0786-0049" target="_blank" rel="noopener" class="footer-orcid" aria-label="ORCID">
       <img src="images/orcid.svg" alt="ORCID" />
     </a>
   </footer>
   <script>
-(function(){var k='theme';function g(){return localStorage.getItem(k)||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}function s(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem(k,t);var i=document.getElementById('theme-icon');if(i)i.src=t==='dark'?'images/sun.svg':'images/moon.svg';}var b=document.getElementById('theme-toggle');if(b)b.onclick=function(){s(g()==='light'?'dark':'light');};s(g());})();
+(function(){var k='theme';function g(){return localStorage.getItem(k)||'dark';}function s(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem(k,t);var i=document.getElementById('theme-icon');if(i)i.src=t==='dark'?'images/sun.svg':'images/moon.svg';}var b=document.getElementById('theme-toggle');if(b)b.onclick=function(){s(g()==='light'?'dark':'light');};s(g());})();
   </script>
   <script>
 (function(){
   var k='postit-pos';
-  var def={lang:{x:40,y:40},book:{x:320,y:80},quakes:{x:40,y:340}};
+  var def={lang:{x:40,y:40},book:{x:328,y:80},quakes:{x:40,y:432}};
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
   function save(p){try{localStorage.setItem(k,JSON.stringify(p));}catch(e){}}
   var pos=load();

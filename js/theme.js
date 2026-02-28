@@ -17,7 +17,7 @@
   }
 
   function getTheme() {
-    return getStoredTheme() || getSystemTheme();
+    return getStoredTheme() || 'dark';
   }
 
   function setTheme(theme) {

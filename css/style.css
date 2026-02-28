@@ -458,7 +458,7 @@ h3 {
 .postit.last-book {
   width: 260px;
   height: 320px;
-  left: 320px;
+  left: 328px;
   top: 80px;
 }
 
@@ -471,7 +471,7 @@ h3 {
   width: 260px;
   height: 200px;
   left: 40px;
-  top: 300px;
+  top: 432px;
 }
 
 /* Language note */
@@ -741,12 +741,19 @@ footer {
   background: var(--bg);
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
 }
 
-.footer-orcid img {
+.footer-orcid img,
+.footer-linkedin img {
   display: block;
   width: 24px;
   height: 24px;
+}
+
+.footer-linkedin:hover {
+  opacity: 0.8;
 }
 
 /* Theme toggle button */
