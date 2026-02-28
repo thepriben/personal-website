@@ -106,6 +106,89 @@
     .quakes-footer a:hover {
       text-decoration: underline;
     }
+
+    /* Popup - theme-adapted */
+    .quakes-popup .leaflet-popup-content-wrapper {
+      background: var(--bg-soft);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px var(--shadow-card);
+      padding: 0;
+    }
+
+    .quakes-popup .leaflet-popup-content {
+      margin: 0;
+      min-width: 240px;
+    }
+
+    .quakes-popup .leaflet-popup-tip {
+      background: var(--bg-soft);
+    }
+
+    .quakes-popup-content {
+      padding: 1rem 1.1rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      border-left: 3px solid var(--border);
+    }
+
+    .quakes-popup-content.quakes-popup-mag-m0 { border-left-color: #fec44f; }
+    .quakes-popup-content.quakes-popup-mag-m2 { border-left-color: #fec44f; }
+    .quakes-popup-content.quakes-popup-mag-m3 { border-left-color: #fe9929; }
+    .quakes-popup-content.quakes-popup-mag-m4 { border-left-color: #fe9929; }
+    .quakes-popup-content.quakes-popup-mag-m5 { border-left-color: #cc4c02; }
+
+    .quakes-popup-mag {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .quakes-popup-dl {
+      margin: 0 0 0.75rem 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.25rem 1rem;
+    }
+
+    .quakes-popup-dl dt {
+      margin: 0;
+      font-weight: 500;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .quakes-popup-dl dd {
+      margin: 0;
+      color: var(--text);
+    }
+
+    .quakes-popup-tz {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .quakes-popup-link {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.35rem 0;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-top: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+
+    .quakes-popup-link:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
   </style>
 </head>
 
@@ -129,7 +212,7 @@
     <div id="map"></div>
 
     <div class="controls">
-      <strong>Last 5 earthquakes around L.A. (~100 miles), source: USGS</strong>
+      <strong>Last 5 earthquakes around LA (~100 miles), source: USGS</strong>
       <button id="refreshBtn">↻ Refresh</button>
       <span id="updated">—</span>
     </div>
@@ -181,13 +264,19 @@
       const mag = (props.mag ?? '—');
       const place = props.place || '—';
       const url = props.url || props.detail || '#';
+      const mClass = magClass(props.mag ?? 0);
       return `
-      <div style="min-width:220px;">
-        <div><strong>Magnitude Mw ${mag}</strong></div>
-        <div><strong>When:</strong> ${local} (LA time)</div>
-        <div><strong>Depth:</strong> ${depthKm} km</div>
-        <div><strong>Location:</strong> ${place}</div>
-        <a href="${url}" target="_blank" rel="noopener noreferrer">USGS Details</a>
+      <div class="quakes-popup-content quakes-popup-mag-${mClass}">
+        <div class="quakes-popup-mag">Mw ${mag}</div>
+        <dl class="quakes-popup-dl">
+          <dt>When</dt>
+          <dd>${local} <span class="quakes-popup-tz">(LA time)</span></dd>
+          <dt>Depth</dt>
+          <dd>${depthKm} km</dd>
+          <dt>Location</dt>
+          <dd>${place}</dd>
+        </dl>
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="quakes-popup-link">USGS Details →</a>
       </div>`;
     }
     async function loadQuakes() {
@@ -210,7 +299,7 @@
             m5: '#cc4c02'
           };
           marker.setStyle({ fillColor: colorMap[magClass(mag)] });
-          marker.bindPopup(formatPopup(props, [lon, lat, depth]));
+          marker.bindPopup(formatPopup(props, [lon, lat, depth]), { className: 'quakes-popup' });
           marker.addTo(markersLayer);
           bounds.push([lat, lon]);
         });
