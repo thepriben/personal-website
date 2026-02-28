@@ -35,8 +35,8 @@
   </header>
 
   <main>
-    <div class="main">
-      <div class="language-note">
+    <div class="main postit-container">
+      <div class="postit language-note" id="postit-lang" data-postit="lang">
         <p>
           This site lists all of my tech publications. Most are in French; other languages are marked with the following flags:
         </p>
@@ -51,7 +51,7 @@
           </span>
         </div>
       </div>
-      <div class="last-book">
+      <div class="postit last-book" id="postit-book" data-postit="book">
         <span class="tag">Last published book</span>
         <a href="https://www.editions-eni.fr/livre/framework-pyqt-developpez-vos-interfaces-graphiques-en-python-avec-pyqt6-9782409050053">
           <img src="images/PyQt6.jpg" alt="PyQt6" class="index" />
@@ -69,5 +69,50 @@
     </a>
   </footer>
   <script src="js/theme.js" defer></script>
+  <script>
+(function(){
+  var k='postit-pos';
+  var def={lang:{x:40,y:40},book:{x:340,y:40}};
+  function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
+  function save(p){try{localStorage.setItem(k,JSON.stringify(p));}catch(e){}}
+  var pos=load();
+  var lang=document.getElementById('postit-lang');
+  var book=document.getElementById('postit-book');
+  if(lang){lang.style.left=(pos.lang?pos.lang.x:def.lang.x)+'px';lang.style.top=(pos.lang?pos.lang.y:def.lang.y)+'px';}
+  if(book){book.style.left=(pos.book?pos.book.x:def.book.x)+'px';book.style.top=(pos.book?pos.book.y:def.book.y)+'px';}
+  function drag(el,key){
+    var startX,startY,ox,oy,moved;
+    function move(e){
+      var x=e.clientX||(e.touches&&e.touches[0].clientX);
+      var y=e.clientY||(e.touches&&e.touches[0].clientY);
+      if(x===undefined)return;
+      var dx=x-startX,dy=y-startY;
+      if(Math.abs(dx)>3||Math.abs(dy)>3)moved=true;
+      pos[key].x=Math.max(0,ox+dx);
+      pos[key].y=Math.max(0,oy+dy);
+      el.style.left=pos[key].x+'px';
+      el.style.top=pos[key].y+'px';
+    }
+    function stop(){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);save(pos);setTimeout(function(){moved=false;},0);}
+    function start(e){
+      e.preventDefault();
+      moved=false;
+      var x=e.clientX||(e.touches&&e.touches[0].clientX);
+      var y=e.clientY||(e.touches&&e.touches[0].clientY);
+      startX=x;startY=y;
+      ox=pos[key].x;oy=pos[key].y;
+      document.addEventListener('mousemove',move);
+      document.addEventListener('mouseup',stop);
+      document.addEventListener('touchmove',move,{passive:false});
+      document.addEventListener('touchend',stop);
+    }
+    el.addEventListener('mousedown',start);
+    el.addEventListener('touchstart',start,{passive:false});
+    el.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();}},true);
+  }
+  if(lang){if(!pos.lang)pos.lang=def.lang;drag(lang,'lang');}
+  if(book){if(!pos.book)pos.book=def.book;drag(book,'book');}
+})();
+  </script>
 </body>
 </html>
