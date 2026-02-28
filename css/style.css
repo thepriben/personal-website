@@ -558,9 +558,10 @@ footer {
   background: var(--bg-soft);
 }
 
-.theme-toggle svg {
+.theme-toggle img {
   width: 18px;
   height: 18px;
+  display: block;
 }
 
 .theme-toggle .icon-sun {
@@ -577,6 +578,10 @@ footer {
 
 [data-theme="dark"] .theme-toggle .icon-moon {
   display: none;
+}
+
+[data-theme="dark"] .theme-toggle img {
+  filter: invert(1);
 }
 
 header .header-inner {
