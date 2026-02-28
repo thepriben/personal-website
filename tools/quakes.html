@@ -35,10 +35,8 @@
       top: 70px;
       right: 10px;
       z-index: 9999;
-      background: rgba(255, 255, 255, 0.95);
       padding: 8px 12px;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
       font-size: 13px;
       font-family: inherit;
       line-height: 1.4;
@@ -61,7 +59,6 @@
       z-index: 1000;
       bottom: 50px;
       left: 10px;
-      background: rgba(255, 255, 255, 0.9);
       padding: 6px 8px;
       border-radius: 8px;
       font-size: 12px;
@@ -95,7 +92,7 @@
     }
 
     .quakes-footer {
-      border-top: 1px dotted #999;
+      border-top: 1px dotted;
       text-align: center;
       padding: 10px;
       font-size: 14px;
@@ -103,7 +100,6 @@
 
     .quakes-footer a {
       font-size: 13px;
-      color: #333;
       text-decoration: none;
     }
 
@@ -133,7 +129,7 @@
     <div id="map"></div>
 
     <div class="controls">
-      <strong>Last 5 earthquakes around L.A. (~100 miles)</strong>
+      <strong>Last 5 earthquakes around L.A. (~100 miles), source: USGS</strong>
       <button id="refreshBtn">↻ Refresh</button>
       <span id="updated">—</span>
     </div>

@@ -814,7 +814,32 @@ header nav {
   padding: 0;
 }
 
-/* Quakes page dark mode overrides */
+/* Quakes page */
+.controls,
+.legend {
+  background: var(--bg-soft);
+  color: var(--text);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.quakes-footer {
+  border-top-color: var(--border-dotted);
+}
+
+.quakes-footer a {
+  color: var(--text-muted);
+}
+
+.quakes-footer a:hover {
+  color: var(--text);
+}
+
+[data-theme="light"] .controls,
+[data-theme="light"] .legend {
+  background: rgba(245, 240, 230, 0.92);
+  border: 1px solid var(--border);
+}
+
 [data-theme="dark"] .controls,
 [data-theme="dark"] .legend {
   background: rgba(30, 30, 30, 0.95);
