@@ -742,7 +742,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .footer-orcid img,
@@ -823,4 +823,79 @@ header nav {
 
 [data-theme="dark"] .quakes-footer a {
   color: var(--text);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav a {
+    min-width: 80px;
+    font-size: 0.7rem;
+  }
+
+  header .header-inner {
+    gap: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .main {
+    padding: 0 0.75rem;
+    margin: 1.5rem auto;
+  }
+
+  .experience-box {
+    margin: 20px auto;
+    padding: 12px;
+    width: min(960px, calc(100% - 24px));
+  }
+
+  .postit-container {
+    min-height: calc(100vh - 160px);
+  }
+
+  .postit {
+    width: 240px;
+    height: 220px;
+  }
+
+  .postit.last-book {
+    width: 240px;
+    height: 300px;
+  }
+
+  .postit.postit-quakes {
+    width: 240px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    gap: 1rem;
+  }
+
+  nav a {
+    min-width: 70px;
+  }
+
+  .postit {
+    width: 220px;
+    height: 200px;
+  }
+
+  .postit.last-book {
+    width: 220px;
+    height: 280px;
+  }
+
+  .postit.postit-quakes {
+    width: 220px;
+    height: 160px;
+  }
+}
+
+/* Accessibility: focus visible */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--text-muted);
+  outline-offset: 2px;
 }
