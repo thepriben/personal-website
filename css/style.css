@@ -172,6 +172,7 @@ table.books-section td.cover-placeholder {
 /* Articles: utiliser toute la largeur et masquer la colonne jaquette */
 body.page-articles .experience-box {
   width: min(1100px, calc(100% - 32px));
+  margin-top: 0.5rem;
 }
 
 body.page-articles table.books-section {
@@ -239,7 +240,7 @@ table.books-section td > i:first-of-type {
 .section-nav {
   width: min(1100px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 0.75rem 0;
+  padding: 0.75rem 0 0.15rem 0;
   text-align: center;
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -258,7 +259,7 @@ table.books-section td > i:first-of-type {
 
 .section-nav .sep {
   color: var(--scrollbar);
-  margin: 0 0.1rem;
+  margin: 0 0.05rem;
 }
 
 .drapeau-france {
