@@ -426,13 +426,17 @@ h3 {
   overflow: hidden;
 }
 
-.postit {
+.postit-container .postit {
   position: absolute;
   cursor: grab;
   user-select: none;
   touch-action: none;
   z-index: 5;
   backface-visibility: hidden;
+}
+
+.postit.postit-dragging {
+  animation-play-state: paused;
 }
 
 .postit a,

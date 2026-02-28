@@ -18,6 +18,37 @@
     (function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
   </script>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    @keyframes postit-float-a {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(8px, -18px); }
+      50% { transform: translate(-6px, -8px); }
+      75% { transform: translate(-4px, -22px); }
+    }
+    @keyframes postit-float-b {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(-10px, -12px); }
+      66% { transform: translate(6px, -20px); }
+    }
+    @keyframes postit-float-c {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(-8px, -14px); }
+      50% { transform: translate(10px, -6px); }
+      75% { transform: translate(4px, -24px); }
+    }
+    .postit-container .postit {
+      animation: postit-float-a 9s ease-in-out infinite;
+    }
+    .postit-container .postit.postit-dragging {
+      animation-play-state: paused;
+    }
+    .postit-container .postit.language-note { animation: postit-float-a 9s ease-in-out infinite; animation-delay: 0s; }
+    .postit-container .postit.last-book { animation: postit-float-b 11s ease-in-out infinite; animation-delay: 1s; }
+    .postit-container .postit.postit-quakes { animation: postit-float-c 10s ease-in-out infinite; animation-delay: 3s; }
+    @media (prefers-reduced-motion: reduce) {
+      .postit-container .postit { animation: none; }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -109,10 +140,11 @@
       pos[key].x=nx;pos[key].y=ny;
       el.style.left=nx+'px';el.style.top=ny+'px';
     }
-    function stop(e){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);el.style.cursor='';if(!moved){var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);var links=el.querySelectorAll('a[href]');if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}}save(pos);setTimeout(function(){moved=false;},0);}
+    function stop(e){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);el.classList.remove('postit-dragging');el.style.cursor='';if(!moved){var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);var links=el.querySelectorAll('a[href]');if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}}save(pos);setTimeout(function(){moved=false;},0);}
     function start(e){
       e.preventDefault();
       moved=false;
+      el.classList.add('postit-dragging');
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       startX=x;startY=y;
