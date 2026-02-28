@@ -223,6 +223,7 @@ table.books-section td > i:first-of-type {
   border-radius: 5px;
   display: block;
   margin-left: auto;
+  filter: brightness(0.92) sepia(0.12);
 }
 
 .books-section sup a {
@@ -465,6 +466,7 @@ h3 {
 .postit.last-book img.index {
   max-width: 130px;
   margin-top: 0.35rem;
+  filter: brightness(0.92) sepia(0.12);
 }
 
 .postit.postit-quakes {
@@ -651,6 +653,7 @@ h3 {
 .last-book img.index {
   margin: 0;
   box-shadow: 0 10px 18px var(--shadow-card);
+  filter: brightness(0.92) sepia(0.12);
 }
 
 .last-book .caption {
