@@ -1,19 +1,19 @@
 /* Theme variables (light = default) */
 :root,
 [data-theme="light"] {
-  --bg: #faf8f5;
-  --bg-soft: #f5f0e8;
-  --bg-soft-start: #f0ebe3;
-  --text: #6b6358;
-  --text-muted: #5c554c;
-  --text-muted-alt: #5a534a;
-  --border: #e5dfd6;
-  --border-dotted: rgba(107, 99, 88, 0.25);
-  --scrollbar: #d4cfc6;
-  --scrollbar-hover: #a39d92;
-  --shadow: rgba(0, 0, 0, 0.08);
-  --shadow-soft: rgba(15, 23, 42, 0.06);
-  --shadow-card: rgba(15, 23, 42, 0.12);
+  --bg: #f5f0e6;
+  --bg-soft: #f0ebe0;
+  --bg-soft-start: #eae5da;
+  --text: #5c5548;
+  --text-muted: #6b6358;
+  --text-muted-alt: #5a5348;
+  --border: #e0d9ce;
+  --border-dotted: rgba(92, 85, 72, 0.25);
+  --scrollbar: #d4cfc4;
+  --scrollbar-hover: #a39d90;
+  --shadow: rgba(0, 0, 0, 0.06);
+  --shadow-soft: rgba(15, 23, 42, 0.05);
+  --shadow-card: rgba(15, 23, 42, 0.1);
 }
 
 [data-theme="dark"] {
@@ -493,6 +493,10 @@ h3 {
   box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
 }
 
+[data-theme="light"] .language-note {
+  background: transparent;
+}
+
 [data-theme="dark"] .language-note {
   background: var(--bg-soft);
   border-left-color: #d4a84b;
@@ -519,7 +523,7 @@ h3 {
 }
 
 [data-theme="light"] .last-book {
-  background: #fff;
+  background: transparent;
 }
 
 [data-theme="dark"] .last-book {
@@ -545,7 +549,7 @@ h3 {
 }
 
 [data-theme="light"] .postit-quakes {
-  background: #fff;
+  background: transparent;
 }
 
 [data-theme="dark"] .postit-quakes {
