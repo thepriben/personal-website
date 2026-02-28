@@ -498,7 +498,7 @@ h3 {
 }
 
 [data-theme="dark"] .language-note {
-  background: var(--bg-soft);
+  background: transparent;
   border-left-color: #d4a84b;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
@@ -527,7 +527,7 @@ h3 {
 }
 
 [data-theme="dark"] .last-book {
-  background: linear-gradient(180deg, #252428 0%, #1e1d21 100%);
+  background: transparent;
   border-top-color: #7c8ae0;
   box-shadow: 0 6px 24px rgba(0,0,0,0.4);
 }
@@ -553,7 +553,7 @@ h3 {
 }
 
 [data-theme="dark"] .postit-quakes {
-  background: linear-gradient(180deg, #1e2625 0%, #182220 100%);
+  background: transparent;
   border-top-color: #4db6ac;
   box-shadow: 0 4px 20px rgba(0,0,0,0.35);
 }
