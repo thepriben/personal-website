@@ -37,28 +37,26 @@
   <main>
     <div class="main postit-container">
       <div class="postit language-note" id="postit-lang" data-postit="lang">
-        <p>
-          This site lists all of my tech publications. Most are in French; other languages are marked with the following flags:
-        </p>
+        <p>Tech publications on this website.</p>
+        <p>By default: <span class="language-pill"><span class="drapeau-france"></span> FR</span></p>
+        <p>Other languages:</p>
         <div class="language-legend">
-          <span class="language-pill">
-            <span class="drapeau-royaume-uni"></span>
-            English
-          </span>
-          <span class="language-pill">
-            <span class="drapeau-espagne"></span>
-            Spanish
-          </span>
+          <span class="language-pill"><span class="drapeau-royaume-uni"></span> EN</span>
+          <span class="language-pill"><span class="drapeau-espagne"></span> ES</span>
         </div>
       </div>
       <div class="postit last-book" id="postit-book" data-postit="book">
-        <span class="tag">Last published book</span>
+        <span class="tag">LAST BOOK</span>
         <a href="https://www.editions-eni.fr/livre/framework-pyqt-developpez-vos-interfaces-graphiques-en-python-avec-pyqt6-9782409050053">
           <img src="images/PyQt6.jpg" alt="PyQt6" class="index" />
         </a>
-        <p class="caption">
-          <span class="last-book-meta">June 2025 · <span class="book-title">PyQt6</span></span>
-        </p>
+        <p class="caption"><a href="https://www.editions-eni.fr/livre/framework-pyqt-developpez-vos-interfaces-graphiques-en-python-avec-pyqt6-9782409050053"><span class="book-title">PyQt6</span></a> (2025)</p>
+      </div>
+      <div class="postit postit-quakes" id="postit-quakes" data-postit="quakes">
+        <a href="tools/quakes.html" class="postit-quakes-link">
+          <span>Last 5 earthquakes around L.A. (~100 miles)</span>
+        </a>
+        <small><a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noopener">Source: USGS</a></small>
       </div>
     </div>
   </main>
@@ -68,32 +66,45 @@
       <img src="images/orcid.svg" alt="ORCID" />
     </a>
   </footer>
-  <script src="js/theme.js" defer></script>
+  <script>
+(function(){var k='theme';function g(){return localStorage.getItem(k)||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}function s(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem(k,t);var i=document.getElementById('theme-icon');if(i)i.src=t==='dark'?'images/sun.svg':'images/moon.svg';}var b=document.getElementById('theme-toggle');if(b)b.onclick=function(){s(g()==='light'?'dark':'light');};s(g());})();
+  </script>
   <script>
 (function(){
   var k='postit-pos';
-  var def={lang:{x:40,y:40},book:{x:340,y:40}};
+  var def={lang:{x:40,y:40},book:{x:320,y:80},quakes:{x:40,y:340}};
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
   function save(p){try{localStorage.setItem(k,JSON.stringify(p));}catch(e){}}
   var pos=load();
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
-  if(lang){lang.style.left=(pos.lang?pos.lang.x:def.lang.x)+'px';lang.style.top=(pos.lang?pos.lang.y:def.lang.y)+'px';}
-  if(book){book.style.left=(pos.book?pos.book.x:def.book.x)+'px';book.style.top=(pos.book?pos.book.y:def.book.y)+'px';}
+  var quakes=document.getElementById('postit-quakes');
+  var container=document.querySelector('.postit-container');
+  var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:quakes,key:'quakes'}];
+  var bounds={w:0,h:0,pad:8};
+  function updateBounds(){var r=container?container.getBoundingClientRect():{width:0,height:0};var ft=document.querySelector('footer');bounds.w=r.width;bounds.h=ft?Math.min(r.height,Math.max(0,ft.getBoundingClientRect().top-r.top)):r.height;}
+  function clampPos(el,key){if(!container||!el)return;updateBounds();var p=bounds.pad,w=Math.max(0,bounds.w-el.offsetWidth-p),h=Math.max(0,bounds.h-el.offsetHeight-p);pos[key].x=Math.max(p,Math.min(w,pos[key].x));pos[key].y=Math.max(p,Math.min(h,pos[key].y));el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';}
+  posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];clampPos(p.el,p.key);}});
+  if(container){updateBounds();window.addEventListener('resize',function(){posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});});}
   function drag(el,key){
     var startX,startY,ox,oy,moved;
     function move(e){
+      el.style.cursor='grabbing';
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       if(x===undefined)return;
       var dx=x-startX,dy=y-startY;
       if(Math.abs(dx)>3||Math.abs(dy)>3)moved=true;
-      pos[key].x=Math.max(0,ox+dx);
-      pos[key].y=Math.max(0,oy+dy);
-      el.style.left=pos[key].x+'px';
-      el.style.top=pos[key].y+'px';
+      if(container)updateBounds();
+      var p=bounds.pad;
+      var maxX=Math.max(p,bounds.w-el.offsetWidth-p);
+      var maxY=Math.max(p,bounds.h-el.offsetHeight-p);
+      var nx=Math.max(p,Math.min(maxX,ox+dx));
+      var ny=Math.max(p,Math.min(maxY,oy+dy));
+      pos[key].x=nx;pos[key].y=ny;
+      el.style.left=nx+'px';el.style.top=ny+'px';
     }
-    function stop(){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);save(pos);setTimeout(function(){moved=false;},0);}
+    function stop(e){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);el.style.cursor='';if(!moved){var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);var links=el.querySelectorAll('a[href]');if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}}save(pos);setTimeout(function(){moved=false;},0);}
     function start(e){
       e.preventDefault();
       moved=false;
@@ -106,12 +117,21 @@
       document.addEventListener('touchmove',move,{passive:false});
       document.addEventListener('touchend',stop);
     }
+    function updateCursor(e){
+      var x=e.clientX,y=e.clientY;
+      if(x==null)return;
+      var links=el.querySelectorAll('a[href]');
+      var over=false;
+      for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){over=true;break;}}
+      el.style.cursor=over?'pointer':'grab';
+    }
+    el.addEventListener('mousemove',updateCursor);
+    el.addEventListener('mouseleave',function(){el.style.cursor='grab';});
     el.addEventListener('mousedown',start);
     el.addEventListener('touchstart',start,{passive:false});
     el.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();}},true);
   }
-  if(lang){if(!pos.lang)pos.lang=def.lang;drag(lang,'lang');}
-  if(book){if(!pos.book)pos.book=def.book;drag(book,'book');}
+  posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];drag(p.el,p.key);}});
 })();
   </script>
 </body>

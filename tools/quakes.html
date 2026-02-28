@@ -52,6 +52,10 @@
       font-family: inherit;
     }
 
+    .leaflet-tile-pane {
+      filter: grayscale(100%);
+    }
+
     .legend {
       position: absolute;
       z-index: 1000;
@@ -129,7 +133,7 @@
     <div id="map"></div>
 
     <div class="controls">
-      <strong>Last 5 earthquakes (~150 km from LA)</strong>
+      <strong>Last 5 earthquakes (~100 miles / 150 km from Santa Monica Pier)</strong>
       <button id="refreshBtn">↻ Refresh</button>
       <span id="updated">—</span>
     </div>
@@ -146,14 +150,17 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
-    const LA = { lat: 34.0522, lon: -118.2437 };
-    const R_KM = 150;
+    const LA = { lat: 34.0092, lon: -118.4976 };
+    const R_MILES = 100;
+    const R_KM = Math.round(R_MILES * 1.60934);
     const USGS_URL = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&limit=5&latitude=${LA.lat}&longitude=${LA.lon}&maxradiuskm=${R_KM}&eventtype=earthquake`;
 
-    const map = L.map('map').setView([LA.lat, LA.lon], 8);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const map = L.map('map', { attributionControl: true }).setView([LA.lat, LA.lon], 8);
+    map.attributionControl.setPrefix(false);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {
       maxZoom: 18,
-      attribution: '&copy; OpenStreetMap contributors'
+      subdomains: 'abcd',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(map);
 
     let markersLayer = L.layerGroup().addTo(map);
