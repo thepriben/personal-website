@@ -163,17 +163,12 @@
       font-weight: 700;
     }
 
-    .quakes-popup-content.quakes-popup-mag-m0 .quakes-popup-mag-badge { background: #fff7bc; color: #8b6914; }
-    .quakes-popup-content.quakes-popup-mag-m2 .quakes-popup-mag-badge { background: #fee391; color: #8b6914; }
+    /* Mw badge - nomenclature YlOrRd (same as legend/markers) */
+    .quakes-popup-content.quakes-popup-mag-m0 .quakes-popup-mag-badge { background: #fff7bc; color: #6b5a0a; }
+    .quakes-popup-content.quakes-popup-mag-m2 .quakes-popup-mag-badge { background: #fee391; color: #6b5a0a; }
     .quakes-popup-content.quakes-popup-mag-m3 .quakes-popup-mag-badge { background: #fec44f; color: #5c3d0a; }
-    .quakes-popup-content.quakes-popup-mag-m4 .quakes-popup-mag-badge { background: #fe9929; color: #4a2e08; }
+    .quakes-popup-content.quakes-popup-mag-m4 .quakes-popup-mag-badge { background: #fe9929; color: #2a1a06; }
     .quakes-popup-content.quakes-popup-mag-m5 .quakes-popup-mag-badge { background: #cc4c02; color: #fff; }
-
-    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m0 .quakes-popup-mag-badge { background: #d4a84b; color: #1a1510; }
-    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m2 .quakes-popup-mag-badge { background: #e6b84d; color: #1a1510; }
-    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m3 .quakes-popup-mag-badge { background: #e68a2e; color: #1a1510; }
-    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m4 .quakes-popup-mag-badge { background: #d46b1a; color: #fff; }
-    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m5 .quakes-popup-mag-badge { background: #a63d02; color: #fff; }
 
     .quakes-popup-body {
       padding: 0 0.9rem 0.65rem;
@@ -227,6 +222,16 @@
       color: var(--text);
       background: var(--bg-soft-start);
       border-color: var(--text-muted);
+    }
+
+    [data-theme="dark"] .quakes-popup-link {
+      color: var(--text-muted-alt);
+      border-color: var(--border);
+    }
+
+    [data-theme="dark"] .quakes-popup-link:hover {
+      color: var(--text);
+      border-color: var(--text-muted-alt);
     }
   </style>
 </head>
