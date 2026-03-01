@@ -112,14 +112,15 @@
       background: var(--bg-soft);
       color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 10px;
       box-shadow: 0 8px 24px var(--shadow-card);
       padding: 0;
+      overflow: hidden;
     }
 
     .quakes-popup .leaflet-popup-content {
       margin: 0;
-      min-width: 240px;
+      min-width: 200px;
     }
 
     .quakes-popup .leaflet-popup-tip {
@@ -127,67 +128,105 @@
     }
 
     .quakes-popup-content {
-      padding: 1rem 1.1rem;
-      font-size: 0.85rem;
-      line-height: 1.5;
-      border-left: 3px solid var(--border);
+      padding: 0;
+      font-size: 0.8rem;
+      line-height: 1.4;
     }
 
-    .quakes-popup-content.quakes-popup-mag-m0 { border-left-color: #fec44f; }
-    .quakes-popup-content.quakes-popup-mag-m2 { border-left-color: #fec44f; }
-    .quakes-popup-content.quakes-popup-mag-m3 { border-left-color: #fe9929; }
-    .quakes-popup-content.quakes-popup-mag-m4 { border-left-color: #fe9929; }
-    .quakes-popup-content.quakes-popup-mag-m5 { border-left-color: #cc4c02; }
+    .quakes-popup-header {
+      padding: 0.65rem 0.9rem 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-    .quakes-popup-mag {
-      font-size: 1.1rem;
+    .quakes-popup-title {
+      font-size: 0.82rem;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 0.75rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border);
+      line-height: 1.2;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .quakes-popup-mag-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.1rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .quakes-popup-content.quakes-popup-mag-m0 .quakes-popup-mag-badge { background: #fff7bc; color: #8b6914; }
+    .quakes-popup-content.quakes-popup-mag-m2 .quakes-popup-mag-badge { background: #fee391; color: #8b6914; }
+    .quakes-popup-content.quakes-popup-mag-m3 .quakes-popup-mag-badge { background: #fec44f; color: #5c3d0a; }
+    .quakes-popup-content.quakes-popup-mag-m4 .quakes-popup-mag-badge { background: #fe9929; color: #4a2e08; }
+    .quakes-popup-content.quakes-popup-mag-m5 .quakes-popup-mag-badge { background: #cc4c02; color: #fff; }
+
+    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m0 .quakes-popup-mag-badge { background: #d4a84b; color: #1a1510; }
+    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m2 .quakes-popup-mag-badge { background: #e6b84d; color: #1a1510; }
+    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m3 .quakes-popup-mag-badge { background: #e68a2e; color: #1a1510; }
+    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m4 .quakes-popup-mag-badge { background: #d46b1a; color: #fff; }
+    [data-theme="dark"] .quakes-popup-content.quakes-popup-mag-m5 .quakes-popup-mag-badge { background: #a63d02; color: #fff; }
+
+    .quakes-popup-body {
+      padding: 0 0.9rem 0.65rem;
     }
 
     .quakes-popup-dl {
-      margin: 0 0 0.75rem 0;
+      margin: 0;
       display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.25rem 1rem;
+      grid-template-columns: 4em 1fr;
+      gap: 0.2rem 1rem;
     }
 
     .quakes-popup-dl dt {
       margin: 0;
       font-weight: 500;
       color: var(--text-muted);
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
 
     .quakes-popup-dl dd {
       margin: 0;
       color: var(--text);
+      font-size: 0.8rem;
     }
 
     .quakes-popup-tz {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
+      font-weight: 400;
     }
 
     .quakes-popup-link {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.35rem 0;
-      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      margin: 0.6rem 0.9rem 0.75rem;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       text-decoration: none;
-      border-top: 1px solid var(--border);
-      transition: color 0.2s;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
     }
 
     .quakes-popup-link:hover {
       color: var(--text);
-      text-decoration: underline;
+      background: var(--bg-soft-start);
+      border-color: var(--text-muted);
     }
   </style>
 </head>
@@ -267,15 +306,20 @@
       const mClass = magClass(props.mag ?? 0);
       return `
       <div class="quakes-popup-content quakes-popup-mag-${mClass}">
-        <div class="quakes-popup-mag">Mw ${mag}</div>
-        <dl class="quakes-popup-dl">
-          <dt>When</dt>
-          <dd>${local} <span class="quakes-popup-tz">(LA time)</span></dd>
-          <dt>Depth</dt>
-          <dd>${depthKm} km</dd>
-          <dt>Location</dt>
-          <dd>${place}</dd>
-        </dl>
+        <div class="quakes-popup-header">
+          <span class="quakes-popup-mag-badge">Mw ${mag}</span>
+          <span class="quakes-popup-title" title="${place}">${place ? (place.split(',')[0] || place).trim() : '—'}</span>
+        </div>
+        <div class="quakes-popup-body">
+          <dl class="quakes-popup-dl">
+            <dt>When</dt>
+            <dd>${local} <span class="quakes-popup-tz">(LA time)</span></dd>
+            <dt>Depth</dt>
+            <dd>${depthKm} km</dd>
+            <dt>Location</dt>
+            <dd>${place}</dd>
+          </dl>
+        </div>
         <a href="${url}" target="_blank" rel="noopener noreferrer" class="quakes-popup-link">USGS Details →</a>
       </div>`;
     }
