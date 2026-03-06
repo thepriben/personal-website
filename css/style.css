@@ -456,6 +456,8 @@ h3 {
 }
 
 .postit.language-note {
+  width: 270px;
+  height: 248px;
   left: 40px;
   top: 40px;
 }
@@ -474,8 +476,8 @@ h3 {
 }
 
 .postit.postit-quakes {
-  width: 260px;
-  height: 200px;
+  width: 270px;
+  height: 248px;
   left: 40px;
   top: 432px;
 }
@@ -484,17 +486,19 @@ h3 {
 .language-note {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.8rem;
   margin: 0;
-  padding: 1.25rem 1.1rem;
+  padding: 0.95rem 1rem 1rem;
   box-sizing: border-box;
   border-radius: 16px;
   border: 1px solid var(--border);
-  border-left: 4px solid #c9a227;
+  border-top: 4px solid #c9a227;
   background: #fff;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.5;
   text-align: left;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
 }
@@ -505,7 +509,7 @@ h3 {
 
 [data-theme="dark"] .language-note {
   background: transparent;
-  border-left-color: #d4a84b;
+  border-top-color: #d4a84b;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
@@ -542,15 +546,15 @@ h3 {
 .postit-quakes {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1.25rem 1rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.8rem;
+  padding: 0.95rem 1rem 1rem;
   border-radius: 16px;
   border: 1px solid var(--border);
   border-top: 4px solid #26a69a;
   background: linear-gradient(180deg, #f0f9f8 0%, #e8f4f2 100%);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   box-shadow: 0 4px 16px rgba(38,166,154,0.12), 0 2px 6px rgba(0,0,0,0.06);
 }
 
@@ -578,43 +582,125 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  justify-content: center;
+  gap: 0.6rem;
   text-align: center;
   text-decoration: none;
   color: var(--text);
-  padding: 0.5rem;
+  width: 100%;
+  min-height: 118px;
+  padding: 0.75rem 0.7rem;
   border-radius: 10px;
-  transition: background 0.2s;
+  border: 1px solid rgba(38,166,154,0.18);
+  background: rgba(38,166,154,0.05);
+  box-sizing: border-box;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
 }
 
+.postit.postit-quakes:hover .postit-quakes-link,
 .postit-quakes-link:hover {
-  text-decoration: underline;
-  background: rgba(38,166,154,0.08);
+  text-decoration: none;
+  background: rgba(38,166,154,0.1);
+  border-color: rgba(38,166,154,0.55);
+  transform: translateY(-1px);
 }
 
+[data-theme="dark"] .postit.postit-quakes:hover .postit-quakes-link,
 [data-theme="dark"] .postit-quakes-link:hover {
   background: rgba(77,182,172,0.12);
+  border-color: rgba(77,182,172,0.55);
 }
 
-.postit-quakes-icon {
-  opacity: 0.9;
+.postit-quakes-ornament {
+  position: relative;
+  width: 108px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-[data-theme="dark"] .postit-quakes-icon {
-  filter: invert(1);
-  opacity: 0.8;
+.postit-quakes-ornament::before,
+.postit-quakes-ornament::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid rgba(38,166,154,0.24);
 }
 
-.postit-quakes small {
-  font-size: 0.6rem;
+.postit-quakes-ornament::before {
+  width: 92px;
+  height: 56px;
 }
 
-.postit-quakes small a {
+.postit-quakes-ornament::after {
+  width: 60px;
+  height: 36px;
+  background: rgba(38,166,154,0.04);
+}
+
+.postit-quakes-core {
+  position: relative;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #b8fff7 0%, #48bdb2 58%, #1f8078 100%);
+  box-shadow: 0 0 0 8px rgba(38,166,154,0.12);
+}
+
+.postit-quakes-node {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(38,166,154,0.55);
+}
+
+.postit-quakes-node-a {
+  top: 16px;
+  left: 18px;
+}
+
+.postit-quakes-node-b {
+  right: 18px;
+  bottom: 14px;
+}
+
+[data-theme="dark"] .postit-quakes-ornament::before,
+[data-theme="dark"] .postit-quakes-ornament::after {
+  border-color: rgba(77,182,172,0.34);
+}
+
+[data-theme="dark"] .postit-quakes-ornament::after {
+  background: rgba(77,182,172,0.08);
+}
+
+[data-theme="dark"] .postit-quakes-core {
+  box-shadow: 0 0 0 8px rgba(77,182,172,0.12);
+}
+
+[data-theme="dark"] .postit-quakes-node {
+  background: rgba(127,214,205,0.7);
+}
+
+.postit-quakes-copy {
+  font-size: 0.74rem;
+  line-height: 1.4;
+  max-width: 13rem;
+}
+
+.postit-quakes-source {
+  font-size: 0.62rem;
+  align-self: center;
+}
+
+.postit-quakes-source a {
   color: var(--text-muted);
   text-decoration: none;
 }
 
-.postit-quakes small a:hover {
+.postit-quakes-source a:hover {
   text-decoration: underline;
 }
 
@@ -651,7 +737,36 @@ h3 {
 
 .language-note .tag,
 .postit-quakes .tag {
-  align-self: flex-start;
+  margin-bottom: 0;
+}
+
+.language-note .tag {
+  align-self: center;
+  white-space: nowrap;
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  padding: 5px 10px;
+}
+
+.language-note .tag {
+  background: rgba(201,162,39,0.14);
+  border-color: rgba(201,162,39,0.35);
+}
+
+.postit-quakes .tag {
+  align-self: center;
+  background: rgba(38,166,154,0.12);
+  border-color: rgba(38,166,154,0.35);
+}
+
+[data-theme="dark"] .language-note .tag {
+  background: rgba(212,168,75,0.18);
+  border-color: rgba(212,168,75,0.42);
+}
+
+[data-theme="dark"] .postit-quakes .tag {
+  background: rgba(77,182,172,0.18);
+  border-color: rgba(77,182,172,0.42);
 }
 
 .last-book img.index {
@@ -713,6 +828,27 @@ h3 {
   margin: 0;
 }
 
+.language-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.language-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.language-group-label {
+  font-size: 0.56rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--text-muted);
+}
+
 .language-legend {
   display: flex;
   flex-wrap: wrap;
@@ -733,6 +869,16 @@ h3 {
   color: var(--text);
   letter-spacing: 0.02em;
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.language-pill-primary {
+  background: transparent;
+  border-color: rgba(201,162,39,0.35);
+}
+
+[data-theme="dark"] .language-pill-primary {
+  background: transparent;
+  border-color: rgba(212,168,75,0.42);
 }
 
 .language-pill .drapeau-france,
@@ -893,14 +1039,15 @@ header nav {
     height: 220px;
   }
 
+  .postit.language-note,
+  .postit.postit-quakes {
+    width: 250px;
+    height: 236px;
+  }
+
   .postit.last-book {
     width: 240px;
     height: 300px;
-  }
-
-  .postit.postit-quakes {
-    width: 240px;
-    height: 180px;
   }
 }
 
@@ -918,14 +1065,25 @@ header nav {
     height: 200px;
   }
 
+  .postit.language-note,
+  .postit.postit-quakes {
+    width: 224px;
+    height: 224px;
+  }
+
   .postit.last-book {
     width: 220px;
     height: 280px;
   }
 
-  .postit.postit-quakes {
-    width: 220px;
-    height: 160px;
+  .postit-quakes-link {
+    min-height: 116px;
+    padding: 0.7rem 0.6rem;
+  }
+
+  .postit-quakes-ornament {
+    width: 94px;
+    height: 62px;
   }
 }
 

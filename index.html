@@ -68,12 +68,19 @@
   <main>
     <div class="main postit-container">
       <div class="postit language-note" id="postit-lang" data-postit="lang">
-        <p>Language of citation for publications on this website.</p>
-        <p>Unless otherwise indicated: <span class="language-pill"><span class="drapeau-france"></span> FR</span></p>
-        <p>Other languages:</p>
-        <div class="language-legend">
-          <span class="language-pill"><span class="drapeau-royaume-uni"></span> EN</span>
-          <span class="language-pill"><span class="drapeau-espagne"></span> ES</span>
+        <span class="tag">LANGUAGE CITATION</span>
+        <div class="language-groups">
+          <div class="language-group">
+            <span class="language-group-label">Unless otherwise indicated:</span>
+            <span class="language-pill language-pill-primary"><span class="drapeau-france"></span> FR</span>
+          </div>
+          <div class="language-group">
+            <span class="language-group-label">Other languages:</span>
+            <div class="language-legend">
+              <span class="language-pill"><span class="drapeau-royaume-uni"></span> EN</span>
+              <span class="language-pill"><span class="drapeau-espagne"></span> ES</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="postit last-book" id="postit-book" data-postit="book">
@@ -84,10 +91,16 @@
         <p class="caption"><a href="https://www.editions-eni.fr/livre/framework-pyqt-developpez-vos-interfaces-graphiques-en-python-avec-pyqt6-9782409050053"><span class="book-title">PyQt6</span></a> (2025)</p>
       </div>
       <div class="postit postit-quakes" id="postit-quakes" data-postit="quakes">
+        <span class="tag">LAST QUAKES IN LA</span>
         <a href="tools/quakes.html" class="postit-quakes-link">
-          <span>Last quakes around LA (~100 miles)</span>
+          <div class="postit-quakes-ornament" aria-hidden="true">
+            <span class="postit-quakes-core"></span>
+            <span class="postit-quakes-node postit-quakes-node-a"></span>
+            <span class="postit-quakes-node postit-quakes-node-b"></span>
+          </div>
+          <span class="postit-quakes-copy"></span>
         </a>
-        <small><a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noopener">Source: USGS</a></small>
+        <small class="postit-quakes-source"><a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noopener">Source: USGS</a></small>
       </div>
     </div>
   </main>

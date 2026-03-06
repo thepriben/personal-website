@@ -140,18 +140,6 @@
       gap: 0.5rem;
     }
 
-    .quakes-popup-title {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.2;
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
     .quakes-popup-mag-badge {
       display: inline-flex;
       align-items: center;
@@ -313,7 +301,6 @@
       <div class="quakes-popup-content quakes-popup-mag-${mClass}">
         <div class="quakes-popup-header">
           <span class="quakes-popup-mag-badge">Mw ${mag}</span>
-          <span class="quakes-popup-title" title="${place}">${place ? (place.split(',')[0] || place).trim() : '—'}</span>
         </div>
         <div class="quakes-popup-body">
           <dl class="quakes-popup-dl">
