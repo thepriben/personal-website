@@ -14,6 +14,10 @@
   --shadow: rgba(0, 0, 0, 0.06);
   --shadow-soft: rgba(15, 23, 42, 0.05);
   --shadow-card: rgba(15, 23, 42, 0.1);
+  --footer-brand-bg: rgba(107, 99, 88, 0.04);
+  --footer-brand-bg-hover: rgba(107, 99, 88, 0.07);
+  --footer-brand-text: #635b50;
+  --footer-brand-focus: rgba(107, 99, 88, 0.34);
 }
 
 [data-theme="dark"] {
@@ -30,6 +34,10 @@
   --shadow: rgba(0, 0, 0, 0.3);
   --shadow-soft: rgba(0, 0, 0, 0.2);
   --shadow-card: rgba(0, 0, 0, 0.35);
+  --footer-brand-bg: rgba(156, 163, 175, 0.06);
+  --footer-brand-bg-hover: rgba(156, 163, 175, 0.1);
+  --footer-brand-text: #c8cdd4;
+  --footer-brand-focus: rgba(209, 213, 219, 0.42);
 }
 
 html {
@@ -1159,7 +1167,7 @@ footer {
   height: 24px;
   padding: 0 0.3rem;
   border-radius: 7px;
-  background: color-mix(in srgb, var(--text-muted) 4%, transparent);
+  background: var(--footer-brand-bg);
   color: inherit;
   text-decoration: none;
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
@@ -1173,7 +1181,7 @@ footer {
   font-size: 0.9rem;
   line-height: 1;
   font-weight: 700;
-  color: color-mix(in srgb, var(--text) 76%, var(--text-muted) 24%);
+  color: var(--footer-brand-text);
   transform: translateY(-0.5px);
 }
 
@@ -1208,20 +1216,12 @@ footer {
 }
 
 .footer-brand:hover {
-  background: color-mix(in srgb, var(--text-muted) 6%, transparent);
+  background: var(--footer-brand-bg-hover);
 }
 
 .footer-brand:focus {
-  outline: 2px solid color-mix(in srgb, var(--text-muted) 52%, transparent);
+  outline: 2px solid var(--footer-brand-focus);
   outline-offset: 2px;
-}
-
-[data-theme="dark"] .footer-brand {
-  background: color-mix(in srgb, var(--text-muted) 6%, transparent);
-}
-
-[data-theme="dark"] .footer-brand-mark {
-  color: color-mix(in srgb, var(--text) 82%, var(--text-muted) 18%);
 }
 
 /* Theme toggle button */
