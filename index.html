@@ -18,7 +18,7 @@
     (function(){var t='dark';try{t=localStorage.getItem('theme')||'dark';}catch(e){}document.documentElement.setAttribute('data-theme',t);})();
   </script>
   <link rel="stylesheet" href="css/style.css?v=20260307g" />
-  <link rel="stylesheet" href="css/home.css?v=20260307d" />
+  <link rel="stylesheet" href="css/home.css?v=20260307k" />
 </head>
 <body>
   <header>
@@ -78,6 +78,52 @@
         </a>
         <small class="postit-quakes-source"><a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noopener">Source: USGS</a></small>
       </div>
+      <div class="aquarium-bubble-column" aria-hidden="true">
+        <span class="aquarium-column-bubble aquarium-column-bubble-a"></span>
+        <span class="aquarium-column-bubble aquarium-column-bubble-b"></span>
+        <span class="aquarium-column-bubble aquarium-column-bubble-c"></span>
+        <span class="aquarium-column-bubble aquarium-column-bubble-d"></span>
+        <span class="aquarium-column-bubble aquarium-column-bubble-e"></span>
+      </div>
+      <div class="aquarium-plant" id="aquarium-plant" aria-hidden="true">
+        <span class="aquarium-plant-sand"></span>
+        <span class="aquarium-plant-pebble aquarium-plant-pebble-a"></span>
+        <span class="aquarium-plant-pebble aquarium-plant-pebble-b"></span>
+        <span class="aquarium-plant-pebble aquarium-plant-pebble-c"></span>
+        <span class="aquarium-plant-stem aquarium-plant-stem-a">
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-a1"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-a2"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-a3"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-a4"></span>
+        </span>
+        <span class="aquarium-plant-stem aquarium-plant-stem-b">
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-b1"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-b2"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-b3"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-b4"></span>
+        </span>
+        <span class="aquarium-plant-stem aquarium-plant-stem-c">
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-c1"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-c2"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-c3"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-c4"></span>
+        </span>
+        <span class="aquarium-plant-stem aquarium-plant-stem-d">
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-d1"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-d2"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-d3"></span>
+        </span>
+        <span class="aquarium-plant-stem aquarium-plant-stem-e">
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-e1"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-e2"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-e3"></span>
+        </span>
+        <span class="aquarium-plant-stem aquarium-plant-stem-f">
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-f1"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-f2"></span>
+          <span class="aquarium-plant-leaf aquarium-plant-leaf-f3"></span>
+        </span>
+      </div>
       <div class="swim-fish swim-fish-hidden" id="swim-fish" data-postit="fish" aria-hidden="true">
         <div class="swim-fish-visual">
           <div class="swim-fish-motion">
@@ -134,7 +180,7 @@
   function fishVerticalRange(el){var off=Math.max(42,Math.round(el.offsetHeight*0.95)),minY=-off,maxY=Math.max(minY,bounds.h-el.offsetHeight+off);return {minY:minY,maxY:maxY};}
   function fishRectAt(x,y){return {left:x+12,top:y+8,right:x+fish.offsetWidth-12,bottom:y+fish.offsetHeight-8};}
   function updateFishVisual(){if(fish){fish.style.setProperty('--sub-hit-shift',fishState.hitShift.toFixed(2)+'px');fish.style.setProperty('--sub-hit-lift',fishState.hitLift.toFixed(2)+'px');}}
-  function updateFishVisibility(){if(!fish)return;fish.classList.toggle('swim-fish-hidden',!fishVisible);fish.setAttribute('aria-hidden',fishVisible?'false':'true');if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',fishVisible?'Hide submarine':'Show submarine');}if(!fishVisible){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();}else{fishState.lastTs=0;fishState.anchorY=pos.fish.y;clampPos(fish,'fish');}saveFishVisible(fishVisible);}
+  function updateFishVisibility(){if(!fish)return;fish.classList.toggle('swim-fish-hidden',!fishVisible);fish.setAttribute('aria-hidden',fishVisible?'false':'true');if(container)container.classList.toggle('aquarium-active',fishVisible);if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',fishVisible?'Hide submarine':'Show submarine');}if(!fishVisible){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();}else{fishState.lastTs=0;fishState.anchorY=pos.fish.y;clampPos(fish,'fish');}saveFishVisible(fishVisible);}
   function rectsOverlap(a,b){return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;}
   function rectInContainer(el){if(!container||!el)return null;var cr=container.getBoundingClientRect();var r=el.getBoundingClientRect();return {left:r.left-cr.left,top:r.top-cr.top,right:r.right-cr.left,bottom:r.bottom-cr.top};}
   function obstacleRects(){return posts.filter(function(p){return p.el&&p.key!=='fish';}).map(function(p){return rectInContainer(p.el);}).filter(Boolean);}
@@ -151,7 +197,7 @@
   updateFishVisibility();
   if(fishToggle){fishToggle.addEventListener('click',function(){fishVisible=!fishVisible;updateFishVisibility();});}
   if(container){updateBounds();window.addEventListener('resize',function(){fishState.lastTs=0;applyMobileLayout();});}
-  function animateFish(ts){if(!fish){return;}if(!fishState.lastTs)fishState.lastTs=ts;var dt=Math.min(0.05,(ts-fishState.lastTs)/1000);fishState.lastTs=ts;if(Math.abs(fishState.hitShift)>0.08){fishState.hitShift+=(0-fishState.hitShift)*Math.min(1,dt*11);}else if(fishState.hitShift!==0){fishState.hitShift=0;}if(Math.abs(fishState.hitLift)>0.08){fishState.hitLift+=(0-fishState.hitLift)*Math.min(1,dt*11);}else if(fishState.hitLift!==0){fishState.hitLift=0;}updateFishVisual();if(!fishVisible){window.requestAnimationFrame(animateFish);return;}if(!fish.classList.contains('postit-dragging')){var r=fishRange(fish),yr=fishVerticalRange(fish);fishState.anchorY=Math.max(yr.minY,Math.min(yr.maxY,fishState.anchorY));if(ts<fishState.xResumeAt){if(fishState.vx<0){fishState.vx+=(0-fishState.vx)*Math.min(1,dt*4.8);if(fishState.vx>-1.5)fishState.vx=0;}else if(fishState.vx>0){fishState.vx+=(0-fishState.vx)*Math.min(1,dt*5.2);}}else{fishState.vx+=(fishState.cruiseSpeed-fishState.vx)*Math.min(1,dt*2.3);}if(ts<fishState.yResumeAt){fishState.vy+=(0-fishState.vy)*Math.min(1,dt*3.8);}else{fishState.vy+=(fishState.anchorY-pos.fish.y)*180*dt;}fishState.vy*=Math.max(0,1-dt*4.6);if(Math.abs(fishState.anchorY-pos.fish.y)<0.15&&Math.abs(fishState.vy)<0.4){pos.fish.y=fishState.anchorY;fishState.vy=0;}else{pos.fish.y+=fishState.vy*dt;}var nextX=pos.fish.x+fishState.vx*dt;if(fishState.vx>0){if(nextX>r.maxX){pos.fish.x=r.minX;}else{var blocker=fishBlockedAt(nextX,pos.fish.y);if(blocker){pos.fish.x=Math.min(pos.fish.x,fishStopX(blocker));fishState.vx=0;}else{pos.fish.x=nextX;}}}else if(nextX<r.minX){pos.fish.x=r.minX;fishState.vx=Math.max(-12,fishState.vx*0.28);fishState.xResumeAt=Math.min(fishState.xResumeAt,ts+90);}else{pos.fish.x=nextX;}clampPos(fish,'fish');}window.requestAnimationFrame(animateFish);}
+  function animateFish(ts){if(!fish){return;}if(!fishState.lastTs)fishState.lastTs=ts;var dt=Math.min(0.05,(ts-fishState.lastTs)/1000);fishState.lastTs=ts;if(Math.abs(fishState.hitShift)>0.08){fishState.hitShift+=(0-fishState.hitShift)*Math.min(1,dt*11);}else if(fishState.hitShift!==0){fishState.hitShift=0;}if(Math.abs(fishState.hitLift)>0.08){fishState.hitLift+=(0-fishState.hitLift)*Math.min(1,dt*11);}else if(fishState.hitLift!==0){fishState.hitLift=0;}updateFishVisual();if(!fishVisible){window.requestAnimationFrame(animateFish);return;}if(!fish.classList.contains('postit-dragging')){var r=fishRange(fish),yr=fishVerticalRange(fish);fishState.anchorY=Math.max(yr.minY,Math.min(yr.maxY,fishState.anchorY));if(ts<fishState.xResumeAt){if(fishState.vx<0){fishState.vx+=(0-fishState.vx)*Math.min(1,dt*4.8);if(fishState.vx>-1.5)fishState.vx=0;}else if(fishState.vx>0){fishState.vx+=(0-fishState.vx)*Math.min(1,dt*5.2);}}else{fishState.vx+=(fishState.cruiseSpeed-fishState.vx)*Math.min(1,dt*2.3);}if(ts<fishState.yResumeAt){fishState.vy+=(0-fishState.vy)*Math.min(1,dt*3.8);}else{fishState.vy+=(fishState.anchorY-pos.fish.y)*180*dt;}fishState.vy*=Math.max(0,1-dt*4.6);if(Math.abs(fishState.anchorY-pos.fish.y)<0.15&&Math.abs(fishState.vy)<0.4){pos.fish.y=fishState.anchorY;fishState.vy=0;}else{pos.fish.y+=fishState.vy*dt;}var nextX=pos.fish.x+fishState.vx*dt;if(fishState.vx>0){if(nextX>r.maxX){pos.fish.x=r.minX+(nextX-r.maxX);}else{var blocker=fishBlockedAt(nextX,pos.fish.y);if(blocker){pos.fish.x=Math.min(pos.fish.x,fishStopX(blocker));fishState.vx=0;}else{pos.fish.x=nextX;}}}else if(nextX<r.minX){pos.fish.x=r.minX;fishState.vx=Math.max(-12,fishState.vx*0.28);fishState.xResumeAt=Math.min(fishState.xResumeAt,ts+90);}else{pos.fish.x=nextX;}clampPos(fish,'fish');}window.requestAnimationFrame(animateFish);}
   if(fish){window.requestAnimationFrame(animateFish);}
   function drag(el,key){
     var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0;
