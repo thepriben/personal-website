@@ -1079,6 +1079,30 @@
   filter: brightness(0.92) sepia(0.12);
 }
 
+[data-theme="dark"] .last-book > a {
+  position: relative;
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+[data-theme="dark"] .last-book > a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(34, 40, 44, 0.34), rgba(8, 10, 12, 0.28));
+  mix-blend-mode: multiply;
+  opacity: 0.96;
+}
+
+[data-theme="dark"] .last-book img.index {
+  display: block;
+  filter: brightness(0.93) sepia(0.08) saturate(0.94) contrast(0.98);
+}
+
 [data-theme="light"] .postit-container.aquarium-active .last-book > a {
   position: relative;
   display: block;
