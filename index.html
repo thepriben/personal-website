@@ -18,9 +18,9 @@
     (function(){var t='dark';try{t=localStorage.getItem('theme')||'dark';}catch(e){}document.documentElement.setAttribute('data-theme',t);})();
   </script>
   <link rel="stylesheet" href="css/style.css?v=20260307g" />
-  <link rel="stylesheet" href="css/home.css?v=20260307s" />
+  <link rel="stylesheet" href="css/home.css?v=20260307aa" />
 </head>
-<body>
+<body class="page-home">
   <header>
     <div class="header-inner">
       <nav>
@@ -98,44 +98,134 @@
         <span class="aquarium-column-bubble aquarium-column-bubble-g"></span>
         <span class="aquarium-column-bubble aquarium-column-bubble-h"></span>
       </div>
-      <div class="aquarium-plant" id="aquarium-plant" aria-hidden="true">
-        <span class="aquarium-plant-sand"></span>
-        <span class="aquarium-plant-pebble aquarium-plant-pebble-a"></span>
-        <span class="aquarium-plant-pebble aquarium-plant-pebble-b"></span>
-        <span class="aquarium-plant-pebble aquarium-plant-pebble-c"></span>
-        <span class="aquarium-plant-stem aquarium-plant-stem-a">
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-a1"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-a2"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-a3"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-a4"></span>
-        </span>
-        <span class="aquarium-plant-stem aquarium-plant-stem-b">
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-b1"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-b2"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-b3"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-b4"></span>
-        </span>
-        <span class="aquarium-plant-stem aquarium-plant-stem-c">
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-c1"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-c2"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-c3"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-c4"></span>
-        </span>
-        <span class="aquarium-plant-stem aquarium-plant-stem-d">
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-d1"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-d2"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-d3"></span>
-        </span>
-        <span class="aquarium-plant-stem aquarium-plant-stem-e">
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-e1"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-e2"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-e3"></span>
-        </span>
-        <span class="aquarium-plant-stem aquarium-plant-stem-f">
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-f1"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-f2"></span>
-          <span class="aquarium-plant-leaf aquarium-plant-leaf-f3"></span>
-        </span>
+      <div class="aquarium-bottomscape" aria-hidden="true">
+        <div class="aquarium-pebble-field">
+          <span class="aquarium-pebble aquarium-pebble-a"></span>
+          <span class="aquarium-pebble aquarium-pebble-b"></span>
+          <span class="aquarium-pebble aquarium-pebble-c"></span>
+          <span class="aquarium-pebble aquarium-pebble-d"></span>
+          <span class="aquarium-pebble aquarium-pebble-e"></span>
+          <span class="aquarium-pebble aquarium-pebble-f"></span>
+          <span class="aquarium-pebble aquarium-pebble-g"></span>
+          <span class="aquarium-pebble aquarium-pebble-h"></span>
+        </div>
+        <div class="aquarium-plant aquarium-plant-left">
+          <span class="aquarium-plant-sand"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-a"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-b"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-c"></span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-a">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-b">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-c">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-d">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d3"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-e">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e3"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-f">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f3"></span>
+          </span>
+        </div>
+        <div class="aquarium-plant aquarium-plant-mid">
+          <span class="aquarium-plant-sand"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-a"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-b"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-c"></span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-a">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-b">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-c">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-d">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d3"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-e">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e3"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-f">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f3"></span>
+          </span>
+        </div>
+        <div class="aquarium-plant aquarium-plant-right">
+          <span class="aquarium-plant-sand"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-a"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-b"></span>
+          <span class="aquarium-plant-pebble aquarium-plant-pebble-c"></span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-a">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-a4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-b">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-b4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-c">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c3"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-c4"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-d">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-d3"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-e">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-e3"></span>
+          </span>
+          <span class="aquarium-plant-stem aquarium-plant-stem-f">
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f1"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f2"></span>
+            <span class="aquarium-plant-leaf aquarium-plant-leaf-f3"></span>
+          </span>
+        </div>
       </div>
       <div class="swim-fish swim-fish-hidden" id="swim-fish" data-postit="fish" aria-hidden="true">
         <div class="swim-fish-visual">

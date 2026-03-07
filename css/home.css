@@ -133,6 +133,17 @@
   box-sizing: border-box;
 }
 
+body.page-home main {
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.page-home .main.postit-container,
+body.page-home .postit-container {
+  height: 100%;
+  min-height: 0;
+}
+
 .postit-container {
   position: relative;
   min-height: 100%;
@@ -161,17 +172,50 @@
 }
 
 [data-theme="light"] .postit-container.aquarium-active {
-  background: #cbeef5;
+  background: #bde5ee;
   box-shadow:
-    inset 0 0 0 1px rgba(143, 189, 201, 0.18),
-    inset 0 14px 24px rgba(255,255,255,0.14);
+    inset 0 0 0 1px rgba(116, 169, 183, 0.28),
+    inset 0 0 0 10px rgba(235, 249, 253, 0.42),
+    inset 0 0 0 12px rgba(124, 177, 191, 0.18),
+    inset 0 16px 26px rgba(255,255,255,0.22),
+    inset 18px 0 22px rgba(255,255,255,0.15),
+    inset -18px -12px 26px rgba(71, 135, 156, 0.16),
+    inset 0 -18px 28px rgba(83, 156, 181, 0.08),
+    0 10px 26px rgba(77, 130, 149, 0.1);
+}
+
+[data-theme="dark"] .postit-container.aquarium-active {
+  box-shadow:
+    inset 0 0 0 1px rgba(165, 200, 214, 0.14),
+    inset 0 0 0 10px rgba(104, 132, 145, 0.08),
+    inset 0 0 0 12px rgba(31, 47, 56, 0.22),
+    inset 0 12px 18px rgba(188, 224, 236, 0.04),
+    inset -12px -8px 20px rgba(0, 0, 0, 0.18),
+    0 8px 22px rgba(0, 0, 0, 0.22);
 }
 
 [data-theme="light"] .postit-container.aquarium-active::before {
   background:
-    radial-gradient(circle at 16% 14%, rgba(243,252,255,0.38), transparent 18%),
-    radial-gradient(circle at 80% 20%, rgba(236,250,255,0.22), transparent 15%),
-    linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0) 32%, rgba(132, 193, 210, 0.08) 100%);
+    linear-gradient(135deg, rgba(255,255,255,0.22) 0 13%, rgba(255,255,255,0) 18% 58%, rgba(113, 173, 192, 0.14) 70% 100%),
+    linear-gradient(152deg, rgba(255,255,255,0) 0 28%, rgba(255,255,255,0.16) 37% 43%, rgba(255,255,255,0) 50% 100%),
+    linear-gradient(118deg, rgba(110, 171, 190, 0.06) 0 22%, rgba(255,255,255,0) 30% 74%, rgba(87, 149, 170, 0.1) 84% 100%),
+    linear-gradient(90deg, rgba(255,255,255,0.18), transparent 4%, transparent 96%, rgba(111, 166, 184, 0.12)),
+    linear-gradient(180deg, rgba(255,255,255,0.18), transparent 6%, transparent 94%, rgba(116, 170, 188, 0.1)),
+    radial-gradient(circle at 16% 14%, rgba(243,252,255,0.42), transparent 18%),
+    radial-gradient(circle at 80% 20%, rgba(236,250,255,0.28), transparent 15%),
+    radial-gradient(circle at 72% 68%, rgba(104, 168, 191, 0.09), transparent 20%),
+    linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0) 32%, rgba(132, 193, 210, 0.1) 100%);
+}
+
+[data-theme="dark"] .postit-container.aquarium-active::before {
+  background:
+    linear-gradient(135deg, rgba(209, 236, 245, 0.04) 0 16%, rgba(209, 236, 245, 0) 20% 66%, rgba(24, 36, 43, 0.14) 74% 100%),
+    linear-gradient(154deg, rgba(255,255,255,0) 0 34%, rgba(188, 224, 236, 0.05) 41% 45%, rgba(255,255,255,0) 51% 100%),
+    linear-gradient(90deg, rgba(214,231,238,0.06), transparent 4%, transparent 96%, rgba(81, 110, 122, 0.12)),
+    linear-gradient(180deg, rgba(214,231,238,0.05), transparent 6%, transparent 94%, rgba(64, 89, 101, 0.12)),
+    radial-gradient(circle at 18% 16%, rgba(184, 214, 224, 0.08), transparent 20%),
+    radial-gradient(circle at 80% 20%, rgba(118, 151, 164, 0.08), transparent 16%),
+    linear-gradient(180deg, rgba(118, 151, 164, 0.04), rgba(0,0,0,0) 34%, rgba(35, 55, 65, 0.08) 100%);
 }
 
 [data-theme="light"] .postit-container.aquarium-active::after {
@@ -320,54 +364,139 @@
   animation-delay: -7.1s;
 }
 
+.aquarium-bottomscape {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 212px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition: opacity 0.24s ease, transform 0.28s ease;
+}
+
+.aquarium-bottomscape::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 62px;
+  background:
+    linear-gradient(180deg, transparent, rgba(66, 122, 102, 0.05) 55%, rgba(87, 131, 109, 0.08)),
+    linear-gradient(180deg, rgba(255,255,255,0.03), transparent 48%);
+}
+
+.postit-container.aquarium-active .aquarium-bottomscape {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+[data-theme="light"] .postit-container.aquarium-active .aquarium-bottomscape {
+  opacity: 0.96;
+}
+
+.aquarium-pebble-field {
+  position: absolute;
+  inset: auto 0 12px 0;
+  height: 72px;
+  z-index: 1;
+}
+
+.aquarium-pebble {
+  position: absolute;
+  bottom: 0;
+  border-radius: 999px;
+  border: 1.5px solid rgba(99, 112, 117, 0.18);
+  background: linear-gradient(180deg, rgba(250,255,255,0.16), rgba(143, 157, 161, 0.2));
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset;
+  opacity: 0.7;
+  filter: blur(0.4px);
+}
+
+[data-theme="light"] .aquarium-pebble {
+  border-color: rgba(92, 106, 112, 0.34);
+  background: linear-gradient(180deg, rgba(255,255,255,0.34), rgba(161, 175, 180, 0.36));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.16) inset,
+    0 1px 0 rgba(86, 99, 104, 0.08);
+  opacity: 0.92;
+  filter: none;
+}
+
+[data-theme="dark"] .aquarium-pebble {
+  border-color: rgba(207, 219, 224, 0.12);
+  background: linear-gradient(180deg, rgba(232,239,242,0.12), rgba(129, 144, 149, 0.16));
+}
+
+.aquarium-pebble-a { left: 4%; width: 48px; height: 18px; bottom: 10px; }
+.aquarium-pebble-b { left: 15%; width: 34px; height: 13px; bottom: 28px; }
+.aquarium-pebble-c { left: 27%; width: 56px; height: 20px; bottom: 16px; }
+.aquarium-pebble-d { left: 41%; width: 38px; height: 14px; bottom: 34px; }
+.aquarium-pebble-e { left: 54%; width: 62px; height: 22px; bottom: 14px; }
+.aquarium-pebble-f { left: 67%; width: 42px; height: 15px; bottom: 30px; }
+.aquarium-pebble-g { left: 79%; width: 58px; height: 20px; bottom: 12px; }
+.aquarium-pebble-h { left: 91%; width: 32px; height: 12px; bottom: 26px; }
+
 .aquarium-plant {
-  --plant-stem: #4c8867;
-  --plant-stem-deep: #2f5f47;
-  --plant-stem-soft: #9ad0a5;
-  --plant-leaf: #6eab7f;
-  --plant-leaf-mid: #95d0a4;
-  --plant-leaf-gloss: rgba(238, 255, 239, 0.76);
+  --plant-stem: #4e8d6a;
+  --plant-stem-deep: #2d6147;
+  --plant-stem-soft: #aedbb4;
+  --plant-leaf: #72ab82;
+  --plant-leaf-mid: #9fd2a8;
+  --plant-leaf-gloss: rgba(247, 255, 248, 0.62);
   --plant-glow: rgba(122, 208, 173, 0.18);
-  --plant-shadow: rgba(23, 53, 36, 0.16);
-  --plant-leaf-shadow: rgba(39, 84, 56, 0.2);
+  --plant-shadow: rgba(23, 53, 36, 0.12);
+  --plant-leaf-shadow: rgba(39, 84, 56, 0.18);
   --plant-sand: rgba(187, 171, 134, 0.22);
   --plant-sand-deep: rgba(130, 112, 76, 0.2);
   --plant-pebble: rgba(134, 146, 150, 0.46);
+  --plant-ink: rgba(34, 63, 46, 0.95);
+  --plant-ink-soft: rgba(56, 92, 70, 0.22);
+  --plant-sand-ink: rgba(122, 97, 62, 0.34);
   position: absolute;
-  right: 8px;
   bottom: 8px;
   width: 188px;
   height: 196px;
   pointer-events: none;
   z-index: 2;
-  opacity: 0;
-  transform: translate3d(10px, 8px, 0);
-  transition: opacity 0.24s ease, transform 0.28s ease;
-  filter: drop-shadow(0 10px 14px rgba(24, 41, 33, 0.08));
+  filter: drop-shadow(0 2px 0 rgba(40, 68, 49, 0.08)) drop-shadow(0 8px 10px rgba(24, 41, 33, 0.08));
+  transform-origin: 50% 100%;
 }
 
-.postit-container.aquarium-active .aquarium-plant {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+.aquarium-plant-left {
+  left: -8px;
+  transform: scale(0.94) rotate(-1.2deg);
 }
 
-[data-theme="light"] .postit-container.aquarium-active .aquarium-plant {
-  opacity: 0.96;
+.aquarium-plant-mid {
+  left: 37%;
+  transform: scale(1.02) rotate(1.1deg);
+}
+
+.aquarium-plant-right {
+  right: -2px;
+  transform: scale(0.98) rotate(-0.6deg);
 }
 
 [data-theme="dark"] .aquarium-plant {
-  --plant-stem: #5d9772;
-  --plant-stem-deep: #31563f;
-  --plant-stem-soft: #9fcfb0;
-  --plant-leaf: #89bf98;
-  --plant-leaf-mid: #a6d5b4;
-  --plant-leaf-gloss: rgba(236, 255, 240, 0.54);
+  --plant-stem: #639e78;
+  --plant-stem-deep: #345a43;
+  --plant-stem-soft: #add8b9;
+  --plant-leaf: #8dc29b;
+  --plant-leaf-mid: #afd9b7;
+  --plant-leaf-gloss: rgba(240, 255, 243, 0.48);
   --plant-glow: rgba(116, 173, 150, 0.13);
-  --plant-shadow: rgba(8, 18, 11, 0.25);
-  --plant-leaf-shadow: rgba(13, 28, 17, 0.24);
+  --plant-shadow: rgba(8, 18, 11, 0.18);
+  --plant-leaf-shadow: rgba(13, 28, 17, 0.18);
   --plant-sand: rgba(128, 115, 84, 0.23);
   --plant-sand-deep: rgba(77, 68, 50, 0.18);
   --plant-pebble: rgba(171, 182, 190, 0.38);
+  --plant-ink: rgba(20, 35, 26, 0.94);
+  --plant-ink-soft: rgba(173, 223, 192, 0.16);
+  --plant-sand-ink: rgba(198, 183, 149, 0.22);
 }
 
 .aquarium-plant::before,
@@ -384,20 +513,20 @@
   height: 142px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 48% 58%, var(--plant-glow), transparent 62%),
-    radial-gradient(circle at 34% 30%, rgba(255,255,255,0.14), transparent 26%);
-  filter: blur(12px);
-  opacity: 0.9;
+    radial-gradient(circle at 50% 62%, var(--plant-glow), transparent 58%),
+    radial-gradient(circle at 34% 30%, rgba(255,255,255,0.1), transparent 22%);
+  filter: blur(8px);
+  opacity: 0.58;
 }
 
 .aquarium-plant::after {
   right: 10px;
   bottom: 8px;
   width: 146px;
-  height: 18px;
+  height: 16px;
   border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(37, 59, 45, 0.14), transparent 72%);
-  opacity: 0.6;
+  background: radial-gradient(circle at center, rgba(37, 59, 45, 0.12), transparent 72%);
+  opacity: 0.45;
 }
 
 .aquarium-plant-sand {
@@ -408,14 +537,16 @@
   width: 150px;
   height: 32px;
   border-radius: 60% 40% 16px 16px;
+  border: 2px solid var(--plant-sand-ink);
+  box-sizing: border-box;
   background:
-    radial-gradient(circle at 22% 38%, rgba(255,255,255,0.24) 0 10%, transparent 11%),
-    radial-gradient(circle at 58% 64%, rgba(255,255,255,0.08) 0 18%, transparent 19%),
-    linear-gradient(180deg, rgba(255,255,255,0.1), transparent 40%),
+    radial-gradient(circle at 22% 38%, rgba(255,255,255,0.18) 0 10%, transparent 11%),
+    linear-gradient(180deg, rgba(255,255,255,0.12), transparent 40%),
     linear-gradient(180deg, var(--plant-sand), var(--plant-sand-deep));
   box-shadow:
-    0 -1px 0 rgba(255,255,255,0.08) inset,
-    0 8px 18px rgba(53, 47, 31, 0.06);
+    0 2px 0 rgba(255,255,255,0.12) inset,
+    0 -1px 0 rgba(78, 61, 32, 0.08) inset,
+    0 1px 0 rgba(255,255,255,0.04);
 }
 
 .aquarium-plant-pebble {
@@ -423,10 +554,11 @@
   bottom: 8px;
   z-index: 2;
   border-radius: 999px;
-  background: var(--plant-pebble);
+  border: 1.5px solid rgba(83, 95, 99, 0.28);
+  background: linear-gradient(180deg, rgba(252,255,255,0.18), var(--plant-pebble));
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.12) inset,
-    0 2px 4px rgba(43, 49, 52, 0.1);
+    0 1px 0 rgba(255,255,255,0.08) inset,
+    0 1px 0 rgba(42, 53, 57, 0.06);
 }
 
 .aquarium-plant-pebble-a {
@@ -454,14 +586,15 @@
   bottom: 16px;
   z-index: 3;
   width: 8px;
+  box-sizing: border-box;
+  border: 2px solid var(--plant-ink);
   border-radius: 999px 999px 3px 3px;
   transform-origin: 50% 100%;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.14), transparent 28%),
-    linear-gradient(90deg, var(--plant-stem-soft) 0 28%, var(--plant-stem) 52%, var(--plant-stem-deep) 100%);
+    linear-gradient(90deg, var(--plant-stem-soft) 0 24%, var(--plant-stem) 24% 64%, var(--plant-stem-deep) 64% 100%);
   box-shadow:
-    1px 0 0 rgba(255,255,255,0.08) inset,
-    -1px 0 0 rgba(17, 43, 29, 0.08) inset;
+    0 1px 0 rgba(255,255,255,0.08) inset,
+    0 2px 0 var(--plant-ink-soft);
 }
 
 .aquarium-plant-stem::before,
@@ -472,20 +605,20 @@
 
 .aquarium-plant-stem::before {
   right: 1px;
-  top: 12px;
+  top: 10px;
   bottom: 8px;
-  width: 1px;
-  background: rgba(32, 71, 48, 0.16);
-  opacity: 0.6;
+  width: 2px;
+  background: rgba(28, 69, 46, 0.22);
+  opacity: 0.5;
 }
 
 .aquarium-plant-stem::after {
-  left: 2px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: rgba(255,255,255,0.16);
-  opacity: 0.5;
+  left: 1px;
+  top: 4px;
+  bottom: 10px;
+  width: 2px;
+  background: rgba(255,255,255,0.18);
+  opacity: 0.56;
 }
 
 .aquarium-plant-stem-a {
@@ -530,25 +663,27 @@
 
 .aquarium-plant-leaf {
   position: absolute;
-  width: 22px;
-  height: 14px;
+  width: 23px;
+  height: 15px;
+  box-sizing: border-box;
+  border: 2px solid var(--plant-ink);
   border-radius: 88% 12% 82% 18% / 84% 26% 74% 16%;
   background:
-    radial-gradient(circle at 26% 30%, var(--plant-leaf-gloss) 0 12%, transparent 13%),
-    linear-gradient(140deg, rgba(240,255,243,0.42) 0%, var(--plant-leaf-mid) 34%, var(--plant-leaf) 74%, var(--plant-stem-deep) 100%);
+    radial-gradient(circle at 28% 28%, var(--plant-leaf-gloss) 0 12%, transparent 13%),
+    linear-gradient(145deg, rgba(240,255,243,0.14) 0 16%, var(--plant-leaf-mid) 16% 48%, var(--plant-leaf) 48% 76%, var(--plant-stem-deep) 76% 100%);
   box-shadow:
-    0 4px 9px var(--plant-leaf-shadow),
-    0 0 0 1px rgba(255,255,255,0.04) inset;
+    0 1px 0 rgba(255,255,255,0.08) inset,
+    0 2px 0 var(--plant-ink-soft);
   transform-origin: 14% 80%;
 }
 
 .aquarium-plant-leaf::before {
   content: "";
   position: absolute;
-  inset: 1px 2px 3px 1px;
+  inset: 1px 2px 2px 1px;
   border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 44%);
-  opacity: 0.62;
+  background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 42%);
+  opacity: 0.52;
 }
 
 .aquarium-plant-leaf::after {
@@ -557,9 +692,10 @@
   left: 4px;
   top: 2px;
   bottom: 2px;
-  width: 1px;
-  background: rgba(244,255,246,0.32);
-  opacity: 0.78;
+  width: 2px;
+  border-radius: 999px;
+  background: rgba(244,255,246,0.24);
+  opacity: 0.72;
 }
 
 .aquarium-plant-leaf-a1 { left: -12px; top: 18px; width: 20px; height: 13px; transform: rotate(-34deg); }
@@ -1411,11 +1547,33 @@
     height: 62px;
   }
 
+  .aquarium-bottomscape {
+    height: 182px;
+  }
+
   .aquarium-plant {
-    right: 4px;
-    bottom: 4px;
     width: 152px;
     height: 166px;
+  }
+
+  .aquarium-plant-left {
+    left: -18px;
+    transform: scale(0.8) rotate(-1.2deg);
+  }
+
+  .aquarium-plant-mid {
+    left: 35%;
+    transform: scale(0.88) rotate(1.1deg);
+  }
+
+  .aquarium-plant-right {
+    right: -16px;
+    transform: scale(0.84) rotate(-0.6deg);
+  }
+
+  .aquarium-pebble-field {
+    inset: auto 0 10px 0;
+    height: 62px;
   }
 
   .aquarium-bubble-column {
@@ -1461,12 +1619,34 @@
     height: 54px;
   }
 
+  .aquarium-bottomscape {
+    height: 154px;
+  }
+
   .aquarium-plant {
     width: 128px;
     height: 140px;
-    right: 1px;
     bottom: 2px;
-    opacity: 0;
+  }
+
+  .aquarium-plant-left {
+    left: -24px;
+    transform: scale(0.68) rotate(-1deg);
+  }
+
+  .aquarium-plant-mid {
+    left: 31%;
+    transform: scale(0.76) rotate(1deg);
+  }
+
+  .aquarium-plant-right {
+    right: -22px;
+    transform: scale(0.72) rotate(-0.5deg);
+  }
+
+  .aquarium-pebble-field {
+    inset: auto 0 8px 0;
+    height: 52px;
   }
 
   .aquarium-bubble-column {
@@ -1498,6 +1678,12 @@
     width: 94px;
     height: 62px;
   }
+}
+
+body.page-home .main.postit-container,
+body.page-home .postit-container {
+  height: 100%;
+  min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
