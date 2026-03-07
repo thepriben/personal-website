@@ -427,7 +427,7 @@ h3 {
 .postit-container {
   position: relative;
   min-height: 100%;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 18px;
 }
 
@@ -460,6 +460,7 @@ h3 {
 
 .swim-fish {
   --sub-hit-shift: 0px;
+  --sub-hit-lift: 0px;
   --sub-hull-a: #f6d45f;
   --sub-hull-b: #d9a63a;
   --sub-hull-c: #b57a22;
@@ -530,7 +531,7 @@ h3 {
 .swim-fish-visual {
   position: absolute;
   inset: 0;
-  transform: translate3d(var(--sub-hit-shift), 0, 0);
+  transform: translate3d(var(--sub-hit-shift), var(--sub-hit-lift), 0);
   will-change: transform;
 }
 
@@ -892,20 +893,6 @@ h3 {
   height: 18px;
 }
 
-.postit-quakes-disc-c {
-  top: 10px;
-  right: 18px;
-  width: 9px;
-  height: 9px;
-}
-
-.postit-quakes-disc-d {
-  bottom: 16px;
-  left: 26px;
-  width: 8px;
-  height: 8px;
-}
-
 .postit-quakes-disc-e {
   bottom: 12px;
   left: 52px;
@@ -918,6 +905,10 @@ h3 {
   right: 20px;
   width: 14px;
   height: 14px;
+  background: radial-gradient(circle at 35% 35%, #f5f6f7 0%, #c6ccd1 52%, #7a8691 100%);
+  box-shadow:
+    0 0 0 1px rgba(122,134,145,0.2),
+    0 10px 18px rgba(90,101,111,0.12);
 }
 
 [data-theme="dark"] .postit-quakes-ornament {
@@ -932,6 +923,12 @@ h3 {
   box-shadow:
     0 0 0 1px rgba(127,214,205,0.2),
     0 8px 16px rgba(0,0,0,0.18);
+}
+
+[data-theme="dark"] .postit-quakes-disc-f {
+  box-shadow:
+    0 0 0 1px rgba(176,186,194,0.2),
+    0 8px 16px rgba(0,0,0,0.2);
 }
 
 .postit-quakes-copy {
@@ -1218,13 +1215,28 @@ footer {
 }
 
 .submarine-toggle {
-  width: auto;
-  min-width: 46px;
-  padding: 0 0.7rem;
-  font-size: 0.63rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  width: 32px;
+  min-width: 32px;
+  padding: 0;
+}
+
+.submarine-toggle-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.water-toggle-wave,
+.water-toggle-bubble {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.water-toggle-bubble-small {
+  stroke-width: 1.35;
 }
 
 .submarine-toggle.is-active {
@@ -1232,6 +1244,11 @@ footer {
   border-color: #b57a22;
   color: #5a3a12;
   box-shadow: 0 4px 10px rgba(181,122,34,0.18);
+}
+
+.submarine-toggle.is-active .water-toggle-wave,
+.submarine-toggle.is-active .water-toggle-bubble {
+  stroke: #754a18;
 }
 
 [data-theme="dark"] .submarine-toggle.is-active {
@@ -1310,9 +1327,8 @@ header nav {
   }
 
   .submarine-toggle {
-    min-width: 42px;
-    padding: 0 0.6rem;
-    font-size: 0.6rem;
+    width: 32px;
+    min-width: 32px;
   }
 
   .main {
