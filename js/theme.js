@@ -5,7 +5,7 @@
     if (btn && btn.dataset.iconSun) {
       return { sun: btn.dataset.iconSun, moon: btn.dataset.iconMoon };
     }
-    return { sun: 'images/sun.svg', moon: 'images/moon.svg' };
+    return { sun: 'images/ui/theme-sun.svg', moon: 'images/ui/theme-moon.svg' };
   }
 
   function getStoredTheme() {

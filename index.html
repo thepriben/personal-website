@@ -17,43 +17,8 @@
   <script>
     (function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20260307b" />
-  <style>
-    @keyframes postit-float-a {
-      0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(8px, -18px); }
-      50% { transform: translate(-6px, -8px); }
-      75% { transform: translate(-4px, -22px); }
-    }
-    @keyframes postit-float-b {
-      0%, 100% { transform: translate(0, 0); }
-      33% { transform: translate(-10px, -12px); }
-      66% { transform: translate(6px, -20px); }
-    }
-    @keyframes postit-float-c {
-      0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(-8px, -14px); }
-      50% { transform: translate(10px, -6px); }
-      75% { transform: translate(4px, -24px); }
-    }
-    .postit-container .postit {
-      --drag-water-x: 0px;
-      --drag-water-y: 0px;
-      --drag-water-tilt: 0deg;
-      animation: postit-float-a 9s ease-in-out infinite;
-    }
-    .postit-container .postit.postit-dragging,
-    .postit-container .postit.postit-water-settling {
-      animation: none;
-      transform: translate(var(--drag-water-x), var(--drag-water-y)) rotate(var(--drag-water-tilt));
-    }
-    .postit-container .postit.language-note { animation: postit-float-a 9s ease-in-out infinite; animation-delay: 0s; }
-    .postit-container .postit.last-book { animation: postit-float-b 11s ease-in-out infinite; animation-delay: 1s; }
-    .postit-container .postit.postit-quakes { animation: postit-float-c 10s ease-in-out infinite; animation-delay: 3s; }
-    @media (prefers-reduced-motion: reduce) {
-      .postit-container .postit { animation: none; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css?v=20260307e" />
+  <link rel="stylesheet" href="css/home.css?v=20260307b" />
 </head>
 <body>
   <header>
@@ -66,7 +31,7 @@
       </nav>
       <div class="header-actions">
         <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-          <img id="theme-icon" src="images/moon.svg" alt="" width="18" height="18" aria-hidden="true">
+          <img id="theme-icon" src="images/ui/theme-moon.svg" alt="" width="18" height="18" aria-hidden="true">
         </button>
         <button type="button" id="submarine-toggle" class="theme-toggle submarine-toggle" aria-pressed="false" aria-controls="swim-fish" aria-label="Show submarine">
           <svg class="submarine-toggle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -102,7 +67,7 @@
       <div class="postit last-book" id="postit-book" data-postit="book">
         <span class="tag">LAST BOOK</span>
         <a href="https://www.editions-eni.fr/livre/framework-pyqt-developpez-vos-interfaces-graphiques-en-python-avec-pyqt6-9782409050053">
-          <img src="images/PyQt6.jpg" alt="PyQt6 book cover" class="index" width="130" height="195" loading="lazy" />
+          <img src="images/books/pyqt6.jpg" alt="PyQt6 book cover" class="index" width="130" height="195" loading="lazy" />
         </a>
         <p class="caption"><a href="https://www.editions-eni.fr/livre/framework-pyqt-developpez-vos-interfaces-graphiques-en-python-avec-pyqt6-9782409050053"><span class="book-title">PyQt6</span></a> (2025)</p>
       </div>
@@ -186,7 +151,7 @@
     </a>
   </footer>
   <script>
-(function(){var k='theme';function g(){return localStorage.getItem(k)||'dark';}function s(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem(k,t);var i=document.getElementById('theme-icon');if(i)i.src=t==='dark'?'images/sun.svg':'images/moon.svg';}var b=document.getElementById('theme-toggle');if(b)b.onclick=function(){s(g()==='light'?'dark':'light');};s(g());})();
+(function(){var k='theme';function g(){return localStorage.getItem(k)||'dark';}function s(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem(k,t);var i=document.getElementById('theme-icon');if(i)i.src=t==='dark'?'images/ui/theme-sun.svg':'images/ui/theme-moon.svg';}var b=document.getElementById('theme-toggle');if(b)b.onclick=function(){s(g()==='light'?'dark':'light');};s(g());})();
   </script>
   <script>
 (function(){
