@@ -1,5 +1,6 @@
 (function () {
   var STORAGE_KEY = 'theme';
+
   function getIconPaths() {
     var btn = document.getElementById('theme-toggle');
     if (btn && btn.dataset.iconSun) {
@@ -9,20 +10,26 @@
   }
 
   function getStoredTheme() {
-    return localStorage.getItem(STORAGE_KEY);
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch (e) {
+      return null;
+    }
   }
 
   function getSystemTheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-
-  function getTheme() {
-    return getStoredTheme() || 'dark';
+    try {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch (e) {
+      return 'dark';
+    }
   }
 
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(STORAGE_KEY, theme);
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch (e) {}
     updateIcon(theme);
   }
 
@@ -35,18 +42,18 @@
   }
 
   function toggleTheme() {
-    var current = getTheme();
+    var current = getStoredTheme() || getSystemTheme();
     var next = current === 'light' ? 'dark' : 'light';
     setTheme(next);
   }
 
-  setTheme(getTheme());
+  setTheme(getStoredTheme() || getSystemTheme());
 
   document.addEventListener('DOMContentLoaded', function () {
     var btn = document.getElementById('theme-toggle');
     if (btn) {
       btn.addEventListener('click', toggleTheme);
-      updateIcon(getTheme());
+      updateIcon(getStoredTheme() || getSystemTheme());
     }
   });
 })();

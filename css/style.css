@@ -568,20 +568,16 @@ footer {
   height: 18px;
   display: block;
   flex: 0 0 auto;
-  transform: translateY(1.25px);
-}
-
-.water-toggle-wave,
-.water-toggle-bubble {
-  fill: none;
-  stroke: var(--text-muted);
-  stroke-width: 1.55;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.water-toggle-bubble-small {
-  stroke-width: 1.35;
+  background-color: var(--text-muted);
+  transform: translateY(1px);
+  -webkit-mask-image: url("../images/ui/water-toggle.svg");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-image: url("../images/ui/water-toggle.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }
 
 .submarine-toggle.is-active {
@@ -591,9 +587,8 @@ footer {
   box-shadow: 0 4px 10px rgba(181,122,34,0.18);
 }
 
-.submarine-toggle.is-active .water-toggle-wave,
-.submarine-toggle.is-active .water-toggle-bubble {
-  stroke: #754a18;
+.submarine-toggle.is-active .submarine-toggle-icon {
+  background-color: #754a18;
 }
 
 [data-theme="dark"] .submarine-toggle.is-active {
@@ -781,7 +776,6 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .swim-fish-motion,
   .swim-fish-svg,
-  .swim-submarine-propeller,
   .swim-fish-bubble {
     animation: none;
   }

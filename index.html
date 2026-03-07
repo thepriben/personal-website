@@ -15,10 +15,10 @@
     gtag('config', 'G-Q8WHXGDDWG');
   </script>
   <script>
-    (function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
+    (function(){var t='dark';try{t=localStorage.getItem('theme')||'dark';}catch(e){}document.documentElement.setAttribute('data-theme',t);})();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20260307e" />
-  <link rel="stylesheet" href="css/home.css?v=20260307b" />
+  <link rel="stylesheet" href="css/style.css?v=20260307f" />
+  <link rel="stylesheet" href="css/home.css?v=20260307c" />
 </head>
 <body>
   <header>
@@ -34,13 +34,7 @@
           <img id="theme-icon" src="images/ui/theme-moon.svg" alt="" width="18" height="18" aria-hidden="true">
         </button>
         <button type="button" id="submarine-toggle" class="theme-toggle submarine-toggle" aria-pressed="false" aria-controls="swim-fish" aria-label="Show submarine">
-          <svg class="submarine-toggle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path class="water-toggle-wave" d="M3.2 9.1C4.4 8.1 5.3 8.1 6.5 9.1C7.7 10.1 8.6 10.1 9.8 9.1C11 8.1 11.9 8.1 13.1 9.1C14.3 10.1 15.2 10.1 16.4 9.1C17.6 8.1 18.5 8.1 19.7 9.1" />
-            <path class="water-toggle-wave" d="M3.2 12.6C4.4 11.6 5.3 11.6 6.5 12.6C7.7 13.6 8.6 13.6 9.8 12.6C11 11.6 11.9 11.6 13.1 12.6C14.3 13.6 15.2 13.6 16.4 12.6C17.6 11.6 18.5 11.6 19.7 12.6" />
-            <path class="water-toggle-wave" d="M3.2 16.1C4.4 15.1 5.3 15.1 6.5 16.1C7.7 17.1 8.6 17.1 9.8 16.1C11 15.1 11.9 15.1 13.1 16.1C14.3 17.1 15.2 17.1 16.4 16.1C17.6 15.1 18.5 15.1 19.7 16.1" />
-            <circle class="water-toggle-bubble" cx="17.1" cy="5.8" r="1.2" />
-            <circle class="water-toggle-bubble water-toggle-bubble-small" cx="14.4" cy="4.1" r="0.72" />
-          </svg>
+          <span class="submarine-toggle-icon" aria-hidden="true"></span>
         </button>
       </div>
     </div>
@@ -87,52 +81,7 @@
       <div class="swim-fish swim-fish-hidden" id="swim-fish" data-postit="fish" aria-hidden="true">
         <div class="swim-fish-visual">
           <div class="swim-fish-motion">
-            <svg class="swim-fish-svg" viewBox="0 0 220 120" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="sub-hull-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
-                <stop class="sub-hull-stop-a" offset="0%" />
-                <stop class="sub-hull-stop-b" offset="55%" />
-                <stop class="sub-hull-stop-c" offset="100%" />
-              </linearGradient>
-              <linearGradient id="sub-tower-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
-                <stop class="sub-tower-stop-a" offset="0%" />
-                <stop class="sub-tower-stop-b" offset="100%" />
-              </linearGradient>
-              <linearGradient id="sub-fin-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
-                <stop class="sub-fin-stop-a" offset="0%" />
-                <stop class="sub-fin-stop-b" offset="100%" />
-              </linearGradient>
-            </defs>
-            <path class="swim-submarine-tail-fin" d="M37 61C26 48 24 36 31 25C44 36 48 49 47 61C48 73 44 86 31 97C24 86 26 74 37 61Z" fill="url(#sub-fin-gradient)" />
-            <g class="swim-submarine-propeller">
-              <circle class="swim-submarine-propeller-core" cx="26" cy="61" r="3.8" />
-              <path class="swim-submarine-propeller-blade" d="M26 58C32 47 41 44 47 49C41 55 34 60 26 61Z" />
-              <path class="swim-submarine-propeller-blade" d="M28 63C40 66 46 74 43 81C34 77 28 70 26 62Z" />
-              <path class="swim-submarine-propeller-blade" d="M23 62C15 72 6 75 1 70C7 65 14 60 23 59Z" />
-            </g>
-            <path class="swim-submarine-hull" d="M41 61C41 45 56 34 84 34H145C174 34 194 46 200 61C194 76 174 88 145 88H84C56 88 41 77 41 61Z" fill="url(#sub-hull-gradient)" />
-            <path class="swim-submarine-sheen" d="M67 42C87 36 112 36 141 38C160 39 178 47 188 58C171 50 151 47 128 47H77C73 47 70 46 67 42Z" />
-            <path class="swim-submarine-outline" d="M41 61C41 45 56 34 84 34H145C174 34 194 46 200 61C194 76 174 88 145 88H84C56 88 41 77 41 61Z" fill="none" stroke-width="2.2" />
-            <path class="swim-submarine-tower" d="M106 34C106 24 115 18 128 18H146C155 18 161 24 161 34V39H106Z" fill="url(#sub-tower-gradient)" />
-            <path class="swim-submarine-tower-outline" d="M106 34C106 24 115 18 128 18H146C155 18 161 24 161 34V39H106Z" fill="none" stroke-width="2" />
-            <path class="swim-submarine-periscope" d="M139 18V9C139 6 141 4 144 4H156" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-            <circle class="swim-submarine-periscope-head" cx="158" cy="4" r="3" />
-            <path class="swim-submarine-bottom-fin" d="M91 88C101 98 104 104 121 101C122 94 113 89 91 88Z" fill="url(#sub-fin-gradient)" />
-            <path class="swim-submarine-panel-line" d="M70 61H166" fill="none" stroke-width="2.1" stroke-linecap="round" />
-            <circle class="swim-submarine-rivet" cx="59" cy="61" r="2.1" />
-            <circle class="swim-submarine-rivet" cx="176" cy="61" r="2.1" />
-            <g class="swim-submarine-window-group">
-              <circle class="swim-submarine-window-frame" cx="88" cy="61" r="10.5" />
-              <circle class="swim-submarine-window-glass" cx="88" cy="61" r="6.6" />
-              <circle class="swim-submarine-window-highlight" cx="85.4" cy="58.4" r="1.7" />
-              <circle class="swim-submarine-window-frame" cx="116" cy="61" r="10.5" />
-              <circle class="swim-submarine-window-glass" cx="116" cy="61" r="6.6" />
-              <circle class="swim-submarine-window-highlight" cx="113.4" cy="58.4" r="1.7" />
-              <circle class="swim-submarine-window-frame" cx="144" cy="61" r="10.5" />
-              <circle class="swim-submarine-window-glass" cx="144" cy="61" r="6.6" />
-              <circle class="swim-submarine-window-highlight" cx="141.4" cy="58.4" r="1.7" />
-            </g>
-            </svg>
+            <span class="swim-fish-svg" aria-hidden="true"></span>
             <span class="swim-fish-bubble swim-fish-bubble-a"></span>
             <span class="swim-fish-bubble swim-fish-bubble-b"></span>
             <span class="swim-fish-bubble swim-fish-bubble-c"></span>
@@ -150,9 +99,7 @@
       <span class="footer-brand-mark footer-orcid-mark" aria-hidden="true"><span>i</span><span>D</span></span>
     </a>
   </footer>
-  <script>
-(function(){var k='theme';function g(){return localStorage.getItem(k)||'dark';}function s(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem(k,t);var i=document.getElementById('theme-icon');if(i)i.src=t==='dark'?'images/ui/theme-sun.svg':'images/ui/theme-moon.svg';}var b=document.getElementById('theme-toggle');if(b)b.onclick=function(){s(g()==='light'?'dark':'light');};s(g());})();
-  </script>
+  <script src="js/theme.js?v=20260307b" defer></script>
   <script>
 (function(){
   var k='postit-pos';
