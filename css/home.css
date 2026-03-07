@@ -49,33 +49,51 @@
 }
 
 @keyframes aquarium-column-rise-a {
-  0% { transform: translate3d(0, 0, 0) scale(0.7); opacity: 0; }
-  12% { opacity: 0.55; }
-  100% { transform: translate3d(8px, -290px, 0) scale(1.15); opacity: 0; }
+  0% { bottom: 2px; transform: translate3d(0, 0, 0) scale(0.72); opacity: 0; }
+  12% { opacity: 0.62; }
+  100% { bottom: calc(100% - 12px); transform: translate3d(10px, 0, 0) scale(1.18); opacity: 0; }
 }
 
 @keyframes aquarium-column-rise-b {
-  0% { transform: translate3d(0, 0, 0) scale(0.65); opacity: 0; }
-  14% { opacity: 0.48; }
-  100% { transform: translate3d(-6px, -250px, 0) scale(1.05); opacity: 0; }
+  0% { bottom: 0; transform: translate3d(0, 0, 0) scale(0.66); opacity: 0; }
+  14% { opacity: 0.54; }
+  100% { bottom: calc(100% - 10px); transform: translate3d(-8px, 0, 0) scale(1.08); opacity: 0; }
 }
 
 @keyframes aquarium-column-rise-c {
-  0% { transform: translate3d(0, 0, 0) scale(0.72); opacity: 0; }
-  10% { opacity: 0.42; }
-  100% { transform: translate3d(10px, -332px, 0) scale(1.22); opacity: 0; }
+  0% { bottom: 4px; transform: translate3d(0, 0, 0) scale(0.76); opacity: 0; }
+  10% { opacity: 0.48; }
+  100% { bottom: calc(100% - 16px); transform: translate3d(12px, 0, 0) scale(1.22); opacity: 0; }
 }
 
 @keyframes aquarium-column-rise-d {
-  0% { transform: translate3d(0, 0, 0) scale(0.68); opacity: 0; }
-  11% { opacity: 0.46; }
-  100% { transform: translate3d(-8px, -276px, 0) scale(1.08); opacity: 0; }
+  0% { bottom: 1px; transform: translate3d(0, 0, 0) scale(0.7); opacity: 0; }
+  11% { opacity: 0.52; }
+  100% { bottom: calc(100% - 11px); transform: translate3d(-10px, 0, 0) scale(1.12); opacity: 0; }
 }
 
 @keyframes aquarium-column-rise-e {
-  0% { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
-  16% { opacity: 0.38; }
-  100% { transform: translate3d(5px, -220px, 0) scale(0.96); opacity: 0; }
+  0% { bottom: 3px; transform: translate3d(0, 0, 0) scale(0.62); opacity: 0; }
+  16% { opacity: 0.42; }
+  100% { bottom: calc(100% - 9px); transform: translate3d(6px, 0, 0) scale(0.98); opacity: 0; }
+}
+
+@keyframes aquarium-column-rise-f {
+  0% { bottom: -1px; transform: translate3d(0, 0, 0) scale(0.74); opacity: 0; }
+  13% { opacity: 0.58; }
+  100% { bottom: calc(100% - 13px); transform: translate3d(-6px, 0, 0) scale(1.14); opacity: 0; }
+}
+
+@keyframes aquarium-column-rise-g {
+  0% { bottom: 2px; transform: translate3d(0, 0, 0) scale(0.64); opacity: 0; }
+  15% { opacity: 0.46; }
+  100% { bottom: calc(100% - 10px); transform: translate3d(9px, 0, 0) scale(1.02); opacity: 0; }
+}
+
+@keyframes aquarium-column-rise-h {
+  0% { bottom: 0; transform: translate3d(0, 0, 0) scale(0.8); opacity: 0; }
+  12% { opacity: 0.64; }
+  100% { bottom: calc(100% - 15px); transform: translate3d(-12px, 0, 0) scale(1.2); opacity: 0; }
 }
 
 .postit-container .postit {
@@ -198,64 +216,108 @@
 }
 
 .aquarium-bubble-column {
+  --aquarium-bubble-stroke: rgba(61,147,182,0.9);
+  --aquarium-bubble-fill: rgba(255,255,255,0.72);
   position: absolute;
-  left: 20%;
-  bottom: 10px;
-  width: 42px;
-  height: calc(100% - 18px);
+  left: 8%;
+  bottom: 4px;
+  width: 76px;
+  height: calc(100% - 8px);
   pointer-events: none;
-  z-index: 1;
+  z-index: 7;
   opacity: 0;
   transition: opacity 0.24s ease;
 }
 
-[data-theme="light"] .postit-container.aquarium-active .aquarium-bubble-column {
-  opacity: 0.78;
+.aquarium-bubble-column-right {
+  left: auto;
+  right: 108px;
+}
+
+[data-theme="light"] .postit-container.aquarium-active .aquarium-bubble-column,
+[data-theme="dark"] .postit-container.aquarium-active .aquarium-bubble-column {
+  opacity: 1;
+}
+
+[data-theme="dark"] .aquarium-bubble-column {
+  --aquarium-bubble-stroke: rgba(255,255,255,0.94);
+  --aquarium-bubble-fill: rgba(255,255,255,0.22);
 }
 
 .aquarium-column-bubble {
   position: absolute;
-  bottom: 0;
+  bottom: -2px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.56);
-  background: rgba(255,255,255,0.16);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  border: 2px solid var(--aquarium-bubble-stroke);
+  background: var(--aquarium-bubble-fill);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.14),
+    0 0 12px rgba(61,147,182,0.12);
   opacity: 0;
 }
 
 .aquarium-column-bubble-a {
-  left: 8px;
-  width: 8px;
-  height: 8px;
+  left: 10px;
+  width: 12px;
+  height: 12px;
   animation: aquarium-column-rise-a 7.2s linear infinite;
+  animation-delay: -4.1s;
 }
 
 .aquarium-column-bubble-b {
-  left: 18px;
-  width: 5px;
-  height: 5px;
+  left: 28px;
+  width: 8px;
+  height: 8px;
   animation: aquarium-column-rise-b 5.9s linear infinite;
+  animation-delay: -2.6s;
 }
 
 .aquarium-column-bubble-c {
-  left: 4px;
-  width: 11px;
-  height: 11px;
+  left: 0;
+  width: 16px;
+  height: 16px;
   animation: aquarium-column-rise-c 8.6s linear infinite;
+  animation-delay: -6.2s;
 }
 
 .aquarium-column-bubble-d {
-  left: 24px;
-  width: 6px;
-  height: 6px;
+  left: 42px;
+  width: 10px;
+  height: 10px;
   animation: aquarium-column-rise-d 6.7s linear infinite;
+  animation-delay: -1.9s;
 }
 
 .aquarium-column-bubble-e {
-  left: 14px;
-  width: 4px;
-  height: 4px;
+  left: 22px;
+  width: 7px;
+  height: 7px;
   animation: aquarium-column-rise-e 5.1s linear infinite;
+  animation-delay: -3.4s;
+}
+
+.aquarium-column-bubble-f {
+  left: 52px;
+  width: 9px;
+  height: 9px;
+  animation: aquarium-column-rise-f 7.8s linear infinite;
+  animation-delay: -5.2s;
+}
+
+.aquarium-column-bubble-g {
+  left: 34px;
+  width: 6px;
+  height: 6px;
+  animation: aquarium-column-rise-g 4.9s linear infinite;
+  animation-delay: -1.4s;
+}
+
+.aquarium-column-bubble-h {
+  left: 60px;
+  width: 13px;
+  height: 13px;
+  animation: aquarium-column-rise-h 8.9s linear infinite;
+  animation-delay: -7.1s;
 }
 
 .aquarium-plant {
@@ -1249,8 +1311,12 @@
   }
 
   .aquarium-bubble-column {
-    left: 18%;
-    width: 34px;
+    left: 6%;
+    width: 60px;
+  }
+
+  .aquarium-bubble-column-right {
+    right: 84px;
   }
 
   .postit.language-note,
@@ -1296,8 +1362,12 @@
   }
 
   .aquarium-bubble-column {
-    left: 16%;
-    width: 28px;
+    left: 4%;
+    width: 46px;
+  }
+
+  .aquarium-bubble-column-right {
+    right: 68px;
   }
 
   .postit.language-note,
