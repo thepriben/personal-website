@@ -59,9 +59,12 @@
         <a href="tech_articles.html">Tech Articles/Chapters</a>
         <a href="tech_videos.html">Tech Videos</a>
       </nav>
-      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-        <img id="theme-icon" src="images/moon.svg" alt="" width="18" height="18" aria-hidden="true">
-      </button>
+      <div class="header-actions">
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+          <img id="theme-icon" src="images/moon.svg" alt="" width="18" height="18" aria-hidden="true">
+        </button>
+        <button type="button" id="submarine-toggle" class="theme-toggle submarine-toggle" aria-pressed="false" aria-controls="swim-fish" aria-label="Show submarine">Sub</button>
+      </div>
     </div>
   </header>
 
@@ -94,13 +97,71 @@
         <span class="tag">LAST QUAKES IN LA</span>
         <a href="tools/quakes.html" class="postit-quakes-link">
           <div class="postit-quakes-ornament" aria-hidden="true">
-            <span class="postit-quakes-core"></span>
-            <span class="postit-quakes-node postit-quakes-node-a"></span>
-            <span class="postit-quakes-node postit-quakes-node-b"></span>
+            <span class="postit-quakes-disc postit-quakes-disc-a"></span>
+            <span class="postit-quakes-disc postit-quakes-disc-b"></span>
+            <span class="postit-quakes-disc postit-quakes-disc-c"></span>
+            <span class="postit-quakes-disc postit-quakes-disc-d"></span>
+            <span class="postit-quakes-disc postit-quakes-disc-e"></span>
+            <span class="postit-quakes-disc postit-quakes-disc-f"></span>
           </div>
-          <span class="postit-quakes-copy"></span>
+          <span class="postit-quakes-copy">Live map of recent seismic activity around Los Angeles.</span>
         </a>
         <small class="postit-quakes-source"><a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noopener">Source: USGS</a></small>
+      </div>
+      <div class="swim-fish swim-fish-hidden" id="swim-fish" data-postit="fish" aria-hidden="true">
+        <div class="swim-fish-visual">
+          <div class="swim-fish-motion">
+            <svg class="swim-fish-svg" viewBox="0 0 220 120" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="sub-hull-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                <stop class="sub-hull-stop-a" offset="0%" />
+                <stop class="sub-hull-stop-b" offset="55%" />
+                <stop class="sub-hull-stop-c" offset="100%" />
+              </linearGradient>
+              <linearGradient id="sub-tower-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                <stop class="sub-tower-stop-a" offset="0%" />
+                <stop class="sub-tower-stop-b" offset="100%" />
+              </linearGradient>
+              <linearGradient id="sub-fin-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                <stop class="sub-fin-stop-a" offset="0%" />
+                <stop class="sub-fin-stop-b" offset="100%" />
+              </linearGradient>
+            </defs>
+            <path class="swim-submarine-tail-fin" d="M37 61C26 48 24 36 31 25C44 36 48 49 47 61C48 73 44 86 31 97C24 86 26 74 37 61Z" fill="url(#sub-fin-gradient)" />
+            <g class="swim-submarine-propeller">
+              <circle class="swim-submarine-propeller-core" cx="26" cy="61" r="3.8" />
+              <path class="swim-submarine-propeller-blade" d="M26 58C32 47 41 44 47 49C41 55 34 60 26 61Z" />
+              <path class="swim-submarine-propeller-blade" d="M28 63C40 66 46 74 43 81C34 77 28 70 26 62Z" />
+              <path class="swim-submarine-propeller-blade" d="M23 62C15 72 6 75 1 70C7 65 14 60 23 59Z" />
+            </g>
+            <path class="swim-submarine-hull" d="M41 61C41 45 56 34 84 34H145C174 34 194 46 200 61C194 76 174 88 145 88H84C56 88 41 77 41 61Z" fill="url(#sub-hull-gradient)" />
+            <path class="swim-submarine-sheen" d="M67 42C87 36 112 36 141 38C160 39 178 47 188 58C171 50 151 47 128 47H77C73 47 70 46 67 42Z" />
+            <path class="swim-submarine-outline" d="M41 61C41 45 56 34 84 34H145C174 34 194 46 200 61C194 76 174 88 145 88H84C56 88 41 77 41 61Z" fill="none" stroke-width="2.2" />
+            <path class="swim-submarine-tower" d="M106 34C106 24 115 18 128 18H146C155 18 161 24 161 34V39H106Z" fill="url(#sub-tower-gradient)" />
+            <path class="swim-submarine-tower-outline" d="M106 34C106 24 115 18 128 18H146C155 18 161 24 161 34V39H106Z" fill="none" stroke-width="2" />
+            <path class="swim-submarine-periscope" d="M139 18V9C139 6 141 4 144 4H156" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <circle class="swim-submarine-periscope-head" cx="158" cy="4" r="3" />
+            <path class="swim-submarine-bottom-fin" d="M91 88C101 98 104 104 121 101C122 94 113 89 91 88Z" fill="url(#sub-fin-gradient)" />
+            <path class="swim-submarine-panel-line" d="M70 61H166" fill="none" stroke-width="2.1" stroke-linecap="round" />
+            <circle class="swim-submarine-rivet" cx="59" cy="61" r="2.1" />
+            <circle class="swim-submarine-rivet" cx="176" cy="61" r="2.1" />
+            <g class="swim-submarine-window-group">
+              <circle class="swim-submarine-window-frame" cx="88" cy="61" r="10.5" />
+              <circle class="swim-submarine-window-glass" cx="88" cy="61" r="6.6" />
+              <circle class="swim-submarine-window-highlight" cx="85.4" cy="58.4" r="1.7" />
+              <circle class="swim-submarine-window-frame" cx="116" cy="61" r="10.5" />
+              <circle class="swim-submarine-window-glass" cx="116" cy="61" r="6.6" />
+              <circle class="swim-submarine-window-highlight" cx="113.4" cy="58.4" r="1.7" />
+              <circle class="swim-submarine-window-frame" cx="144" cy="61" r="10.5" />
+              <circle class="swim-submarine-window-glass" cx="144" cy="61" r="6.6" />
+              <circle class="swim-submarine-window-highlight" cx="141.4" cy="58.4" r="1.7" />
+            </g>
+            </svg>
+            <span class="swim-fish-bubble swim-fish-bubble-a"></span>
+            <span class="swim-fish-bubble swim-fish-bubble-b"></span>
+            <span class="swim-fish-bubble swim-fish-bubble-c"></span>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -119,49 +180,94 @@
   <script>
 (function(){
   var k='postit-pos';
-  var def={lang:{x:40,y:40},book:{x:328,y:80},quakes:{x:40,y:432}};
+  var sk='submarine-visible';
+  var legacyDef={lang:{x:40,y:40},book:{x:328,y:80},quakes:{x:40,y:432}};
+  var def={lang:{x:8,y:36},book:{x:420,y:72},quakes:{x:980,y:48},fish:{x:-150,y:196}};
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
+  function hasSavedPositions(){try{return !!localStorage.getItem(k);}catch(e){return false;}}
+  function loadFishVisible(){try{return localStorage.getItem(sk)==='1';}catch(e){return false;}}
+  function saveFishVisible(v){try{localStorage.setItem(sk,v?'1':'0');}catch(e){}}
   function save(p){try{localStorage.setItem(k,JSON.stringify(p));}catch(e){}}
   var pos=load();
+  if(!pos.fish)pos.fish={x:def.fish.x,y:def.fish.y};
+  pos.fish.x=def.fish.x;
+  if(typeof pos.fish.y!=='number')pos.fish.y=def.fish.y;
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var quakes=document.getElementById('postit-quakes');
+  var fish=document.getElementById('swim-fish');
+  var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
-  var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:quakes,key:'quakes'}];
+  var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:quakes,key:'quakes'},{el:fish,key:'fish'}];
   var bounds={w:0,h:0,pad:8};
+  var fishState={cruiseSpeed:156,vx:156,lastTs:0,bumpTimer:0,resumeAt:0,hitShift:0};
+  var fishVisible=loadFishVisible();
   function updateBounds(){var r=container?container.getBoundingClientRect():{width:0,height:0};var ft=document.querySelector('footer');bounds.w=r.width;bounds.h=ft?Math.min(r.height,Math.max(0,ft.getBoundingClientRect().top-r.top)):r.height;}
-  function clampPos(el,key){if(!container||!el)return;updateBounds();var p=bounds.pad,w=Math.max(0,bounds.w-el.offsetWidth-p),h=Math.max(0,bounds.h-el.offsetHeight-p);pos[key].x=Math.max(p,Math.min(w,pos[key].x));pos[key].y=Math.max(p,Math.min(h,pos[key].y));el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';}
-  function applyMobileLayout(){if(!container)return;updateBounds();if(bounds.w<600){var y=bounds.pad;posts.forEach(function(p){if(p.el){pos[p.key]={x:Math.max(bounds.pad,(bounds.w-p.el.offsetWidth)/2),y:y};y+=p.el.offsetHeight+16;}});}else{var loaded=load();posts.forEach(function(p){if(p.el&&loaded[p.key])pos[p.key]=loaded[p.key];});}posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});}
+  function samePos(a,b){return !!a&&!!b&&Math.abs(a.x-b.x)<2&&Math.abs(a.y-b.y)<2;}
+  function shouldUseAquariumDefaults(loaded){return !hasSavedPositions()||!loaded||!loaded.lang||!loaded.book||!loaded.quakes||samePos(loaded.lang,legacyDef.lang)&&samePos(loaded.book,legacyDef.book)&&samePos(loaded.quakes,legacyDef.quakes);}
+  function desktopLayout(){var pad=6;var langPos={x:pad,y:38};var quakesX=Math.max(pad,Math.round(bounds.w-278));var bookX=Math.max(pad+300,Math.min(quakesX-292,Math.round(bounds.w*0.49)-130));return {lang:langPos,book:{x:bookX,y:72},quakes:{x:quakesX,y:52}};}
+  function fishRange(el){var off=Math.max(42,Math.round(el.offsetWidth*0.46));return {minX:-el.offsetWidth-off,maxX:bounds.w+off};}
+  function fishDragRange(el){var off=Math.max(18,Math.round(el.offsetWidth*0.42));return {minX:-off,maxX:bounds.w-el.offsetWidth+off};}
+  function fishRectAt(x,y){return {left:x+12,top:y+8,right:x+fish.offsetWidth-12,bottom:y+fish.offsetHeight-8};}
+  function updateFishVisual(){if(fish)fish.style.setProperty('--sub-hit-shift',fishState.hitShift.toFixed(2)+'px');}
+  function updateFishVisibility(){if(!fish)return;fish.classList.toggle('swim-fish-hidden',!fishVisible);fish.setAttribute('aria-hidden',fishVisible?'false':'true');if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',fishVisible?'Hide submarine':'Show submarine');}if(!fishVisible){fishState.hitShift=0;updateFishVisual();}else{fishState.lastTs=0;clampPos(fish,'fish');}saveFishVisible(fishVisible);}
+  function rectsOverlap(a,b){return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;}
+  function rectInContainer(el){if(!container||!el)return null;var cr=container.getBoundingClientRect();var r=el.getBoundingClientRect();return {left:r.left-cr.left,top:r.top-cr.top,right:r.right-cr.left,bottom:r.bottom-cr.top};}
+  function obstacleRects(){return posts.filter(function(p){return p.el&&p.key!=='fish';}).map(function(p){return rectInContainer(p.el);}).filter(Boolean);}
+  function fishBlockedAt(x,y){if(!fish||!fishVisible)return false;var fr=fishRectAt(x,y);var obstacles=obstacleRects();for(var i=0;i<obstacles.length;i++){if(rectsOverlap(fr,obstacles[i]))return obstacles[i];}return null;}
+  function fishStopX(obstacle){return obstacle.left-fish.offsetWidth+10;}
+  function bumpFish(speed,boxRect,fishRect){if(!fish||!fishVisible)return;var r=fishRange(fish);var now=performance.now();var norm=Math.max(0,Math.min(1,speed/1800));var baseEase=norm*norm*norm;var midNorm=Math.max(0,Math.min(1,(norm-0.16)/0.64));var midBoost=Math.pow(midNorm,1.18);var ease=Math.min(1,baseEase+0.28*midBoost);var separationGap=1.5+5.5*ease;var reboundSpeed=8+164*ease;var driftDelay=160+760*ease;var targetX=pos.fish.x-(1.4+10*ease);if(boxRect){var penetration=fishRect?Math.max(0,fishRect.right-boxRect.left):0;targetX=Math.min(targetX,pos.fish.x-penetration-separationGap,boxRect.left-fish.offsetWidth-separationGap);fishState.hitShift=Math.min(-(0.75+3.4*norm+3.8*ease+Math.min(1.2,penetration*0.03)),fishState.hitShift);}pos.fish.x=Math.max(r.minX,targetX);fishState.vx=Math.min(fishState.vx,-reboundSpeed);fishState.resumeAt=now+driftDelay;fishState.lastTs=0;clampPos(fish,'fish');if(boxRect){var settledRect=rectInContainer(fish);if(settledRect&&rectsOverlap(settledRect,boxRect)){var remaining=Math.max(0,settledRect.right-boxRect.left);if(remaining>0){pos.fish.x=Math.max(r.minX,pos.fish.x-remaining-separationGap);clampPos(fish,'fish');}}}updateFishVisual();fish.classList.remove('swim-fish-bumped');void fish.offsetWidth;fish.classList.add('swim-fish-bumped');if(fishState.bumpTimer)clearTimeout(fishState.bumpTimer);fishState.bumpTimer=window.setTimeout(function(){fish.classList.remove('swim-fish-bumped');},320);}
+  function maybeBumpFishWith(el,key,speed,ts){if(key==='fish'||!fish||!fishVisible||fish.classList.contains('postit-dragging'))return false;var boxRect=rectInContainer(el);var fishRect=rectInContainer(fish);if(!boxRect||!fishRect||!rectsOverlap(boxRect,fishRect))return false;bumpFish(speed,boxRect,fishRect);return true;}
+  function clampPos(el,key){if(!container||!el)return;updateBounds();var p=bounds.pad;if(key==='fish'){var r=fishRange(el),h=Math.max(0,bounds.h-el.offsetHeight-p);pos[key].x=Math.max(r.minX,Math.min(r.maxX,pos[key].x));pos[key].y=Math.max(p,Math.min(h,pos[key].y));el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';return;}var w=Math.max(0,bounds.w-el.offsetWidth-p),h=Math.max(0,bounds.h-el.offsetHeight-p);pos[key].x=Math.max(p,Math.min(w,pos[key].x));pos[key].y=Math.max(p,Math.min(h,pos[key].y));el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';}
+  function applyMobileLayout(){if(!container)return;updateBounds();var loaded=load();if(bounds.w<600){var y=bounds.pad;posts.forEach(function(p){if(p.el&&p.key!=='fish'){pos[p.key]={x:Math.max(bounds.pad,(bounds.w-p.el.offsetWidth)/2),y:y};y+=p.el.offsetHeight+16;}});if(fish){pos.fish.y=loaded.fish&&typeof loaded.fish.y==='number'?loaded.fish.y:y+12;}}else{var wideDefaults=desktopLayout();var useWideDefaults=shouldUseAquariumDefaults(loaded);posts.forEach(function(p){if(!p.el)return;if(p.key==='fish'){if(loaded.fish&&typeof loaded.fish.y==='number')pos.fish.y=loaded.fish.y;}else if(useWideDefaults){pos[p.key]=wideDefaults[p.key];}else if(loaded[p.key]){pos[p.key]=loaded[p.key];}else{pos[p.key]=wideDefaults[p.key];}});}posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});}
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];}});
+  updateFishVisual();
   applyMobileLayout();
-  if(container){updateBounds();window.addEventListener('resize',function(){applyMobileLayout();});}
+  updateFishVisibility();
+  if(fishToggle){fishToggle.addEventListener('click',function(){fishVisible=!fishVisible;updateFishVisibility();});}
+  if(container){updateBounds();window.addEventListener('resize',function(){fishState.lastTs=0;applyMobileLayout();});}
+  function animateFish(ts){if(!fish){return;}if(!fishState.lastTs)fishState.lastTs=ts;var dt=Math.min(0.05,(ts-fishState.lastTs)/1000);fishState.lastTs=ts;if(Math.abs(fishState.hitShift)>0.08){fishState.hitShift+=(0-fishState.hitShift)*Math.min(1,dt*11);}else if(fishState.hitShift!==0){fishState.hitShift=0;}updateFishVisual();if(!fishVisible){window.requestAnimationFrame(animateFish);return;}if(!fish.classList.contains('postit-dragging')){var r=fishRange(fish);if(ts<fishState.resumeAt){if(fishState.vx<0){fishState.vx=Math.min(0,fishState.vx+180*dt);if(fishState.vx>-6)fishState.vx=0;}else if(fishState.vx>0){fishState.vx=Math.max(0,fishState.vx-220*dt);}}else if(fishState.vx<fishState.cruiseSpeed){fishState.vx=Math.min(fishState.cruiseSpeed,fishState.vx+112*dt);}else if(fishState.vx>fishState.cruiseSpeed){fishState.vx=Math.max(fishState.cruiseSpeed,fishState.vx-120*dt);}var nextX=pos.fish.x+fishState.vx*dt;if(fishState.vx>0){if(nextX>r.maxX){pos.fish.x=r.minX;}else{var blocker=fishBlockedAt(nextX,pos.fish.y);if(blocker){pos.fish.x=Math.min(pos.fish.x,fishStopX(blocker));fishState.vx=0;}else{pos.fish.x=nextX;}}}else if(nextX<r.minX){pos.fish.x=r.minX;fishState.vx=Math.max(-18,fishState.vx*0.32);fishState.resumeAt=Math.min(fishState.resumeAt,ts+120);}else{pos.fish.x=nextX;}clampPos(fish,'fish');}window.requestAnimationFrame(animateFish);}
+  if(fish){window.requestAnimationFrame(animateFish);}
   function drag(el,key){
-    var startX,startY,ox,oy,moved;
+    var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs;
     function move(e){
       el.style.cursor='grabbing';
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       if(x===undefined)return;
+      var now=performance.now();
       var dx=x-startX,dy=y-startY;
       if(Math.abs(dx)>3||Math.abs(dy)>3)moved=true;
       if(container)updateBounds();
       var p=bounds.pad;
+      var minX=p;
       var maxX=Math.max(p,bounds.w-el.offsetWidth-p);
       var maxY=Math.max(p,bounds.h-el.offsetHeight-p);
+      if(key==='fish'){var fr=fishDragRange(el);minX=fr.minX;maxX=Math.max(minX,fr.maxX);}
       var nx=Math.max(p,Math.min(maxX,ox+dx));
+      if(key==='fish')nx=Math.max(minX,Math.min(maxX,ox+dx));
       var ny=Math.max(p,Math.min(maxY,oy+dy));
       pos[key].x=nx;pos[key].y=ny;
       el.style.left=nx+'px';el.style.top=ny+'px';
+      if(lastPointerTs&&key!=='fish'){
+        var dtMs=Math.max(16,now-lastPointerTs);
+        var speed=Math.hypot(x-lastPointerX,y-lastPointerY)/(dtMs/1000);
+        if((!lastHitTs||now-lastHitTs>24)&&maybeBumpFishWith(el,key,speed,now))lastHitTs=now;
+      }
+      lastPointerX=x;lastPointerY=y;lastPointerTs=now;
     }
-    function stop(e){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);el.classList.remove('postit-dragging');el.style.cursor='';if(!moved){var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);var links=el.querySelectorAll('a[href]');if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}}save(pos);setTimeout(function(){moved=false;},0);}
+    function stop(e){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);el.classList.remove('postit-dragging');el.style.cursor='';fishState.lastTs=0;if(!moved){var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);var links=el.querySelectorAll('a[href]');if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}}save(pos);setTimeout(function(){moved=false;},0);}
     function start(e){
+      if(key==='fish'&&!fishVisible)return;
       e.preventDefault();
       moved=false;
       el.classList.add('postit-dragging');
+      if(key==='fish'){fishState.hitShift=0;updateFishVisual();}
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       startX=x;startY=y;
       ox=pos[key].x;oy=pos[key].y;
+      lastPointerX=x;lastPointerY=y;lastPointerTs=performance.now();lastHitTs=0;
       document.addEventListener('mousemove',move);
       document.addEventListener('mouseup',stop);
       document.addEventListener('touchmove',move,{passive:false});
