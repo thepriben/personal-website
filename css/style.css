@@ -537,7 +537,7 @@ footer {
   pointer-events: none;
 }
 
-[data-theme="dark"] .theme-toggle img {
+[data-theme="dark"] #theme-icon {
   filter: invert(1);
 }
 
@@ -568,16 +568,9 @@ footer {
   height: 18px;
   display: block;
   flex: 0 0 auto;
-  background-color: var(--text-muted);
   transform: translateY(1px);
-  -webkit-mask-image: url("../images/ui/water-toggle.svg");
-  -webkit-mask-position: center;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-image: url("../images/ui/water-toggle.svg");
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-size: contain;
+  opacity: 0.96;
+  filter: none;
 }
 
 .submarine-toggle.is-active {
@@ -588,7 +581,7 @@ footer {
 }
 
 .submarine-toggle.is-active .submarine-toggle-icon {
-  background-color: #754a18;
+  opacity: 1;
 }
 
 [data-theme="dark"] .submarine-toggle.is-active {
