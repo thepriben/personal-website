@@ -1,6 +1,6 @@
 # medialoco.github.io
 
-<table>
+<table border="0" cellpadding="0" cellspacing="0" role="presentation">
   <tr>
     <td valign="middle">
       A static website featuring tech books, articles, chapters, and videos, with both dark/light mode and a playful submarine mode.
