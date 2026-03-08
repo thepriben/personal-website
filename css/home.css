@@ -1030,6 +1030,15 @@ body.page-home .main.postit-container {
   --clown-shadow: rgba(39, 77, 92, 0.16);
   --clown-bubble-stroke: rgba(52, 144, 175, 0.82);
   --clown-bubble-fill: rgba(255,255,255,0.52);
+  --clown-tail-soft: rgba(255, 194, 108, 0.84);
+  --clown-tail-mid: rgba(244, 112, 42, 0.96);
+  --clown-tail-deep: rgba(197, 65, 22, 0.98);
+  --clown-fin-soft: rgba(255, 194, 108, 0.84);
+  --clown-fin-mid: rgba(244, 112, 42, 0.96);
+  --clown-fin-deep: rgba(197, 65, 22, 0.98);
+  --clown-body-glow-soft: rgba(255, 168, 128, 0.34);
+  --clown-body-glow-deep: rgba(255, 121, 72, 0.22);
+  --clown-speckle: rgba(255, 202, 124, 0.62);
   position: absolute;
   width: 70px;
   height: 48px;
@@ -1056,6 +1065,32 @@ body.page-home .main.postit-container {
   --clown-bubble-fill: rgba(255,255,255,0.2);
 }
 
+.clown-fish-violet {
+  --clown-orange: #9b6bff;
+  --clown-orange-deep: #6640c8;
+  --clown-orange-soft: #c19bff;
+  --clown-cream: #dccbfd;
+  --clown-outline: #2c1956;
+  --clown-shadow: rgba(51, 36, 93, 0.18);
+  --clown-bubble-stroke: rgba(224, 197, 255, 0.96);
+  --clown-bubble-fill: rgba(250, 243, 255, 0.64);
+  --clown-tail-soft: rgba(245, 236, 255, 0.94);
+  --clown-tail-mid: rgba(165, 114, 255, 0.98);
+  --clown-tail-deep: rgba(88, 46, 196, 0.99);
+  --clown-fin-soft: rgba(236, 222, 255, 0.9);
+  --clown-fin-mid: rgba(171, 121, 255, 0.96);
+  --clown-fin-deep: rgba(102, 64, 200, 0.98);
+  --clown-body-glow-soft: rgba(214, 182, 255, 0.34);
+  --clown-body-glow-deep: rgba(134, 97, 230, 0.24);
+  --clown-speckle: rgba(233, 214, 255, 0.68);
+}
+
+[data-theme="dark"] .clown-fish-violet {
+  --clown-shadow: rgba(18, 12, 36, 0.3);
+  --clown-bubble-stroke: rgba(221, 205, 255, 0.9);
+  --clown-bubble-fill: rgba(255,255,255,0.24);
+}
+
 .clown-fish * {
   pointer-events: none;
 }
@@ -1078,6 +1113,10 @@ body.page-home .main.postit-container {
 
 .clown-fish.postit-dragging .clown-fish-motion {
   animation-play-state: paused;
+}
+
+.clown-fish.clown-fish-chatting .clown-fish-motion {
+  animation-duration: 1.5s;
 }
 
 .clown-fish-shadow {
@@ -1130,7 +1169,7 @@ body.page-home .main.postit-container {
   width: 15px;
   height: 11px;
   background:
-    linear-gradient(180deg, rgba(255,194,108,0.84) 0%, rgba(244,112,42,0.96) 56%, rgba(197,65,22,0.98) 100%);
+    linear-gradient(180deg, var(--clown-tail-soft) 0%, var(--clown-tail-mid) 56%, var(--clown-tail-deep) 100%);
   border: var(--clown-line) solid var(--clown-outline);
   border-right-width: 1px;
   border-radius: 14px 22px 18px 10px;
@@ -1160,8 +1199,8 @@ body.page-home .main.postit-container {
   overflow: hidden;
   background:
     radial-gradient(circle at 38% 28%, rgba(255,230,176,0.62) 0 15%, rgba(255,230,176,0) 16%),
-    radial-gradient(circle at 72% 24%, rgba(255,168,128,0.34) 0 18%, rgba(255,168,128,0) 19%),
-    radial-gradient(circle at 64% 75%, rgba(255,121,72,0.22) 0 18%, rgba(255,121,72,0) 19%),
+    radial-gradient(circle at 72% 24%, var(--clown-body-glow-soft) 0 18%, rgba(255,168,128,0) 19%),
+    radial-gradient(circle at 64% 75%, var(--clown-body-glow-deep) 0 18%, rgba(255,121,72,0) 19%),
     radial-gradient(circle at 24% 68%, rgba(255,255,255,0.18) 0 10%, rgba(255,255,255,0) 11%),
     linear-gradient(180deg, var(--clown-orange-soft) 0%, var(--clown-orange) 50%, var(--clown-orange-deep) 100%);
   border: var(--clown-line) solid var(--clown-outline);
@@ -1179,11 +1218,11 @@ body.page-home .main.postit-container {
   width: 26px;
   height: 16px;
   background:
-    radial-gradient(circle at 10% 30%, rgba(255,202,124,0.7) 0 2px, rgba(255,202,124,0) 2.6px),
-    radial-gradient(circle at 28% 60%, rgba(255,202,124,0.58) 0 2.2px, rgba(255,202,124,0) 2.8px),
-    radial-gradient(circle at 48% 30%, rgba(255,202,124,0.64) 0 2px, rgba(255,202,124,0) 2.6px),
-    radial-gradient(circle at 65% 62%, rgba(255,202,124,0.58) 0 2.2px, rgba(255,202,124,0) 2.8px),
-    radial-gradient(circle at 84% 32%, rgba(255,202,124,0.62) 0 2px, rgba(255,202,124,0) 2.6px);
+    radial-gradient(circle at 10% 30%, var(--clown-speckle) 0 2px, rgba(255,202,124,0) 2.6px),
+    radial-gradient(circle at 28% 60%, var(--clown-speckle) 0 2.2px, rgba(255,202,124,0) 2.8px),
+    radial-gradient(circle at 48% 30%, var(--clown-speckle) 0 2px, rgba(255,202,124,0) 2.6px),
+    radial-gradient(circle at 65% 62%, var(--clown-speckle) 0 2.2px, rgba(255,202,124,0) 2.8px),
+    radial-gradient(circle at 84% 32%, var(--clown-speckle) 0 2px, rgba(255,202,124,0) 2.6px);
   opacity: 0.52;
 }
 
@@ -1201,7 +1240,7 @@ body.page-home .main.postit-container {
 
 .clown-fish-fin {
   position: absolute;
-  background: linear-gradient(180deg, rgba(255,198,112,0.92) 0%, rgba(244,108,38,0.92) 58%, rgba(197,65,22,0.94) 100%);
+  background: linear-gradient(180deg, var(--clown-fin-soft) 0%, var(--clown-fin-mid) 58%, var(--clown-fin-deep) 100%);
   border: var(--clown-line) solid var(--clown-outline);
   opacity: 0.96;
 }
@@ -1314,6 +1353,7 @@ body.page-home .main.postit-container {
   border: 1px solid var(--clown-bubble-stroke);
   background: var(--clown-bubble-fill);
   animation: clown-bubble 2.8s linear infinite;
+  transition: width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, filter 0.18s ease;
 }
 
 .clown-fish-bubble-a {
@@ -1326,6 +1366,29 @@ body.page-home .main.postit-container {
   width: 3px;
   height: 3px;
   animation-delay: 1.1s;
+}
+
+.clown-fish.clown-fish-chatting .clown-fish-bubble {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.76);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.22));
+  animation-name: clown-bubble-chat;
+  animation-duration: 1.4s;
+}
+
+[data-theme="dark"] .clown-fish.clown-fish-chatting .clown-fish-bubble {
+  border-color: rgba(244, 240, 255, 0.86);
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.clown-fish.clown-fish-chatting .clown-fish-bubble-a {
+  width: 6px;
+  height: 6px;
+}
+
+.clown-fish.clown-fish-chatting .clown-fish-bubble-b {
+  width: 5px;
+  height: 5px;
 }
 
 @keyframes fish-glide {
@@ -1397,6 +1460,12 @@ body.page-home .main.postit-container {
   0% { transform: translate3d(0, 0, 0) scale(0.65); opacity: 0; }
   18% { opacity: 0.58; }
   100% { transform: translate3d(12px, -16px, 0) scale(1.08); opacity: 0; }
+}
+
+@keyframes clown-bubble-chat {
+  0% { transform: translate3d(0, 0, 0) scale(0.72); opacity: 0; }
+  20% { opacity: 0.92; }
+  100% { transform: translate3d(15px, -18px, 0) scale(1.26); opacity: 0; }
 }
 
 @keyframes sub-propeller-spin {
