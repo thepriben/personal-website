@@ -367,7 +367,12 @@
   var clownMotion={turnChance:0.09,dartChance:0.1,dartMin:56,dartMax:16,baseMin:24,baseMax:18,nextMin:2600,nextMax:2600,driftFreq:0.0028,driftAmp:10,lerpX:1.4,lerpY:1.8,releaseScale:0.12,releaseMaxX:96,releaseMaxY:72,releaseBase:24,releaseVar:20,releaseYJitter:14,releaseDecisionMin:1400,releaseDecisionVar:2200,separateMin:52,separateVar:18};
   var violetMotion={turnChance:0.13,dartChance:0.16,dartMin:52,dartMax:18,baseMin:22,baseMax:20,nextMin:2200,nextMax:3000,driftFreq:0.0033,driftAmp:12,lerpX:1.7,lerpY:2.1,releaseScale:0.13,releaseMaxX:102,releaseMaxY:76,releaseBase:22,releaseVar:24,releaseYJitter:16,releaseDecisionMin:1200,releaseDecisionVar:1900,separateMin:56,separateVar:22};
   var greenMotion={turnChance:0.16,dartChance:0.22,dartMin:48,dartMax:16,baseMin:20,baseMax:16,nextMin:1800,nextMax:2600,driftFreq:0.0037,driftAmp:13,lerpX:1.9,lerpY:2.3,releaseScale:0.14,releaseMaxX:108,releaseMaxY:82,releaseBase:20,releaseVar:22,releaseYJitter:18,releaseDecisionMin:1000,releaseDecisionVar:1700,separateMin:58,separateVar:20};
-  var fishChat={active:false,until:0,cooldownUntil:0,probeAt:0,anchorY:0};
+  var fishChat={active:false,until:0,anchorY:0,leftKey:'',rightKey:'',pairId:''};
+  var fishChatPairs=[
+    {id:'clown-violet',keys:['clown','violet'],probeAt:0,cooldownUntil:0,lastChatAt:0},
+    {id:'clown-green',keys:['clown','green'],probeAt:0,cooldownUntil:0,lastChatAt:0},
+    {id:'violet-green',keys:['violet','green'],probeAt:0,cooldownUntil:0,lastChatAt:0}
+  ];
   var aquariumMode=loadAquariumMode();
   var fishVisible=aquariumMode!==0;
   function aquariumCardsHidden(){return aquariumMode===2;}
@@ -394,6 +399,9 @@
   function updateClownVisual(){updateBuddyVisual(clown,clownState);}
   function updateVioletVisual(){updateBuddyVisual(violet,violetState);}
   function updateGreenVisual(){updateBuddyVisual(green,greenState);}
+  function buddyElByKey(key){if(key==='clown')return clown;if(key==='violet')return violet;if(key==='green')return green;return null;}
+  function buddyStateByKey(key){if(key==='clown')return clownState;if(key==='violet')return violetState;if(key==='green')return greenState;return null;}
+  function buddyMotionByKey(key){if(key==='clown')return clownMotion;if(key==='violet')return violetMotion;if(key==='green')return greenMotion;return null;}
   function clampBuddyPos(el,key){if(!container||!el)return;updateBounds();var xr=clownRange(el),yr=clownVerticalRange(el);pos[key].x=clamp(pos[key].x,xr.minX,xr.maxX);pos[key].y=clamp(pos[key].y,yr.minY,yr.maxY);el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';}
   function clampClownPos(){clampBuddyPos(clown,'clown');}
   function clampVioletPos(){clampBuddyPos(violet,'violet');}
@@ -407,10 +415,81 @@
     el.addEventListener('click',function(){if(isMoved()||(canToggle&&!canToggle()))return;clearClickTimer();clickTimer=window.setTimeout(function(){clickTimer=0;toggle();},220);});
     el.addEventListener('dblclick',function(e){if(isMoved()||(canToggle&&!canToggle()))return;e.preventDefault();e.stopPropagation();clearClickTimer();toggle();});
   }
-  function setFishChatClasses(active){if(clown)clown.classList.toggle('clown-fish-chatting',active);if(violet)violet.classList.toggle('clown-fish-chatting',active);}
-  function stopFishChat(ts,withSeparation){var wasActive=fishChat.active;fishChat.active=false;fishChat.until=0;fishChat.probeAt=0;setFishChatClasses(false);if(!wasActive)return;if(withSeparation&&clown&&violet){if(pos.clown.x<=pos.violet.x){setBuddyCourse(clownState,clownMotion,ts,-1,true);setBuddyCourse(violetState,violetMotion,ts,1,true);}else{setBuddyCourse(clownState,clownMotion,ts,1,true);setBuddyCourse(violetState,violetMotion,ts,-1,true);}}}
-  function maybeStartFishChat(ts){if(fishChat.active||ts<fishChat.cooldownUntil||!clown||!violet||clown.classList.contains('postit-dragging')||violet.classList.contains('postit-dragging'))return;var clownCenter=buddyCenter(clown,'clown'),violetCenter=buddyCenter(violet,'violet'),xDist=Math.abs(clownCenter.x-violetCenter.x),yDist=Math.abs(clownCenter.y-violetCenter.y),converging=clownCenter.x<violetCenter.x?clownState.vx>5&&violetState.vx<-5:clownState.vx<-5&&violetState.vx>5,facingEachOther=clownCenter.x<violetCenter.x?clownState.facing===1&&violetState.facing===-1:clownState.facing===-1&&violetState.facing===1;if(xDist<74&&yDist<28&&(converging||facingEachOther||xDist<42)){if(!fishChat.probeAt||ts>=fishChat.probeAt){fishChat.probeAt=ts+380;if(Math.random()<0.62){fishChat.active=true;fishChat.until=ts+1800+Math.random()*2000;fishChat.cooldownUntil=fishChat.until+1200+Math.random()*1800;fishChat.anchorY=(pos.clown.y+pos.violet.y)*0.5;setFishChatClasses(true);}else{fishChat.cooldownUntil=ts+860;}}}}
-  function updateFishChat(ts){if(!clown||!violet)return;if(!fishVisible){stopFishChat(ts,false);return;}if(fishChat.active){if(clown.classList.contains('postit-dragging')||violet.classList.contains('postit-dragging')){stopFishChat(ts,false);return;}if(ts>=fishChat.until){stopFishChat(ts,true);return;}}else{maybeStartFishChat(ts);}}
+  function setFishChatClasses(activeKeys){
+    if(clown)clown.classList.toggle('clown-fish-chatting',!!activeKeys&&activeKeys.indexOf('clown')!==-1);
+    if(violet)violet.classList.toggle('clown-fish-chatting',!!activeKeys&&activeKeys.indexOf('violet')!==-1);
+    if(green)green.classList.toggle('clown-fish-chatting',!!activeKeys&&activeKeys.indexOf('green')!==-1);
+  }
+  function stopFishChat(ts,withSeparation){
+    var wasActive=fishChat.active,leftKey=fishChat.leftKey,rightKey=fishChat.rightKey,leftEl=buddyElByKey(leftKey),rightEl=buddyElByKey(rightKey),leftState=buddyStateByKey(leftKey),rightState=buddyStateByKey(rightKey),leftMotion=buddyMotionByKey(leftKey),rightMotion=buddyMotionByKey(rightKey);
+    fishChat.active=false;
+    fishChat.until=0;
+    fishChat.anchorY=0;
+    fishChat.leftKey='';
+    fishChat.rightKey='';
+    fishChat.pairId='';
+    setFishChatClasses([]);
+    if(!wasActive)return;
+    if(withSeparation&&leftEl&&rightEl&&leftState&&rightState&&leftMotion&&rightMotion){
+      if(pos[leftKey].x<=pos[rightKey].x){
+        setBuddyCourse(leftState,leftMotion,ts,-1,true);
+        setBuddyCourse(rightState,rightMotion,ts,1,true);
+      }else{
+        setBuddyCourse(leftState,leftMotion,ts,1,true);
+        setBuddyCourse(rightState,rightMotion,ts,-1,true);
+      }
+    }
+  }
+  function maybeStartFishChat(ts){
+    if(fishChat.active)return;
+    var candidates=[];
+    fishChatPairs.forEach(function(pair){
+      var leftKey=pair.keys[0],rightKey=pair.keys[1],leftEl=buddyElByKey(leftKey),rightEl=buddyElByKey(rightKey),leftState=buddyStateByKey(leftKey),rightState=buddyStateByKey(rightKey);
+      if(!leftEl||!rightEl||!leftState||!rightState)return;
+      var pairCoolingDown=ts<pair.cooldownUntil;
+      if(pairCoolingDown||leftEl.classList.contains('postit-dragging')||rightEl.classList.contains('postit-dragging'))return;
+      var leftCenter=buddyCenter(leftEl,leftKey),rightCenter=buddyCenter(rightEl,rightKey),xDist=Math.abs(leftCenter.x-rightCenter.x),yDist=Math.abs(leftCenter.y-rightCenter.y),converging=leftCenter.x<rightCenter.x?leftState.vx>5&&rightState.vx<-5:leftState.vx<-5&&rightState.vx>5,facingEachOther=leftCenter.x<rightCenter.x?leftState.facing===1&&rightState.facing===-1:leftState.facing===-1&&rightState.facing===1;
+      if(xDist<74&&yDist<28&&(converging||facingEachOther||xDist<42)){
+        candidates.push({pair:pair,leftKey:leftKey,rightKey:rightKey,xDist:xDist,yDist:yDist});
+      }else if(xDist>98||yDist>42){
+        pair.probeAt=0;
+      }
+    });
+    if(!candidates.length)return;
+    candidates.sort(function(a,b){
+      var lastA=a.pair.lastChatAt||0,lastB=b.pair.lastChatAt||0;
+      if(lastA!==lastB)return lastA-lastB;
+      return (a.xDist+a.yDist*1.6)-(b.xDist+b.yDist*1.6);
+    });
+    var candidate=candidates[0],pair=candidate.pair;
+    if(!pair.probeAt||ts>=pair.probeAt){
+      pair.probeAt=ts+380;
+      if(Math.random()<0.62){
+        var leftKey=pos[candidate.leftKey].x<=pos[candidate.rightKey].x?candidate.leftKey:candidate.rightKey,rightKey=leftKey===candidate.leftKey?candidate.rightKey:candidate.leftKey;
+        fishChat.active=true;
+        fishChat.until=ts+1800+Math.random()*2000;
+        fishChat.anchorY=(pos[candidate.leftKey].y+pos[candidate.rightKey].y)*0.5;
+        fishChat.leftKey=leftKey;
+        fishChat.rightKey=rightKey;
+        fishChat.pairId=pair.id;
+        pair.lastChatAt=ts;
+        pair.cooldownUntil=fishChat.until+1200+Math.random()*1800;
+        setFishChatClasses([leftKey,rightKey]);
+      }else{
+        pair.cooldownUntil=ts+860;
+      }
+    }
+  }
+  function updateFishChat(ts){
+    if(!fishVisible){stopFishChat(ts,false);return;}
+    if(fishChat.active){
+      var leftEl=buddyElByKey(fishChat.leftKey),rightEl=buddyElByKey(fishChat.rightKey);
+      if(!leftEl||!rightEl||leftEl.classList.contains('postit-dragging')||rightEl.classList.contains('postit-dragging')){stopFishChat(ts,false);return;}
+      if(ts>=fishChat.until){stopFishChat(ts,true);return;}
+    }else{
+      maybeStartFishChat(ts);
+    }
+  }
   function updateFishVisibility(){if(!fish)return;fishVisible=aquariumMode!==0;var cardsHidden=aquariumCardsHidden();fish.classList.toggle('swim-fish-hidden',!fishVisible);fish.setAttribute('aria-hidden',fishVisible?'false':'true');if(clown){clown.classList.toggle('clown-fish-hidden',!fishVisible);clown.setAttribute('aria-hidden',fishVisible?'false':'true');}if(violet){violet.classList.toggle('clown-fish-hidden',!fishVisible);violet.setAttribute('aria-hidden',fishVisible?'false':'true');}if(green){green.classList.toggle('clown-fish-hidden',!fishVisible);green.setAttribute('aria-hidden',fishVisible?'false':'true');}if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.classList.toggle('is-muted',cardsHidden);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',aquariumMode===0?'Show aquarium':aquariumMode===1?'Hide cards':'Turn aquarium off');}if(!fishVisible){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();stopFishChat(performance.now(),false);if(clown){clownState.hitX=0;clownState.hitY=0;updateClownVisual();clown.classList.remove('clown-fish-bumped');}if(violet){violetState.hitX=0;violetState.hitY=0;updateVioletVisual();violet.classList.remove('clown-fish-bumped');}if(green){greenState.hitX=0;greenState.hitY=0;updateGreenVisual();green.classList.remove('clown-fish-bumped');}}else{fishState.lastTs=0;fishState.anchorY=pos.fish.y;clampPos(fish,'fish');if(clown){clownState.lastTs=0;clownState.nextDecisionAt=0;clampClownPos();updateClownVisual();}if(violet){violetState.lastTs=0;violetState.nextDecisionAt=0;clampVioletPos();updateVioletVisual();}if(green){greenState.lastTs=0;greenState.nextDecisionAt=0;clampGreenPos();updateGreenVisual();}}saveAquariumMode(aquariumMode);}
   function rectsOverlap(a,b){return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;}
   function rectInContainer(el){if(!container||!el)return null;var cr=container.getBoundingClientRect();var r=el.getBoundingClientRect();return {left:r.left-cr.left,top:r.top-cr.top,right:r.right-cr.left,bottom:r.bottom-cr.top};}
@@ -442,8 +521,20 @@
     if(Math.abs(state.hitY)>0.08){state.hitY+=(0-state.hitY)*Math.min(1,dt*12);}else if(state.hitY!==0){state.hitY=0;}
     updateBuddyVisual(el,state);
     if(!fishVisible||el.classList.contains('postit-dragging'))return;
-    if(fishChat.active&&clown&&violet&&(key==='clown'||key==='violet')){
-      var leftKey=pos.clown.x<=pos.violet.x?'clown':'violet',leftEl=leftKey==='clown'?clown:violet,rightEl=leftKey==='clown'?violet:clown,midCenter=(buddyCenter(leftEl,leftKey).x+buddyCenter(rightEl,leftKey==='clown'?'violet':'clown').x)*0.5,targetGap=Math.max(74,(leftEl.offsetWidth+rightEl.offsetWidth)*0.54),targetCenterX=midCenter+(key===leftKey?-1:1)*targetGap*0.5,targetX=targetCenterX-el.offsetWidth*0.5,targetY=fishChat.anchorY+Math.sin(ts*0.004+(key===leftKey?0:1.7))*4-el.offsetHeight*0.45;pos[key].x+=(targetX-pos[key].x)*Math.min(1,dt*2.6);pos[key].y+=(targetY-pos[key].y)*Math.min(1,dt*2.1);state.vx+=(0-state.vx)*Math.min(1,dt*4.2);state.vy+=(0-state.vy)*Math.min(1,dt*4.2);state.targetVx=0;state.targetVy=0;state.facing=key===leftKey?1:-1;clampBuddyPos(el,key);return;
+    if(fishChat.active&&(key===fishChat.leftKey||key===fishChat.rightKey)){
+      var leftKey=fishChat.leftKey,rightKey=fishChat.rightKey,leftEl=buddyElByKey(leftKey),rightEl=buddyElByKey(rightKey);
+      if(leftEl&&rightEl){
+        var midCenter=(buddyCenter(leftEl,leftKey).x+buddyCenter(rightEl,rightKey).x)*0.5,targetGap=Math.max(74,(leftEl.offsetWidth+rightEl.offsetWidth)*0.54),targetCenterX=midCenter+(key===leftKey?-1:1)*targetGap*0.5,targetX=targetCenterX-el.offsetWidth*0.5,targetY=fishChat.anchorY+Math.sin(ts*0.004+(key===leftKey?0:1.7))*4-el.offsetHeight*0.45;
+        pos[key].x+=(targetX-pos[key].x)*Math.min(1,dt*2.6);
+        pos[key].y+=(targetY-pos[key].y)*Math.min(1,dt*2.1);
+        state.vx+=(0-state.vx)*Math.min(1,dt*4.2);
+        state.vy+=(0-state.vy)*Math.min(1,dt*4.2);
+        state.targetVx=0;
+        state.targetVy=0;
+        state.facing=key===leftKey?1:-1;
+        clampBuddyPos(el,key);
+        return;
+      }
     }
     var xr=clownRange(el),yr=clownVerticalRange(el),spanX=Math.max(1,xr.maxX-xr.minX),spanY=Math.max(1,yr.maxY-yr.minY);
     if(!state.nextDecisionAt||ts>=state.nextDecisionAt)setBuddyCourse(state,motion,ts);
