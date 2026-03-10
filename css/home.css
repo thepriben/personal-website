@@ -264,6 +264,13 @@ body.page-home .main.postit-container {
   touch-action: none;
   z-index: 5;
   backface-visibility: hidden;
+  transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
+.postit-container.aquarium-postits-hidden .postit {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .aquarium-bubble-column {
@@ -2227,10 +2234,23 @@ body.page-home .main.postit-container {
   opacity: 1;
 }
 
+.submarine-toggle.is-active.is-muted {
+  background: linear-gradient(180deg, #e7cb74 0%, #cfad54 100%);
+  border-color: #af8740;
+  color: #64481f;
+  box-shadow: 0 3px 8px rgba(160,118,42,0.14);
+}
+
 [data-theme="dark"] .submarine-toggle.is-active {
   background: linear-gradient(180deg, #f6d45f 0%, #d9a63a 100%);
   border-color: #c8902e;
   color: #4e3312;
+}
+
+[data-theme="dark"] .submarine-toggle.is-active.is-muted {
+  background: linear-gradient(180deg, #dabe68 0%, #ba8d34 100%);
+  border-color: #b38a38;
+  color: #4a3110;
 }
 
 @media (max-width: 768px) {
