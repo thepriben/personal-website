@@ -915,6 +915,7 @@ body.page-home .main.postit-container {
 .swim-fish {
   --sub-hit-shift: 0px;
   --sub-hit-lift: 0px;
+  --sub-dir: 1;
   --sub-bubble-stroke: rgba(61,147,182,0.82);
   --sub-bubble-fill: rgba(255,255,255,0.58);
   position: absolute;
@@ -928,6 +929,8 @@ body.page-home .main.postit-container {
   z-index: 3;
   overflow: visible;
   opacity: 1;
+  transform: scaleX(var(--sub-dir));
+  transform-origin: 50% 50%;
   transition: opacity 0.22s ease;
 }
 
@@ -1098,6 +1101,7 @@ body.page-home .main.postit-container {
   --clown-hit-x: 0px;
   --clown-hit-y: 0px;
   --clown-dir: -1;
+  --clown-scale: 1;
   --clown-line: 1.5px;
   --clown-orange: #f16424;
   --clown-orange-deep: #c54116;
@@ -1168,6 +1172,36 @@ body.page-home .main.postit-container {
   --clown-bubble-fill: rgba(255,255,255,0.24);
 }
 
+.clown-fish-green {
+  --clown-orange: #39b567;
+  --clown-orange-deep: #1f7d41;
+  --clown-orange-soft: #8de39a;
+  --clown-cream: #dff6cf;
+  --clown-outline: #163f24;
+  --clown-shadow: rgba(29, 92, 54, 0.18);
+  --clown-bubble-stroke: rgba(195, 247, 215, 0.94);
+  --clown-bubble-fill: rgba(247,255,251,0.62);
+  --clown-tail-soft: rgba(230, 255, 224, 0.92);
+  --clown-tail-mid: rgba(98, 214, 131, 0.96);
+  --clown-tail-deep: rgba(31, 125, 65, 0.98);
+  --clown-fin-soft: rgba(223, 252, 213, 0.88);
+  --clown-fin-mid: rgba(99, 214, 132, 0.96);
+  --clown-fin-deep: rgba(31, 125, 65, 0.98);
+  --clown-body-glow-soft: rgba(181, 243, 180, 0.34);
+  --clown-body-glow-deep: rgba(88, 184, 104, 0.22);
+  --clown-speckle: rgba(227, 255, 219, 0.68);
+}
+
+[data-theme="dark"] .clown-fish-green {
+  --clown-shadow: rgba(12, 36, 22, 0.3);
+  --clown-bubble-stroke: rgba(216, 255, 227, 0.88);
+  --clown-bubble-fill: rgba(255,255,255,0.22);
+}
+
+.clown-fish-small {
+  --clown-scale: 0.82;
+}
+
 .clown-fish * {
   pointer-events: none;
 }
@@ -1206,12 +1240,14 @@ body.page-home .main.postit-container {
   background: rgba(58, 102, 117, 0.18);
   filter: blur(4px);
   opacity: 0.48;
+  transform: scale(var(--clown-scale));
+  transform-origin: 50% 50%;
 }
 
 .clown-fish-swimmer {
   position: absolute;
   inset: 0;
-  transform: scaleX(var(--clown-dir));
+  transform: scaleX(var(--clown-dir)) scale(var(--clown-scale));
   transform-origin: 50% 50%;
 }
 
