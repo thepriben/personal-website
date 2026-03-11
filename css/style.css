@@ -475,9 +475,11 @@ footer {
 }
 
 .footer-github-icon {
-  width: 17px;
-  height: 17px;
+  display: block;
+  width: 18px;
+  height: 18px;
   color: var(--footer-brand-text);
+  shape-rendering: geometricPrecision;
 }
 
 .footer-github-icon path {
