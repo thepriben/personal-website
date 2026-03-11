@@ -477,7 +477,11 @@ footer {
 .footer-github-icon {
   width: 17px;
   height: 17px;
-  fill: var(--footer-brand-text);
+  color: var(--footer-brand-text);
+}
+
+.footer-github-icon path {
+  fill: currentColor;
 }
 
 .footer-linkedin-mark {
