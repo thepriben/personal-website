@@ -1178,6 +1178,7 @@ body.page-home .main.postit-container {
   width: 76%;
   height: 68%;
   transform-origin: 50% 50%;
+  isolation: isolate;
   background-image: url("../images/ui/pawn-wreck-light.svg?v=20260313a");
   background-position: center;
   background-repeat: no-repeat;
@@ -1186,12 +1187,28 @@ body.page-home .main.postit-container {
 }
 
 [data-theme="light"] .wrecked-pawn-illustration {
-  filter: sepia(0.14) saturate(0.92) hue-rotate(-8deg) brightness(0.99);
+  filter: brightness(0.99) saturate(0.9) contrast(0.98);
 }
 
 [data-theme="dark"] .wrecked-pawn-illustration {
   background-image: url("../images/ui/pawn-wreck-dark.svg?v=20260313e");
   filter: brightness(0.93) sepia(0.08) saturate(0.94) contrast(0.98);
+}
+
+.wrecked-pawn-illustration::before {
+  content: none;
+}
+
+[data-theme="light"] .wrecked-pawn-illustration::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(181, 233, 246, 0.5), rgba(120, 203, 227, 0.62));
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+  -webkit-mask: url("../images/ui/pawn-wreck-light.svg?v=20260313a") center / contain no-repeat;
+  mask: url("../images/ui/pawn-wreck-light.svg?v=20260313a") center / contain no-repeat;
 }
 
 .wrecked-pawn-illustration::after {
