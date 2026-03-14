@@ -1191,6 +1191,7 @@ body.page-home .main.postit-container {
 
 [data-theme="dark"] .wrecked-pawn-illustration {
   background-image: url("../images/ui/pawn-wreck-dark.svg?v=20260313e");
+  filter: brightness(0.93) sepia(0.08) saturate(0.94) contrast(0.98);
 }
 
 .wrecked-pawn-illustration::after {
