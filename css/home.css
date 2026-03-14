@@ -1117,6 +1117,7 @@ body.page-home .main.postit-container {
   --pawn-sink-sway-x: 0px;
   --pawn-sink-sway-y: 0px;
   --pawn-sink-sway-tilt: 0deg;
+  --pawn-rest-tilt: 0deg;
   --pawn-lift-y: 0px;
   position: absolute;
   width: 128px;
@@ -1151,7 +1152,7 @@ body.page-home .main.postit-container {
 .wrecked-pawn-motion {
   position: absolute;
   inset: 0;
-  transform: translate3d(0, var(--pawn-lift-y), 0) rotate(0deg);
+  transform: translate3d(0, var(--pawn-lift-y), 0) rotate(var(--pawn-rest-tilt));
   transform-origin: 50% 84%;
   will-change: transform;
 }
@@ -1164,11 +1165,11 @@ body.page-home .main.postit-container {
       calc(var(--drag-water-y) + var(--pawn-sink-sway-y) + var(--pawn-lift-y)),
       0
     )
-    rotate(calc(0deg + var(--drag-water-tilt) + var(--pawn-sink-sway-tilt)));
+    rotate(calc(var(--pawn-rest-tilt) + var(--drag-water-tilt) + var(--pawn-sink-sway-tilt)));
 }
 
 .wrecked-pawn.pawn-sinking {
-  --pawn-lift-y: 5px;
+  --pawn-lift-y: 3px;
 }
 
 .wrecked-pawn-illustration {

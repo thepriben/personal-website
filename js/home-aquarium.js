@@ -459,18 +459,28 @@
     bindTapToggle(el,function(){return !!moved;},function(){flipBuddyDirection(state,motion,updateVisual);},function(){return fishVisible;});
   }
   function drag(el,key){
-    var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0};
+    var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnLandingLift=3,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0,currentTilt:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0,restY:0};
     function pulsePawnFx(className,duration){if(key!=='pawn')return;el.classList.remove(className);void el.offsetWidth;el.classList.add(className);window.setTimeout(function(){el.classList.remove(className);},duration);}
     function setPawnImpactFx(scale,opacity,bubbleScale){if(key!=='pawn')return;el.style.setProperty('--pawn-impact-scale',scale.toFixed(3));el.style.setProperty('--pawn-impact-opacity',opacity.toFixed(3));el.style.setProperty('--pawn-bubble-burst-scale',bubbleScale.toFixed(3));}
     function applyWaterDrag(){if(key==='fish')return;el.style.setProperty('--drag-water-x',waterX.toFixed(2)+'px');el.style.setProperty('--drag-water-y',waterY.toFixed(2)+'px');el.style.setProperty('--drag-water-tilt',waterTilt.toFixed(2)+'deg');}
     function applyPawnSinkFx(swayX,swayY,swayTilt){if(key!=='pawn')return;el.style.setProperty('--pawn-sink-sway-x',swayX.toFixed(2)+'px');el.style.setProperty('--pawn-sink-sway-y',swayY.toFixed(2)+'px');el.style.setProperty('--pawn-sink-sway-tilt',swayTilt.toFixed(2)+'deg');}
-    function clearPawnSinkFx(){if(key!=='pawn')return;pawnSinkFx.active=false;applyPawnSinkFx(0,0,0);}
-    function clearPawnSinkMotion(){if(key!=='pawn')return;pawnSinkMotion.active=false;pawnSinkMotion.vx=0;pawnSinkMotion.vy=0;pawnSinkMotion.maxVy=0;}
-    function startPawnSinkFx(vx,vy){if(key!=='pawn')return;pawnSinkFx.active=true;pawnSinkFx.startTs=performance.now();pawnSinkFx.ampX=clamp(4.2+Math.abs(vx)*0.0031,4.2,10.5);pawnSinkFx.ampY=clamp(1.2+Math.abs(vy)*0.001,1.2,3.2);pawnSinkFx.ampTilt=clamp(3.2+Math.abs(vx)*0.0016+Math.abs(vy)*0.0009,3.2,7.2);pawnSinkFx.phase=vx<0?Math.PI:0;}
-    function startPawnSinkMotion(vx,vy){if(key!=='pawn')return;pawnSinkMotion.active=true;pawnSinkMotion.vx=clamp(vx*0.0054,-14,14);pawnSinkMotion.vy=clamp(11.5+Math.max(0,vy)*0.003,11.5,24);pawnSinkMotion.maxVy=clamp(24+Math.abs(vy)*0.004,24,38);}
+    function applyPawnRestTilt(tilt){if(key!=='pawn')return;el.style.setProperty('--pawn-rest-tilt',tilt.toFixed(2)+'deg');}
+    function clearPawnRestTilt(){if(key!=='pawn')return;applyPawnRestTilt(0);}
+    function clearPawnSinkFx(){if(key!=='pawn')return;pawnSinkFx.active=false;pawnSinkFx.currentTilt=0;applyPawnSinkFx(0,0,0);}
+    function clearPawnSinkMotion(){if(key!=='pawn')return;pawnSinkMotion.active=false;pawnSinkMotion.vx=0;pawnSinkMotion.vy=0;pawnSinkMotion.maxVy=0;pawnSinkMotion.restY=0;}
+    function startPawnSinkFx(vx,vy){if(key!=='pawn')return;pawnSinkFx.active=true;pawnSinkFx.startTs=performance.now();pawnSinkFx.ampX=clamp(4.2+Math.abs(vx)*0.0031,4.2,10.5);pawnSinkFx.ampY=clamp(1.2+Math.abs(vy)*0.001,1.2,3.2);pawnSinkFx.ampTilt=clamp(3.2+Math.abs(vx)*0.0016+Math.abs(vy)*0.0009,3.2,7.2);pawnSinkFx.phase=vx<0?Math.PI:0;pawnSinkFx.currentTilt=0;}
+    function startPawnSinkMotion(vx,vy,restY){
+      if(key!=='pawn')return;
+      var headingDown=restY>=pos[key].y;
+      pawnSinkMotion.active=true;
+      pawnSinkMotion.restY=restY;
+      pawnSinkMotion.vx=clamp(vx*0.0054,-14,14);
+      pawnSinkMotion.vy=headingDown?clamp(11.5+Math.max(0,vy)*0.003,11.5,24):clamp(-5.6-Math.max(0,-vy)*0.0018,-12,-5.6);
+      pawnSinkMotion.maxVy=clamp(24+Math.abs(vy)*0.004,24,38);
+    }
     function updatePawnSinkFx(ts,isSinking,approachFactor){
       if(key!=='pawn')return;
-      if(!isSinking||!pawnSinkFx.active){applyPawnSinkFx(0,0,0);return;}
+      if(!isSinking||!pawnSinkFx.active){pawnSinkFx.currentTilt=0;applyPawnSinkFx(0,0,0);return;}
       var t=(ts-pawnSinkFx.startTs)/1000;
       var decay=Math.exp(-t*0.74);
       var wobble=Math.sin(t*4.4+pawnSinkFx.phase);
@@ -481,8 +491,22 @@
       var swayX=wobble*pawnSinkFx.ampX*decay + approachWobble*(2.2*approach);
       var swayY=Math.abs(bob)*pawnSinkFx.ampY*decay + Math.abs(approachBob)*(0.9*approach);
       var swayTilt=wobble*pawnSinkFx.ampTilt*decay + approachWobble*(2.8*approach);
+      pawnSinkFx.currentTilt=swayTilt;
       applyPawnSinkFx(swayX,swayY,swayTilt);
       if(decay<0.05)clearPawnSinkFx();
+    }
+    function landPawn(){
+      if(key!=='pawn')return;
+      var landedTilt=clamp((pawnSinkFx.currentTilt||0)*0.44 + (pawnSinkMotion.vx||0)*0.05,-2.2,2.2);
+      if(Math.abs(landedTilt)<0.45)landedTilt=landedTilt<0?-0.55:0.55;
+      pos[key].y=pawnSinkMotion.restY||dragTargetY;
+      dragTargetX=pos[key].x;
+      dragTargetY=pos[key].y;
+      applyPawnRestTilt(landedTilt);
+      pulsePawnFx('pawn-drop',1100);
+      el.classList.remove('pawn-sinking');
+      clearPawnSinkFx();
+      clearPawnSinkMotion();
     }
     function stopWaterDragRaf(){if(waterRaf){window.cancelAnimationFrame(waterRaf);waterRaf=0;}}
     function clearWaterDrag(){if(key==='fish')return;stopWaterDragRaf();waterX=0;waterY=0;waterTilt=0;applyWaterDrag();clearPawnSinkFx();el.classList.remove('postit-water-settling');}
@@ -498,6 +522,7 @@
       var prevX=pos[key].x,prevY=pos[key].y;
       var pawnSinking=key==='pawn'&&el.classList.contains('pawn-sinking');
       if(pawnSinking&&pawnSinkMotion.active){
+        var restY=pawnSinkMotion.restY||dragTargetY;
         var sinkDx=dragTargetX-pos[key].x,sinkDy=dragTargetY-pos[key].y;
         pawnSinkMotion.vx+=(sinkDx*1.34)*dt;
         pawnSinkMotion.vy+=(sinkDy*1.86)*dt;
@@ -507,10 +532,10 @@
         pawnSinkMotion.vy=clamp(pawnSinkMotion.vy,-10,pawnSinkMotion.maxVy||22);
         pos[key].x+=pawnSinkMotion.vx*dt;
         pos[key].y+=pawnSinkMotion.vy*dt;
-        if(Math.abs(sinkDx)<0.32&&Math.abs(sinkDy)<0.32&&Math.abs(pawnSinkMotion.vx)<2.2&&Math.abs(pawnSinkMotion.vy)<2.2){
-          pos[key].x=dragTargetX;
-          pos[key].y=dragTargetY;
-          clearPawnSinkMotion();
+        if((pawnSinkMotion.vy>=0&&pos[key].y>=restY-pawnLandingLift)||(pawnSinkMotion.vy<0&&pos[key].y<=restY+pawnLandingLift&&Math.abs(pawnSinkMotion.vy)<=7)){
+          pos[key].y=restY;
+          landPawn();
+          pawnSinking=false;
         }
       }else{
         var easeX=dragActive?0.14:key==='pawn'?0.095:0.11;
@@ -595,15 +620,13 @@
           var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
           var restPawnLayout=bounds.w<600?mobilePawnLayout():desktopPawnLayout();
           var restY=clamp(restPawnLayout.y,p,maxY);
-          var sinkDepth=clamp(12+Math.abs(pointerVy)*0.0038,12,20);
-          var overshootY=clamp(Math.abs(pointerVy)*0.001,0,3);
           var driftX=clamp(pointerVx*0.0035,-5,5);
           var dropDistance=Math.max(0,restY-pos[key].y);
           var impactEnergy=clamp((dropDistance+Math.abs(pointerVy)*0.07)/140,0,1);
           dragTargetX=clamp(pos[key].x+driftX,p,maxX);
-          dragTargetY=clamp(Math.max(restY,pos[key].y+sinkDepth),p,Math.min(maxY,restY+overshootY));
+          dragTargetY=restY;
           setPawnImpactFx(0.92+impactEnergy*0.88,0.82+impactEnergy*0.42,0.92+impactEnergy*0.46);
-          startPawnSinkMotion(pointerVx,pointerVy);
+          startPawnSinkMotion(pointerVx,pointerVy,restY);
           startPawnSinkFx(pointerVx,pointerVy);
           el.classList.add('pawn-sinking');
         }
@@ -629,7 +652,7 @@
       stopDragRaf();
       dragActive=true;
       if(key==='fish'){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();}
-      if(key==='pawn'){el.classList.remove('pawn-drop','pawn-sinking');clearPawnSinkFx();clearPawnSinkMotion();pulsePawnFx('pawn-lift',460);}
+      if(key==='pawn'){el.classList.remove('pawn-drop','pawn-sinking');clearPawnSinkFx();clearPawnSinkMotion();clearPawnRestTilt();pulsePawnFx('pawn-lift',460);}
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       startX=x;startY=y;
