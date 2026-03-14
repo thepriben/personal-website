@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="pawn-head-light" x1="95" y1="18" x2="147" y2="72" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#737882"/>
+      <stop offset="54%" stop-color="#34373d"/>
+      <stop offset="100%" stop-color="#121417"/>
+    </linearGradient>
+    <linearGradient id="pawn-body-light" x1="74" y1="56" x2="165" y2="169" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#676c75"/>
+      <stop offset="48%" stop-color="#2e3238"/>
+      <stop offset="100%" stop-color="#101215"/>
+    </linearGradient>
+    <linearGradient id="pawn-rim-light" x1="94" y1="127" x2="150" y2="149" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#838a96"/>
+      <stop offset="100%" stop-color="#23272d"/>
+    </linearGradient>
+    <linearGradient id="pawn-base-light" x1="56" y1="172" x2="186" y2="215" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#727883"/>
+      <stop offset="54%" stop-color="#2d3137"/>
+      <stop offset="100%" stop-color="#0e1013"/>
+    </linearGradient>
+  </defs>
+
+  <g>
+    <circle cx="120" cy="37" r="20" fill="url(#pawn-head-light)"/>
+    <path d="M83 91C81 73 95 58 120 58C145 58 159 73 157 91C155 105 146 116 134 123L137 136C127 139 113 139 103 136L106 123C94 116 85 105 83 91Z" fill="url(#pawn-body-light)"/>
+    <path d="M93 136C106 132 134 132 147 136L147 147C135 150 105 150 93 147V136Z" fill="url(#pawn-rim-light)"/>
+    <path d="M80 149C96 145 145 145 161 150L154 183C137 188 102 188 86 183L80 149Z" fill="url(#pawn-body-light)"/>
+    <path d="M60 183C83 176 158 176 180 183L179 196C157 202 82 202 61 196L60 183Z" fill="url(#pawn-base-light)"/>
+    <path d="M52 196C78 189 163 189 188 196L187 210C162 217 79 217 53 210L52 196Z" fill="url(#pawn-base-light)"/>
+  </g>
+
+  <g stroke="#090a0c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="120" cy="37" r="20" fill="url(#pawn-head-light)"/>
+    <path d="M83 91C81 73 95 58 120 58C145 58 159 73 157 91C155 105 146 116 134 123L137 136C127 139 113 139 103 136L106 123C94 116 85 105 83 91Z" fill="url(#pawn-body-light)"/>
+    <path d="M93 136C106 132 134 132 147 136L147 147C135 150 105 150 93 147V136Z" fill="url(#pawn-rim-light)"/>
+    <path d="M80 149C96 145 145 145 161 150L154 183C137 188 102 188 86 183L80 149Z" fill="url(#pawn-body-light)"/>
+    <path d="M60 183C83 176 158 176 180 183L179 196C157 202 82 202 61 196L60 183Z" fill="url(#pawn-base-light)"/>
+    <path d="M52 196C78 189 163 189 188 196L187 210C162 217 79 217 53 210L52 196Z" fill="url(#pawn-base-light)"/>
+  </g>
+
+  <g opacity="0.62">
+    <circle cx="111" cy="30" r="9" fill="#ebeff5" fill-opacity="0.68"/>
+    <path d="M102 69C110 64 126 63 136 66C129 77 111 82 102 69Z" fill="#d8dde7" fill-opacity="0.36"/>
+    <path d="M100 138C109 135 126 135 136 138C130 144 107 145 100 138Z" fill="#edf1f7" fill-opacity="0.32"/>
+    <path d="M89 154C103 149 130 149 143 152C135 164 104 166 89 154Z" fill="#d4dbe6" fill-opacity="0.18"/>
+    <path d="M78 185C98 179 142 179 163 184C151 192 95 193 78 185Z" fill="#f0f3f8" fill-opacity="0.16"/>
+  </g>
+
+  <g stroke-linecap="round">
+    <path d="M146 75C150 82 151 91 148 99" stroke="#f7f9fc" stroke-opacity="0.38" stroke-width="3.2"/>
+    <path d="M92 79C96 86 97 94 95 102" stroke="#7b8390" stroke-opacity="0.22" stroke-width="3"/>
+    <path d="M146 158L158 166" stroke="#9ea6b3" stroke-opacity="0.24" stroke-width="3.2"/>
+    <path d="M85 192C100 188 138 188 154 192" stroke="#eef2f7" stroke-opacity="0.2" stroke-width="2.8"/>
+    <path d="M121 121C128 122 133 127 133 133" stroke="#b9c0cb" stroke-opacity="0.2" stroke-width="2.4"/>
+  </g>
+</svg>

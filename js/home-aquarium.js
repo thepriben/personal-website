@@ -2,7 +2,7 @@
   var k='postit-pos';
   var sk='submarine-visible';
   var legacyDef={lang:{x:40,y:40},book:{x:328,y:80},quakes:{x:40,y:432}};
-  var def={lang:{x:8,y:36},book:{x:420,y:72},quakes:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238}};
+  var def={lang:{x:8,y:36},book:{x:420,y:72},quakes:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364}};
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
   function wrapCoord(value,min,max){var span=Math.max(1,max-min);if(value<min)return max-(min-value)%span;if(value>max)return min+(value-max)%span;return value;}
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
@@ -23,6 +23,9 @@
   if(!pos.green)pos.green={x:def.green.x,y:def.green.y};
   if(typeof pos.green.x!=='number')pos.green.x=def.green.x;
   if(typeof pos.green.y!=='number')pos.green.y=def.green.y;
+  if(!pos.pawn)pos.pawn={x:def.pawn.x,y:def.pawn.y};
+  if(typeof pos.pawn.x!=='number')pos.pawn.x=def.pawn.x;
+  if(typeof pos.pawn.y!=='number')pos.pawn.y=def.pawn.y;
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var quakes=document.getElementById('postit-quakes');
@@ -30,6 +33,7 @@
   var clown=document.getElementById('clown-fish');
   var violet=document.getElementById('violet-fish');
   var green=document.getElementById('green-fish');
+  var pawn=document.getElementById('wrecked-pawn');
   var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
   var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:quakes,key:'quakes'},{el:fish,key:'fish'}];
@@ -59,6 +63,18 @@
   function desktopClownLayout(layout){var xr=clown?clownRange(clown):{minX:def.clown.x,maxX:def.clown.x},yr=clown?clownVerticalRange(clown):{minY:def.clown.y,maxY:def.clown.y},x=clamp(Math.round(bounds.w*0.74),xr.minX,xr.maxX),y=clamp(desktopFishY(layout)+86,yr.minY,yr.maxY);return {x:x,y:y};}
   function desktopVioletLayout(layout){var xr=violet?clownRange(violet):{minX:def.violet.x,maxX:def.violet.x},yr=violet?clownVerticalRange(violet):{minY:def.violet.y,maxY:def.violet.y},x=clamp(Math.round(bounds.w*0.18),xr.minX,xr.maxX),y=clamp(desktopFishY(layout)+118,yr.minY,yr.maxY);return {x:x,y:y};}
   function desktopGreenLayout(layout){var xr=green?clownRange(green):{minX:def.green.x,maxX:def.green.x},yr=green?clownVerticalRange(green):{minY:def.green.y,maxY:def.green.y},x=clamp(Math.round(bounds.w*0.5),xr.minX,xr.maxX),y=clamp(desktopFishY(layout)+44,yr.minY,yr.maxY);return {x:x,y:y};}
+  function desktopPawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:120,h=pawn?pawn.offsetHeight:168,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.66),p,maxX),y=clamp(Math.round(bounds.h-h-24),p,maxY);return {x:x,y:y};}
+  function mobilePawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:100,h=pawn?pawn.offsetHeight:138,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.58),p,maxX),y=clamp(Math.round(bounds.h-h-10),p,maxY);return {x:x,y:y};}
+  function resolveSavedPawnPos(savedPawn,layout){
+    if(!savedPawn||typeof savedPawn.x!=='number'||typeof savedPawn.y!=='number')return null;
+    var p=bounds.pad,w=pawn?pawn.offsetWidth:120,h=pawn?pawn.offsetHeight:168,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p);
+    var lowThreshold=Math.max(p,maxY-Math.round(h*0.08));
+    var nearDefaultBand=Math.max(16,Math.round(h*0.14));
+    return {
+      x:clamp(savedPawn.x,p,maxX),
+      y:savedPawn.y>=lowThreshold||savedPawn.y<layout.y&&savedPawn.y>=layout.y-nearDefaultBand?layout.y:clamp(savedPawn.y,p,maxY)
+    };
+  }
   function fishRange(el){var off=Math.max(42,Math.round(el.offsetWidth*0.46));return {minX:-el.offsetWidth-off,maxX:bounds.w+off};}
   function fishDragRange(el){var off=Math.max(18,Math.round(el.offsetWidth*0.42));return {minX:-off,maxX:bounds.w-el.offsetWidth+off};}
   function fishVerticalRange(el){var off=Math.max(42,Math.round(el.offsetHeight*0.95)),minY=-off,maxY=Math.max(minY,bounds.h-el.offsetHeight+off);return {minY:minY,maxY:maxY};}
@@ -164,7 +180,38 @@
       maybeStartFishChat(ts);
     }
   }
-  function updateFishVisibility(){if(!fish)return;fishVisible=aquariumMode!==0;var cardsHidden=aquariumCardsHidden();fish.classList.toggle('swim-fish-hidden',!fishVisible);fish.setAttribute('aria-hidden',fishVisible?'false':'true');if(clown){clown.classList.toggle('clown-fish-hidden',!fishVisible);clown.setAttribute('aria-hidden',fishVisible?'false':'true');}if(violet){violet.classList.toggle('clown-fish-hidden',!fishVisible);violet.setAttribute('aria-hidden',fishVisible?'false':'true');}if(green){green.classList.toggle('clown-fish-hidden',!fishVisible);green.setAttribute('aria-hidden',fishVisible?'false':'true');}if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.classList.toggle('is-muted',cardsHidden);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',aquariumMode===0?'Show aquarium':aquariumMode===1?'Hide cards':'Turn aquarium off');}if(!fishVisible){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();stopFishChat(performance.now(),false);if(clown){clownState.hitX=0;clownState.hitY=0;updateClownVisual();clown.classList.remove('clown-fish-bumped');}if(violet){violetState.hitX=0;violetState.hitY=0;updateVioletVisual();violet.classList.remove('clown-fish-bumped');}if(green){greenState.hitX=0;greenState.hitY=0;updateGreenVisual();green.classList.remove('clown-fish-bumped');}}else{fishState.lastTs=0;fishState.anchorY=pos.fish.y;clampPos(fish,'fish');if(clown){clownState.lastTs=0;clownState.nextDecisionAt=0;clampClownPos();updateClownVisual();}if(violet){violetState.lastTs=0;violetState.nextDecisionAt=0;clampVioletPos();updateVioletVisual();}if(green){greenState.lastTs=0;greenState.nextDecisionAt=0;clampGreenPos();updateGreenVisual();}}saveAquariumMode(aquariumMode);}
+  function updateFishVisibility(){
+    if(!fish)return;
+    fishVisible=aquariumMode!==0;
+    var cardsHidden=aquariumCardsHidden();
+    fish.classList.toggle('swim-fish-hidden',!fishVisible);
+    fish.setAttribute('aria-hidden',fishVisible?'false':'true');
+    if(clown){clown.classList.toggle('clown-fish-hidden',!fishVisible);clown.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    if(violet){violet.classList.toggle('clown-fish-hidden',!fishVisible);violet.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    if(green){green.classList.toggle('clown-fish-hidden',!fishVisible);green.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    if(pawn){pawn.classList.toggle('wrecked-pawn-hidden',!fishVisible);pawn.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
+    if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.classList.toggle('is-muted',cardsHidden);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',aquariumMode===0?'Show aquarium':aquariumMode===1?'Hide cards':'Turn aquarium off');}
+    if(!fishVisible){
+      fishState.hitShift=0;
+      fishState.hitLift=0;
+      updateFishVisual();
+      stopFishChat(performance.now(),false);
+      if(clown){clownState.hitX=0;clownState.hitY=0;updateClownVisual();clown.classList.remove('clown-fish-bumped');}
+      if(violet){violetState.hitX=0;violetState.hitY=0;updateVioletVisual();violet.classList.remove('clown-fish-bumped');}
+      if(green){greenState.hitX=0;greenState.hitY=0;updateGreenVisual();green.classList.remove('clown-fish-bumped');}
+      if(pawn){pawn.classList.remove('pawn-lift','pawn-drop','pawn-sinking');}
+    }else{
+      fishState.lastTs=0;
+      fishState.anchorY=pos.fish.y;
+      clampPos(fish,'fish');
+      if(clown){clownState.lastTs=0;clownState.nextDecisionAt=0;clampClownPos();updateClownVisual();}
+      if(violet){violetState.lastTs=0;violetState.nextDecisionAt=0;clampVioletPos();updateVioletVisual();}
+      if(green){greenState.lastTs=0;greenState.nextDecisionAt=0;clampGreenPos();updateGreenVisual();}
+      if(pawn)clampPos(pawn,'pawn');
+    }
+    saveAquariumMode(aquariumMode);
+  }
   function rectsOverlap(a,b){return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;}
   function rectInContainer(el){if(!container||!el)return null;var cr=container.getBoundingClientRect();var r=el.getBoundingClientRect();return {left:r.left-cr.left,top:r.top-cr.top,right:r.right-cr.left,bottom:r.bottom-cr.top};}
   function obstacleRects(){if(aquariumCardsHidden())return [];return posts.filter(function(p){return p.el&&p.key!=='fish';}).map(function(p){return rectInContainer(p.el);}).filter(Boolean);}
@@ -204,7 +251,90 @@
     return moved;
   }
   function clampPos(el,key){if(!container||!el)return;updateBounds();var p=bounds.pad;if(key==='fish'){var r=fishRange(el),yr=fishVerticalRange(el);pos[key].x=Math.max(r.minX,Math.min(r.maxX,pos[key].x));pos[key].y=Math.max(yr.minY,Math.min(yr.maxY,pos[key].y));el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';return;}var w=Math.max(0,bounds.w-el.offsetWidth-p),h=Math.max(0,bounds.h-el.offsetHeight-p);pos[key].x=Math.max(p,Math.min(w,pos[key].x));pos[key].y=Math.max(p,Math.min(h,pos[key].y));el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';}
-  function applyMobileLayout(){if(!container)return;updateBounds();var loaded=load();if(bounds.w<600){var y=bounds.pad;posts.forEach(function(p){if(p.el&&p.key!=='fish'){pos[p.key]={x:Math.max(bounds.pad,(bounds.w-p.el.offsetWidth)/2),y:y};y+=p.el.offsetHeight+16;}});if(fish){pos.fish.y=loaded.fish&&typeof loaded.fish.y==='number'?loaded.fish.y:y+12;fishState.anchorY=pos.fish.y;}if(clown){var mobileX=clamp(Math.round(bounds.w*0.58),clownRange(clown).minX,clownRange(clown).maxX);var mobileY=clamp(y+54,clownVerticalRange(clown).minY,clownVerticalRange(clown).maxY);if(loaded.clown&&typeof loaded.clown.x==='number'&&typeof loaded.clown.y==='number')pos.clown={x:loaded.clown.x,y:loaded.clown.y};else pos.clown={x:mobileX,y:mobileY};}if(violet){var mobileVX=clamp(Math.round(bounds.w*0.18),clownRange(violet).minX,clownRange(violet).maxX);var mobileVY=clamp(y+88,clownVerticalRange(violet).minY,clownVerticalRange(violet).maxY);if(loaded.violet&&typeof loaded.violet.x==='number'&&typeof loaded.violet.y==='number')pos.violet={x:loaded.violet.x,y:loaded.violet.y};else pos.violet={x:mobileVX,y:mobileVY};}if(green){var mobileGX=clamp(Math.round(bounds.w*0.4),clownRange(green).minX,clownRange(green).maxX);var mobileGY=clamp(y+36,clownVerticalRange(green).minY,clownVerticalRange(green).maxY);if(loaded.green&&typeof loaded.green.x==='number'&&typeof loaded.green.y==='number')pos.green={x:loaded.green.x,y:loaded.green.y};else pos.green={x:mobileGX,y:mobileGY};}}else{var wideDefaults=desktopLayout();var useWideDefaults=shouldUseAquariumDefaults(loaded);posts.forEach(function(p){if(!p.el)return;if(p.key==='fish'){if(useWideDefaults||!(loaded.fish&&typeof loaded.fish.y==='number'))pos.fish.y=desktopFishY(wideDefaults);else pos.fish.y=loaded.fish.y;fishState.anchorY=pos.fish.y;}else if(useWideDefaults){pos[p.key]=wideDefaults[p.key];}else if(loaded[p.key]){pos[p.key]=loaded[p.key];}else{pos[p.key]=wideDefaults[p.key];}});if(clown){if(useWideDefaults||!(loaded.clown&&typeof loaded.clown.x==='number'&&typeof loaded.clown.y==='number'))pos.clown=desktopClownLayout(wideDefaults);else pos.clown={x:loaded.clown.x,y:loaded.clown.y};}if(violet){if(useWideDefaults||!(loaded.violet&&typeof loaded.violet.x==='number'&&typeof loaded.violet.y==='number'))pos.violet=desktopVioletLayout(wideDefaults);else pos.violet={x:loaded.violet.x,y:loaded.violet.y};}if(green){if(useWideDefaults||!(loaded.green&&typeof loaded.green.x==='number'&&typeof loaded.green.y==='number'))pos.green=desktopGreenLayout(wideDefaults);else pos.green={x:loaded.green.x,y:loaded.green.y};}}posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});if(clown)clampClownPos();if(violet)clampVioletPos();if(green)clampGreenPos();}
+  function applyMobileLayout(){
+    if(!container)return;
+    updateBounds();
+    var loaded=load();
+    if(bounds.w<600){
+      var y=bounds.pad;
+      posts.forEach(function(p){
+        if(p.el&&p.key!=='fish'){
+          pos[p.key]={x:Math.max(bounds.pad,(bounds.w-p.el.offsetWidth)/2),y:y};
+          y+=p.el.offsetHeight+16;
+        }
+      });
+      if(fish){
+        pos.fish.y=loaded.fish&&typeof loaded.fish.y==='number'?loaded.fish.y:y+12;
+        fishState.anchorY=pos.fish.y;
+      }
+      if(clown){
+        var mobileX=clamp(Math.round(bounds.w*0.58),clownRange(clown).minX,clownRange(clown).maxX);
+        var mobileY=clamp(y+54,clownVerticalRange(clown).minY,clownVerticalRange(clown).maxY);
+        if(loaded.clown&&typeof loaded.clown.x==='number'&&typeof loaded.clown.y==='number')pos.clown={x:loaded.clown.x,y:loaded.clown.y};
+        else pos.clown={x:mobileX,y:mobileY};
+      }
+      if(violet){
+        var mobileVX=clamp(Math.round(bounds.w*0.18),clownRange(violet).minX,clownRange(violet).maxX);
+        var mobileVY=clamp(y+88,clownVerticalRange(violet).minY,clownVerticalRange(violet).maxY);
+        if(loaded.violet&&typeof loaded.violet.x==='number'&&typeof loaded.violet.y==='number')pos.violet={x:loaded.violet.x,y:loaded.violet.y};
+        else pos.violet={x:mobileVX,y:mobileVY};
+      }
+      if(green){
+        var mobileGX=clamp(Math.round(bounds.w*0.4),clownRange(green).minX,clownRange(green).maxX);
+        var mobileGY=clamp(y+36,clownVerticalRange(green).minY,clownVerticalRange(green).maxY);
+        if(loaded.green&&typeof loaded.green.x==='number'&&typeof loaded.green.y==='number')pos.green={x:loaded.green.x,y:loaded.green.y};
+        else pos.green={x:mobileGX,y:mobileGY};
+      }
+      if(pawn){
+        var mobilePawn=mobilePawnLayout();
+        var savedMobilePawn=resolveSavedPawnPos(loaded.pawn,mobilePawn);
+        if(savedMobilePawn)pos.pawn=savedMobilePawn;
+        else pos.pawn={x:mobilePawn.x,y:mobilePawn.y};
+      }
+    }else{
+      var wideDefaults=desktopLayout();
+      var useWideDefaults=shouldUseAquariumDefaults(loaded);
+      posts.forEach(function(p){
+        if(!p.el)return;
+        if(p.key==='fish'){
+          if(useWideDefaults||!(loaded.fish&&typeof loaded.fish.y==='number'))pos.fish.y=desktopFishY(wideDefaults);
+          else pos.fish.y=loaded.fish.y;
+          fishState.anchorY=pos.fish.y;
+        }else if(useWideDefaults){
+          pos[p.key]=wideDefaults[p.key];
+        }else if(loaded[p.key]){
+          pos[p.key]=loaded[p.key];
+        }else{
+          pos[p.key]=wideDefaults[p.key];
+        }
+      });
+      if(clown){
+        if(useWideDefaults||!(loaded.clown&&typeof loaded.clown.x==='number'&&typeof loaded.clown.y==='number'))pos.clown=desktopClownLayout(wideDefaults);
+        else pos.clown={x:loaded.clown.x,y:loaded.clown.y};
+      }
+      if(violet){
+        if(useWideDefaults||!(loaded.violet&&typeof loaded.violet.x==='number'&&typeof loaded.violet.y==='number'))pos.violet=desktopVioletLayout(wideDefaults);
+        else pos.violet={x:loaded.violet.x,y:loaded.violet.y};
+      }
+      if(green){
+        if(useWideDefaults||!(loaded.green&&typeof loaded.green.x==='number'&&typeof loaded.green.y==='number'))pos.green=desktopGreenLayout(wideDefaults);
+        else pos.green={x:loaded.green.x,y:loaded.green.y};
+      }
+      if(pawn){
+        var desktopPawn=desktopPawnLayout();
+        if(useWideDefaults||!(loaded.pawn&&typeof loaded.pawn.x==='number'&&typeof loaded.pawn.y==='number'))pos.pawn={x:desktopPawn.x,y:desktopPawn.y};
+        else{
+          var savedDesktopPawn=resolveSavedPawnPos(loaded.pawn,desktopPawn);
+          pos.pawn=savedDesktopPawn||{x:desktopPawn.x,y:desktopPawn.y};
+        }
+      }
+    }
+    posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});
+    if(clown)clampClownPos();
+    if(violet)clampVioletPos();
+    if(green)clampGreenPos();
+    if(pawn)clampPos(pawn,'pawn');
+  }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];}});
   updateFishVisual();
   updateClownVisual();
@@ -329,30 +459,87 @@
     bindTapToggle(el,function(){return !!moved;},function(){flipBuddyDirection(state,motion,updateVisual);},function(){return fishVisible;});
   }
   function drag(el,key){
-    var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0;
+    var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0};
+    function pulsePawnFx(className,duration){if(key!=='pawn')return;el.classList.remove(className);void el.offsetWidth;el.classList.add(className);window.setTimeout(function(){el.classList.remove(className);},duration);}
+    function setPawnImpactFx(scale,opacity,bubbleScale){if(key!=='pawn')return;el.style.setProperty('--pawn-impact-scale',scale.toFixed(3));el.style.setProperty('--pawn-impact-opacity',opacity.toFixed(3));el.style.setProperty('--pawn-bubble-burst-scale',bubbleScale.toFixed(3));}
     function applyWaterDrag(){if(key==='fish')return;el.style.setProperty('--drag-water-x',waterX.toFixed(2)+'px');el.style.setProperty('--drag-water-y',waterY.toFixed(2)+'px');el.style.setProperty('--drag-water-tilt',waterTilt.toFixed(2)+'deg');}
+    function applyPawnSinkFx(swayX,swayY,swayTilt){if(key!=='pawn')return;el.style.setProperty('--pawn-sink-sway-x',swayX.toFixed(2)+'px');el.style.setProperty('--pawn-sink-sway-y',swayY.toFixed(2)+'px');el.style.setProperty('--pawn-sink-sway-tilt',swayTilt.toFixed(2)+'deg');}
+    function clearPawnSinkFx(){if(key!=='pawn')return;pawnSinkFx.active=false;applyPawnSinkFx(0,0,0);}
+    function clearPawnSinkMotion(){if(key!=='pawn')return;pawnSinkMotion.active=false;pawnSinkMotion.vx=0;pawnSinkMotion.vy=0;pawnSinkMotion.maxVy=0;}
+    function startPawnSinkFx(vx,vy){if(key!=='pawn')return;pawnSinkFx.active=true;pawnSinkFx.startTs=performance.now();pawnSinkFx.ampX=clamp(4.2+Math.abs(vx)*0.0031,4.2,10.5);pawnSinkFx.ampY=clamp(1.2+Math.abs(vy)*0.001,1.2,3.2);pawnSinkFx.ampTilt=clamp(3.2+Math.abs(vx)*0.0016+Math.abs(vy)*0.0009,3.2,7.2);pawnSinkFx.phase=vx<0?Math.PI:0;}
+    function startPawnSinkMotion(vx,vy){if(key!=='pawn')return;pawnSinkMotion.active=true;pawnSinkMotion.vx=clamp(vx*0.0054,-14,14);pawnSinkMotion.vy=clamp(11.5+Math.max(0,vy)*0.003,11.5,24);pawnSinkMotion.maxVy=clamp(24+Math.abs(vy)*0.004,24,38);}
+    function updatePawnSinkFx(ts,isSinking,approachFactor){
+      if(key!=='pawn')return;
+      if(!isSinking||!pawnSinkFx.active){applyPawnSinkFx(0,0,0);return;}
+      var t=(ts-pawnSinkFx.startTs)/1000;
+      var decay=Math.exp(-t*0.74);
+      var wobble=Math.sin(t*4.4+pawnSinkFx.phase);
+      var bob=Math.sin(t*3.2+pawnSinkFx.phase*0.45);
+      var approach=clamp(typeof approachFactor==='number'?approachFactor:0,0,1);
+      var approachWobble=Math.sin(t*8.8+pawnSinkFx.phase*0.55);
+      var approachBob=Math.sin(t*6.1+pawnSinkFx.phase*0.3);
+      var swayX=wobble*pawnSinkFx.ampX*decay + approachWobble*(2.2*approach);
+      var swayY=Math.abs(bob)*pawnSinkFx.ampY*decay + Math.abs(approachBob)*(0.9*approach);
+      var swayTilt=wobble*pawnSinkFx.ampTilt*decay + approachWobble*(2.8*approach);
+      applyPawnSinkFx(swayX,swayY,swayTilt);
+      if(decay<0.05)clearPawnSinkFx();
+    }
     function stopWaterDragRaf(){if(waterRaf){window.cancelAnimationFrame(waterRaf);waterRaf=0;}}
-    function clearWaterDrag(){if(key==='fish')return;stopWaterDragRaf();waterX=0;waterY=0;waterTilt=0;applyWaterDrag();el.classList.remove('postit-water-settling');}
-    function settleWaterDrag(){if(key==='fish')return;stopWaterDragRaf();el.classList.add('postit-water-settling');function tick(){waterX+=(0-waterX)*0.18;waterY+=(0-waterY)*0.18;waterTilt+=(0-waterTilt)*0.16;applyWaterDrag();if(Math.abs(waterX)>0.08||Math.abs(waterY)>0.08||Math.abs(waterTilt)>0.08){waterRaf=window.requestAnimationFrame(tick);}else{clearWaterDrag();}}waterRaf=window.requestAnimationFrame(tick);}
+    function clearWaterDrag(){if(key==='fish')return;stopWaterDragRaf();waterX=0;waterY=0;waterTilt=0;applyWaterDrag();clearPawnSinkFx();el.classList.remove('postit-water-settling');}
+    function settleWaterDrag(){if(key==='fish')return;stopWaterDragRaf();el.classList.add('postit-water-settling');var easeX=key==='pawn'?0.11:0.18,easeY=key==='pawn'?0.1:0.18,easeTilt=key==='pawn'?0.09:0.16;function tick(){waterX+=(0-waterX)*easeX;waterY+=(0-waterY)*easeY;waterTilt+=(0-waterTilt)*easeTilt;applyWaterDrag();if(Math.abs(waterX)>0.08||Math.abs(waterY)>0.08||Math.abs(waterTilt)>0.08){waterRaf=window.requestAnimationFrame(tick);}else{clearWaterDrag();}}waterRaf=window.requestAnimationFrame(tick);}
     function updateWaterDrag(vx,vy){if(key==='fish')return;stopWaterDragRaf();el.classList.remove('postit-water-settling');var targetX=Math.max(-10,Math.min(10,-vx*0.007));var targetY=Math.max(-8,Math.min(8,-vy*0.006));var targetTilt=Math.max(-4.8,Math.min(4.8,vx*0.0032));waterX+=(targetX-waterX)*0.42;waterY+=(targetY-waterY)*0.38;waterTilt+=(targetTilt-waterTilt)*0.36;applyWaterDrag();}
     function stopDragRaf(){if(dragRaf){window.cancelAnimationFrame(dragRaf);dragRaf=0;}dragLastTs=0;}
     function animateDrag(ts){
       if(key==='fish'){dragRaf=0;return;}
       if(!dragLastTs)dragLastTs=ts;
       var dtMs=Math.max(16,ts-dragLastTs);
+      var dt=dtMs/1000;
       dragLastTs=ts;
       var prevX=pos[key].x,prevY=pos[key].y;
-      var ease=dragActive?0.14:0.11;
-      pos[key].x+=(dragTargetX-pos[key].x)*ease;
-      pos[key].y+=(dragTargetY-pos[key].y)*ease;
-      if(Math.abs(dragTargetX-pos[key].x)<0.25)pos[key].x=dragTargetX;
-      if(Math.abs(dragTargetY-pos[key].y)<0.25)pos[key].y=dragTargetY;
+      var pawnSinking=key==='pawn'&&el.classList.contains('pawn-sinking');
+      if(pawnSinking&&pawnSinkMotion.active){
+        var sinkDx=dragTargetX-pos[key].x,sinkDy=dragTargetY-pos[key].y;
+        pawnSinkMotion.vx+=(sinkDx*1.34)*dt;
+        pawnSinkMotion.vy+=(sinkDy*1.86)*dt;
+        pawnSinkMotion.vx*=Math.exp(-dt*2.3);
+        pawnSinkMotion.vy*=Math.exp(-dt*1.35);
+        pawnSinkMotion.vx=clamp(pawnSinkMotion.vx,-16,16);
+        pawnSinkMotion.vy=clamp(pawnSinkMotion.vy,-10,pawnSinkMotion.maxVy||22);
+        pos[key].x+=pawnSinkMotion.vx*dt;
+        pos[key].y+=pawnSinkMotion.vy*dt;
+        if(Math.abs(sinkDx)<0.32&&Math.abs(sinkDy)<0.32&&Math.abs(pawnSinkMotion.vx)<2.2&&Math.abs(pawnSinkMotion.vy)<2.2){
+          pos[key].x=dragTargetX;
+          pos[key].y=dragTargetY;
+          clearPawnSinkMotion();
+        }
+      }else{
+        var easeX=dragActive?0.14:key==='pawn'?0.095:0.11;
+        var easeY=dragActive?0.14:key==='pawn'?0.095:0.11;
+        pos[key].x+=(dragTargetX-pos[key].x)*easeX;
+        pos[key].y+=(dragTargetY-pos[key].y)*easeY;
+        if(Math.abs(dragTargetX-pos[key].x)<0.25)pos[key].x=dragTargetX;
+        if(Math.abs(dragTargetY-pos[key].y)<0.25)pos[key].y=dragTargetY;
+      }
       el.style.left=pos[key].x+'px';el.style.top=pos[key].y+'px';
-      var vx=(pos[key].x-prevX)/(dtMs/1000),vy=(pos[key].y-prevY)/(dtMs/1000);
+      var vx=(pos[key].x-prevX)/dt,vy=(pos[key].y-prevY)/dt;
       updateWaterDrag(vx,vy);
+      var approachFactor=pawnSinking?clamp(1-Math.abs(dragTargetY-pos[key].y)/24,0,1):0;
+      updatePawnSinkFx(ts,pawnSinking,approachFactor);
       var speed=Math.hypot(vx,vy);
       if(speed>8&&(!lastHitTs||ts-lastHitTs>24)&&maybeBumpFishWith(el,key,vx,vy,ts))lastHitTs=ts;
-      if(dragActive||Math.abs(dragTargetX-pos[key].x)>0.25||Math.abs(dragTargetY-pos[key].y)>0.25){dragRaf=window.requestAnimationFrame(animateDrag);}else{dragRaf=0;dragLastTs=0;save(pos);}
+      if(dragActive||Math.abs(dragTargetX-pos[key].x)>0.25||Math.abs(dragTargetY-pos[key].y)>0.25){
+        dragRaf=window.requestAnimationFrame(animateDrag);
+      }else{
+        dragRaf=0;
+        dragLastTs=0;
+        if(key==='pawn'){
+          if(pawnSinking)pulsePawnFx('pawn-drop',1100);
+          el.classList.remove('pawn-sinking');
+          clearPawnSinkFx();
+          clearPawnSinkMotion();
+        }
+        save(pos);
+      }
     }
     function move(e){
       el.style.cursor='grabbing';
@@ -360,6 +547,7 @@
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       if(x===undefined)return;
       var now=performance.now();
+      var prevX=pos[key].x,prevY=pos[key].y;
       var dx=x-startX,dy=y-startY;
       if(Math.abs(dx)>3||Math.abs(dy)>3)moved=true;
       if(container)updateBounds();
@@ -386,20 +574,62 @@
         var dtMs=Math.max(16,now-lastPointerTs);
         var vx=(x-lastPointerX)/(dtMs/1000);
         var vy=(y-lastPointerY)/(dtMs/1000);
+        pointerVx=vx;
+        pointerVy=vy;
         updateWaterDrag(vx,vy);
       }
       lastPointerX=x;lastPointerY=y;lastPointerTs=now;
     }
-    function stop(e){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',stop);document.removeEventListener('touchmove',move,{passive:false});document.removeEventListener('touchend',stop);el.classList.remove('postit-dragging');el.style.cursor='';fishState.lastTs=0;dragActive=false;if(key!=='fish'){settleWaterDrag();if(!dragRaf&&(Math.abs(dragTargetX-pos[key].x)>0.25||Math.abs(dragTargetY-pos[key].y)>0.25))dragRaf=window.requestAnimationFrame(animateDrag);}if(!moved){var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);var links=el.querySelectorAll('a[href]');if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}}if(key==='fish'||!dragRaf)save(pos);setTimeout(function(){moved=false;},0);}
+    function stop(e){
+      document.removeEventListener('mousemove',move);
+      document.removeEventListener('mouseup',stop);
+      document.removeEventListener('touchmove',move,{passive:false});
+      document.removeEventListener('touchend',stop);
+      el.classList.remove('postit-dragging');
+      el.style.cursor='';
+      fishState.lastTs=0;
+      dragActive=false;
+      if(key!=='fish'){
+        if(key==='pawn'){
+          if(container)updateBounds();
+          var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
+          var restPawnLayout=bounds.w<600?mobilePawnLayout():desktopPawnLayout();
+          var restY=clamp(restPawnLayout.y,p,maxY);
+          var sinkDepth=clamp(12+Math.abs(pointerVy)*0.0038,12,20);
+          var overshootY=clamp(Math.abs(pointerVy)*0.001,0,3);
+          var driftX=clamp(pointerVx*0.0035,-5,5);
+          var dropDistance=Math.max(0,restY-pos[key].y);
+          var impactEnergy=clamp((dropDistance+Math.abs(pointerVy)*0.07)/140,0,1);
+          dragTargetX=clamp(pos[key].x+driftX,p,maxX);
+          dragTargetY=clamp(Math.max(restY,pos[key].y+sinkDepth),p,Math.min(maxY,restY+overshootY));
+          setPawnImpactFx(0.92+impactEnergy*0.88,0.82+impactEnergy*0.42,0.92+impactEnergy*0.46);
+          startPawnSinkMotion(pointerVx,pointerVy);
+          startPawnSinkFx(pointerVx,pointerVy);
+          el.classList.add('pawn-sinking');
+        }
+        settleWaterDrag();
+        if(!dragRaf&&(Math.abs(dragTargetX-pos[key].x)>0.25||Math.abs(dragTargetY-pos[key].y)>0.25))dragRaf=window.requestAnimationFrame(animateDrag);
+      }
+      if(!moved){
+        var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);
+        var links=el.querySelectorAll('a[href]');
+        if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}
+      }
+      if(key==='fish'||!dragRaf)save(pos);
+      setTimeout(function(){moved=false;},0);
+    }
     function start(e){
-      if(key==='fish'&&!fishVisible)return;
+      if((key==='fish'||key==='pawn')&&!fishVisible)return;
       e.preventDefault();
       moved=false;
+      pointerVx=0;
+      pointerVy=0;
       el.classList.add('postit-dragging');
       clearWaterDrag();
       stopDragRaf();
       dragActive=true;
       if(key==='fish'){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();}
+      if(key==='pawn'){el.classList.remove('pawn-drop','pawn-sinking');clearPawnSinkFx();clearPawnSinkMotion();pulsePawnFx('pawn-lift',460);}
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       startX=x;startY=y;
@@ -427,6 +657,7 @@
     if(key==='fish')bindTapToggle(el,function(){return !!moved;},flipSubmarineDirection,function(){return fishVisible;});
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];drag(p.el,p.key);}});
+  if(pawn)drag(pawn,'pawn');
   if(clown)dragBuddy(clown,'clown',clownState,clownMotion,updateClownVisual);
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);

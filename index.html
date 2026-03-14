@@ -8,7 +8,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
   <script src="js/site-head.js?v=20260310a"></script>
   <link rel="stylesheet" href="css/style.css?v=20260307g" />
-  <link rel="stylesheet" href="css/home.css?v=20260307au" />
+  <link rel="stylesheet" href="css/home.css?v=20260313u" />
 </head>
 <body class="page-home">
   <header>
@@ -23,7 +23,7 @@
         <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
           <img id="theme-icon" src="images/ui/theme-moon.svg" alt="" width="18" height="18" aria-hidden="true">
         </button>
-        <button type="button" id="submarine-toggle" class="theme-toggle submarine-toggle" aria-pressed="false" aria-controls="swim-fish clown-fish violet-fish green-fish" aria-label="Show submarine">
+        <button type="button" id="submarine-toggle" class="theme-toggle submarine-toggle" aria-pressed="false" aria-controls="swim-fish clown-fish violet-fish green-fish wrecked-pawn" aria-label="Show submarine">
           <img class="submarine-toggle-icon" src="images/ui/water-toggle.svg" alt="" width="18" height="18" aria-hidden="true">
         </button>
       </div>
@@ -217,6 +217,31 @@
           </span>
         </div>
       </div>
+      <div class="wrecked-pawn wrecked-pawn-hidden" id="wrecked-pawn" data-postit="pawn" aria-hidden="true">
+        <div class="wrecked-pawn-motion">
+          <span class="wrecked-pawn-illustration" aria-hidden="true"></span>
+          <span class="wrecked-pawn-impact" aria-hidden="true">
+            <span class="wrecked-pawn-impact-sand"></span>
+            <span class="wrecked-pawn-impact-froth"></span>
+          </span>
+          <span class="wrecked-pawn-grains" aria-hidden="true">
+            <span class="wrecked-pawn-grain wrecked-pawn-grain-a"></span>
+            <span class="wrecked-pawn-grain wrecked-pawn-grain-b"></span>
+            <span class="wrecked-pawn-grain wrecked-pawn-grain-c"></span>
+            <span class="wrecked-pawn-grain wrecked-pawn-grain-d"></span>
+            <span class="wrecked-pawn-grain wrecked-pawn-grain-e"></span>
+            <span class="wrecked-pawn-grain wrecked-pawn-grain-f"></span>
+          </span>
+          <span class="wrecked-pawn-bubbles" aria-hidden="true">
+            <span class="wrecked-pawn-bubble wrecked-pawn-bubble-l1"></span>
+            <span class="wrecked-pawn-bubble wrecked-pawn-bubble-l2"></span>
+            <span class="wrecked-pawn-bubble wrecked-pawn-bubble-l3"></span>
+            <span class="wrecked-pawn-bubble wrecked-pawn-bubble-r1"></span>
+            <span class="wrecked-pawn-bubble wrecked-pawn-bubble-r2"></span>
+            <span class="wrecked-pawn-bubble wrecked-pawn-bubble-r3"></span>
+          </span>
+        </div>
+      </div>
       <div class="aquarium-front-frame" aria-hidden="true"></div>
       <div class="swim-fish swim-fish-hidden" id="swim-fish" data-postit="fish" aria-hidden="true">
         <div class="swim-fish-visual">
@@ -313,6 +338,6 @@
     </a>
   </footer>
   <script src="js/theme.js?v=20260307b" defer></script>
-  <script src="js/home-aquarium.js?v=20260310a"></script>
+  <script src="js/home-aquarium.js?v=20260313m"></script>
 </body>
 </html>

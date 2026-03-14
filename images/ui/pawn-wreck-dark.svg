@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="pawn-head-dark" x1="95" y1="18" x2="147" y2="72" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fffefd"/>
+      <stop offset="56%" stop-color="#f3f0ea"/>
+      <stop offset="100%" stop-color="#e5e0d5"/>
+    </linearGradient>
+    <linearGradient id="pawn-body-dark" x1="74" y1="56" x2="165" y2="169" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fffefd"/>
+      <stop offset="50%" stop-color="#f1ede5"/>
+      <stop offset="100%" stop-color="#e2dbce"/>
+    </linearGradient>
+    <linearGradient id="pawn-rim-dark" x1="94" y1="127" x2="150" y2="149" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbf8f1"/>
+      <stop offset="100%" stop-color="#ddd4c4"/>
+    </linearGradient>
+    <linearGradient id="pawn-base-dark" x1="56" y1="172" x2="186" y2="215" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbf8f2"/>
+      <stop offset="48%" stop-color="#ebe5da"/>
+      <stop offset="100%" stop-color="#ddd4c5"/>
+    </linearGradient>
+    <linearGradient id="pawn-shadow-dark" x1="86" y1="84" x2="163" y2="196" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#181512" stop-opacity="0.02"/>
+      <stop offset="46%" stop-color="#181512" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#181512" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+
+  <g>
+    <circle cx="120" cy="37" r="20" fill="url(#pawn-head-dark)"/>
+    <path d="M83 91C81 73 95 58 120 58C145 58 159 73 157 91C155 105 146 116 134 123L137 136C127 139 113 139 103 136L106 123C94 116 85 105 83 91Z" fill="url(#pawn-body-dark)"/>
+    <path d="M93 136C106 132 134 132 147 136L147 147C135 150 105 150 93 147V136Z" fill="url(#pawn-rim-dark)"/>
+    <path d="M80 149C96 145 145 145 161 150L154 183C137 188 102 188 86 183L80 149Z" fill="url(#pawn-body-dark)"/>
+    <path d="M60 183C83 176 158 176 180 183L179 196C157 202 82 202 61 196L60 183Z" fill="url(#pawn-base-dark)"/>
+    <path d="M52 196C78 189 163 189 188 196L187 210C162 217 79 217 53 210L52 196Z" fill="url(#pawn-base-dark)"/>
+  </g>
+
+  <g stroke="#6b6763" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="120" cy="37" r="20" fill="url(#pawn-head-dark)"/>
+    <path d="M83 91C81 73 95 58 120 58C145 58 159 73 157 91C155 105 146 116 134 123L137 136C127 139 113 139 103 136L106 123C94 116 85 105 83 91Z" fill="url(#pawn-body-dark)"/>
+    <path d="M93 136C106 132 134 132 147 136L147 147C135 150 105 150 93 147V136Z" fill="url(#pawn-rim-dark)"/>
+    <path d="M80 149C96 145 145 145 161 150L154 183C137 188 102 188 86 183L80 149Z" fill="url(#pawn-body-dark)"/>
+    <path d="M60 183C83 176 158 176 180 183L179 196C157 202 82 202 61 196L60 183Z" fill="url(#pawn-base-dark)"/>
+    <path d="M52 196C78 189 163 189 188 196L187 210C162 217 79 217 53 210L52 196Z" fill="url(#pawn-base-dark)"/>
+  </g>
+
+  <g opacity="0.56">
+    <path d="M126 61C139 66 147 76 147 89C147 101 140 112 129 119L132 134C125 136 115 136 108 134L112 119C103 112 97 102 97 90C97 77 105 66 118 61C113 60 108 60 104 61C92 66 84 78 85 92C87 105 96 116 106 123L103 136C113 139 127 139 137 136L134 123C146 116 155 105 157 91C159 75 146 62 126 61Z" fill="url(#pawn-shadow-dark)"/>
+    <path d="M90 151C107 154 134 154 153 151L150 179C136 183 106 184 90 181L90 151Z" fill="#1b1713" fill-opacity="0.08"/>
+    <path d="M72 184C97 189 143 189 170 184L169 194C144 199 97 199 71 194L72 184Z" fill="#181410" fill-opacity="0.1"/>
+  </g>
+
+  <g stroke="#111111" stroke-opacity="0.22" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M144 71C148 82 148 95 144 104"/>
+    <path d="M93 70C89 78 88 89 91 98"/>
+    <path d="M98 138C110 140 129 140 142 138"/>
+    <path d="M88 154C103 158 131 158 148 154"/>
+    <path d="M77 186C101 182 142 182 164 186"/>
+  </g>
+
+  <g opacity="0.68">
+    <circle cx="109" cy="29" r="10" fill="#ffffff" fill-opacity="0.94"/>
+    <path d="M101 68C110 63 126 62 137 66C130 77 111 82 101 68Z" fill="#fffdf9" fill-opacity="0.6"/>
+    <path d="M100 138C109 135 126 135 136 138C130 144 106 145 100 138Z" fill="#fbf8f1" fill-opacity="0.46"/>
+    <path d="M89 154C103 149 130 149 143 152C135 164 104 166 89 154Z" fill="#f6f1e8" fill-opacity="0.28"/>
+    <path d="M78 185C98 179 142 179 163 184C151 192 95 193 78 185Z" fill="#faf7f1" fill-opacity="0.2"/>
+  </g>
+
+  <g stroke-linecap="round">
+    <path d="M146 76C149 83 150 91 147 100" stroke="#ffffff" stroke-opacity="0.46" stroke-width="3.3"/>
+    <path d="M126 121C132 123 136 128 136 133" stroke="#fcf8f0" stroke-opacity="0.34" stroke-width="2.6"/>
+    <path d="M147 158L158 166" stroke="#faf5eb" stroke-opacity="0.24" stroke-width="3"/>
+    <path d="M86 191C102 188 140 188 155 191" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2.7"/>
+  </g>
+</svg>
