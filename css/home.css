@@ -2568,8 +2568,51 @@ body.page-home .main.postit-container {
   display: block;
   flex: 0 0 auto;
   transform: translateY(1px);
+  overflow: visible;
   opacity: 0.96;
   filter: none;
+}
+
+.submarine-toggle-porthole,
+.submarine-toggle-water,
+.submarine-toggle-bubble {
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.submarine-toggle-porthole,
+.submarine-toggle-water {
+  opacity: 0.96;
+}
+
+.submarine-toggle-bubble,
+.submarine-toggle-spark {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.submarine-toggle-bubble {
+  transform: translateY(1px) scale(0.86);
+}
+
+.submarine-toggle-spark {
+  fill: currentColor;
+  transform: translateY(1px) scale(0.8);
+}
+
+.submarine-toggle.is-active:not(.is-muted) .submarine-toggle-bubble {
+  opacity: 1;
+  transform: none;
+}
+
+.submarine-toggle.is-active.is-muted .submarine-toggle-spark {
+  opacity: 1;
+  transform: none;
 }
 
 .submarine-toggle.is-active {
