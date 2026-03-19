@@ -210,6 +210,7 @@ table.books-section td > i:first-of-type {
 
 .books-section h2 {
   margin: 12px 0 4px;
+  scroll-margin-top: 3rem;
 }
 
 table.books-section td > i:first-of-type {
@@ -263,6 +264,11 @@ table.books-section td > i:first-of-type {
   letter-spacing: 0.08em;
   row-gap: 0.18rem;
   color: var(--text-muted-alt);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
 
 .section-nav a {
