@@ -285,6 +285,14 @@ table.books-section td > i:first-of-type {
   opacity: 1;
 }
 
+.lang-tag {
+  font-style: italic;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  margin-left: 0.15em;
+}
+
 .drapeau-france {
   display: inline-block;
   width: 15px;

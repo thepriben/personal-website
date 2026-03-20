@@ -2473,71 +2473,63 @@ body.page-home .main.postit-container {
   margin: 0;
 }
 
-.language-groups {
+.language-codes {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  width: 100%;
-}
-
-.language-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.35rem;
-}
-
-.language-group-label {
-  font-size: 0.56rem;
-  letter-spacing: 0.01em;
-  text-transform: none;
-  color: var(--text-muted);
-}
-
-.language-legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 0.5rem;
-  margin-top: 0.4rem;
-}
-
-.language-pill {
-  display: inline-flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  font-size: 0.7rem;
+  gap: 1rem;
+  width: 100%;
+  margin: 1.2rem 0 0.4rem;
+}
+
+.lang-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  font-size: 0.72rem;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.lang-code:hover {
+  transform: scale(1.08);
+}
+
+.lang-code abbr {
+  text-decoration: none;
+  border: none;
+}
+
+.lang-code-primary {
+  width: 52px;
+  height: 52px;
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 600;
   color: var(--text);
-  letter-spacing: 0.02em;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  border-color: #c9a227;
+  border-width: 2px;
 }
 
-.language-pill-primary {
-  background: transparent;
-  border-color: rgba(201,162,39,0.35);
+[data-theme="dark"] .lang-code-primary {
+  border-color: #d4a84b;
 }
 
-[data-theme="light"] .language-legend .language-pill,
-[data-theme="dark"] .language-legend .language-pill {
-  background: transparent;
-}
-
-[data-theme="dark"] .language-pill-primary {
-  background: transparent;
-  border-color: rgba(212,168,75,0.42);
-}
-
-.language-pill .drapeau-france,
-.language-pill .drapeau-royaume-uni,
-.language-pill .drapeau-espagne {
-  margin-left: 0;
-  margin-right: 0;
-  margin-bottom: 0;
-  flex: 0 0 auto;
+.lang-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.5rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.55;
+  text-transform: none;
+  letter-spacing: 0.01em;
 }
 
 .header-actions {
