@@ -2497,8 +2497,24 @@ body.page-home .main.postit-container {
   color: var(--text-muted);
 }
 
+.last-book .caption {
+  width: 100%;
+  max-width: none;
+  font-size: 0.6rem;
+  line-height: 1.12;
+}
+
 .last-book .book-title {
   color: var(--text);
+  display: inline-block;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.last-book-date {
+  display: block;
+  margin-top: 0.04rem;
+  white-space: nowrap;
 }
 
 .last-book:hover .book-title,
