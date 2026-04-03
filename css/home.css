@@ -2319,8 +2319,11 @@ body.page-home .main.postit-container {
 }
 
 .postit-quakes-source {
-  font-size: 0.62rem;
+  margin-top: -0.18rem;
+  font-size: 0.6rem;
+  line-height: 1.12;
   align-self: center;
+  text-align: center;
 }
 
 .postit-quakes-source a {
@@ -2410,6 +2413,7 @@ body.page-home .main.postit-container {
 .last-book img.index,
 .last-article img.index {
   margin: 0;
+  margin-bottom: 0.14rem;
   box-shadow: 0 10px 18px var(--shadow-card);
   filter: brightness(0.92) sepia(0.12);
 }
@@ -2417,7 +2421,9 @@ body.page-home .main.postit-container {
 [data-theme="dark"] .last-book > a,
 [data-theme="dark"] .last-article > a {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-radius: 10px;
   overflow: hidden;
   isolation: isolate;
@@ -2444,7 +2450,9 @@ body.page-home .main.postit-container {
 [data-theme="light"] .postit-container.aquarium-active .last-book > a,
 [data-theme="light"] .postit-container.aquarium-active .last-article > a {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-radius: 10px;
   overflow: hidden;
   isolation: isolate;
