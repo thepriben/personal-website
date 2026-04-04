@@ -2,7 +2,7 @@
   var k='postit-pos';
   var sk='submarine-visible';
   var legacyDef={lang:{x:40,y:40},book:{x:328,y:80},quakes:{x:40,y:432}};
-  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},quakes:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364}};
+  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},chapter:{x:986,y:318},quakes:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364}};
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
   function wrapCoord(value,min,max){var span=Math.max(1,max-min);if(value<min)return max-(min-value)%span;if(value>max)return min+(value-max)%span;return value;}
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
@@ -29,6 +29,7 @@
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var article=document.getElementById('postit-article');
+  var chapter=document.getElementById('postit-chapter');
   var quakes=document.getElementById('postit-quakes');
   var fish=document.getElementById('swim-fish');
   var clown=document.getElementById('clown-fish');
@@ -37,7 +38,7 @@
   var pawn=document.getElementById('wrecked-pawn');
   var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
-  var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:article,key:'article'},{el:quakes,key:'quakes'},{el:fish,key:'fish'}];
+  var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:article,key:'article'},{el:chapter,key:'chapter'},{el:quakes,key:'quakes'},{el:fish,key:'fish'}];
   var bounds={w:0,h:0,pad:8};
   var fishState={cruiseSpeed:156,dir:1,vx:156,vy:0,lastTs:0,bumpTimer:0,xResumeAt:0,yResumeAt:0,hitShift:0,hitLift:0,anchorY:def.fish.y};
   var clownState={vx:-44,vy:5,targetVx:-44,targetVy:5,lastTs:0,nextDecisionAt:0,hitX:0,hitY:0,facing:-1,driftPhase:1.7};
@@ -58,8 +59,9 @@
   function cycleAquariumMode(){aquariumMode=(aquariumMode+1)%3;fishVisible=aquariumMode!==0;updateFishVisibility();}
   function updateBounds(){var r=container?container.getBoundingClientRect():{width:0,height:0};var ft=document.querySelector('footer');bounds.w=r.width;bounds.h=ft?Math.min(r.height,Math.max(0,ft.getBoundingClientRect().top-r.top)):r.height;}
   function samePos(a,b){return !!a&&!!b&&Math.abs(a.x-b.x)<2&&Math.abs(a.y-b.y)<2;}
-  function shouldUseAquariumDefaults(loaded){return !hasSavedPositions()||!loaded||!loaded.lang||!loaded.book||!loaded.quakes||samePos(loaded.lang,legacyDef.lang)&&samePos(loaded.book,legacyDef.book)&&samePos(loaded.quakes,legacyDef.quakes);}
-  function desktopLayout(){var pad=6,gap=22;var langPos={x:pad,y:38};var langHeight=lang?lang.offsetHeight:248;var articleY=langPos.y+langHeight+gap;var quakesX=Math.max(pad,Math.round(bounds.w-278));var bookX=Math.max(pad+300,Math.min(quakesX-292,Math.round(bounds.w*0.49)-130));return {lang:langPos,book:{x:bookX,y:72},article:{x:pad+14,y:articleY},quakes:{x:quakesX,y:52}};}
+  function shouldUseAquariumDefaults(loaded){return !hasSavedPositions()||!loaded||!loaded.lang||!loaded.book||!loaded.article||!loaded.chapter||!loaded.quakes||samePos(loaded.lang,legacyDef.lang)&&samePos(loaded.book,legacyDef.book)&&samePos(loaded.quakes,legacyDef.quakes);}
+  function mediumLayout(){var pad=6,gap=22;var langPos={x:pad,y:38};var articleX=pad+14;var langHeight=lang?lang.offsetHeight:248;var articleWidth=(article?article.offsetWidth:260)+14;var leftWidth=Math.max(lang?lang.offsetWidth:270,articleWidth);var rightWidth=Math.max(book?book.offsetWidth:260,quakes?quakes.offsetWidth:270,chapter?chapter.offsetWidth:260);var rightX=Math.max(pad+leftWidth+28,Math.round(bounds.w-rightWidth-pad));var bookY=72;var bookHeight=book?book.offsetHeight:320;var quakesY=bookY+bookHeight+gap;var quakesHeight=quakes?quakes.offsetHeight:248;return {lang:langPos,book:{x:rightX,y:bookY},article:{x:articleX,y:langPos.y+langHeight+gap},quakes:{x:rightX,y:quakesY},chapter:{x:rightX+6,y:quakesY+quakesHeight+gap}};}
+  function desktopLayout(){var pad=6,gap=22;var langPos={x:pad,y:38};var langHeight=lang?lang.offsetHeight:248;var articleY=langPos.y+langHeight+gap;var quakesX=Math.max(pad,Math.round(bounds.w-278));var quakesY=52;var quakesHeight=quakes?quakes.offsetHeight:248;var bookX=Math.max(pad+300,Math.min(quakesX-292,Math.round(bounds.w*0.49)-130));return {lang:langPos,book:{x:bookX,y:72},article:{x:pad+14,y:articleY},chapter:{x:quakesX+6,y:quakesY+quakesHeight+18},quakes:{x:quakesX,y:quakesY}};}
   function desktopFishY(layout){var y=def.fish.y,clearance=18;posts.forEach(function(p){if(p.el&&p.key!=='fish'){var item=layout&&layout[p.key]?layout[p.key]:pos[p.key];if(item)y=Math.max(y,item.y+p.el.offsetHeight+clearance);}});if(fish){var yr=fishVerticalRange(fish);y=Math.max(yr.minY,Math.min(yr.maxY,y));}return y;}
   function desktopClownLayout(layout){var xr=clown?clownRange(clown):{minX:def.clown.x,maxX:def.clown.x},yr=clown?clownVerticalRange(clown):{minY:def.clown.y,maxY:def.clown.y},x=clamp(Math.round(bounds.w*0.74),xr.minX,xr.maxX),y=clamp(desktopFishY(layout)+86,yr.minY,yr.maxY);return {x:x,y:y};}
   function desktopVioletLayout(layout){var xr=violet?clownRange(violet):{minX:def.violet.x,maxX:def.violet.x},yr=violet?clownVerticalRange(violet):{minY:def.violet.y,maxY:def.violet.y},x=clamp(Math.round(bounds.w*0.18),xr.minX,xr.maxX),y=clamp(desktopFishY(layout)+118,yr.minY,yr.maxY);return {x:x,y:y};}
@@ -256,7 +258,7 @@
     if(!container)return;
     updateBounds();
     var loaded=load();
-    if(bounds.w<600){
+    if(bounds.w<720){
       var y=bounds.pad;
       posts.forEach(function(p){
         if(p.el&&p.key!=='fish'){
@@ -291,6 +293,35 @@
         var savedMobilePawn=resolveSavedPawnPos(loaded.pawn,mobilePawn);
         if(savedMobilePawn)pos.pawn=savedMobilePawn;
         else pos.pawn={x:mobilePawn.x,y:mobilePawn.y};
+      }
+    }else if(bounds.w<1040){
+      var mediumDefaults=mediumLayout();
+      posts.forEach(function(p){
+        if(!p.el)return;
+        if(p.key==='fish'){
+          if(loaded.fish&&typeof loaded.fish.y==='number')pos.fish.y=loaded.fish.y;
+          else pos.fish.y=desktopFishY(mediumDefaults);
+          fishState.anchorY=pos.fish.y;
+        }else{
+          pos[p.key]=mediumDefaults[p.key];
+        }
+      });
+      if(clown){
+        if(loaded.clown&&typeof loaded.clown.x==='number'&&typeof loaded.clown.y==='number')pos.clown={x:loaded.clown.x,y:loaded.clown.y};
+        else pos.clown=desktopClownLayout(mediumDefaults);
+      }
+      if(violet){
+        if(loaded.violet&&typeof loaded.violet.x==='number'&&typeof loaded.violet.y==='number')pos.violet={x:loaded.violet.x,y:loaded.violet.y};
+        else pos.violet=desktopVioletLayout(mediumDefaults);
+      }
+      if(green){
+        if(loaded.green&&typeof loaded.green.x==='number'&&typeof loaded.green.y==='number')pos.green={x:loaded.green.x,y:loaded.green.y};
+        else pos.green=desktopGreenLayout(mediumDefaults);
+      }
+      if(pawn){
+        var mediumPawn=desktopPawnLayout();
+        var savedMediumPawn=resolveSavedPawnPos(loaded.pawn,mediumPawn);
+        pos.pawn=savedMediumPawn||{x:mediumPawn.x,y:mediumPawn.y};
       }
     }else{
       var wideDefaults=desktopLayout();
