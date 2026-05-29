@@ -73,15 +73,28 @@
     var p=bounds.pad,w=pawn?pawn.offsetWidth:120,h=pawn?pawn.offsetHeight:168,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p);
     var lowThreshold=Math.max(p,maxY-Math.round(h*0.08));
     var nearDefaultBand=Math.max(16,Math.round(h*0.14));
+    var atRest=savedPawn.y>=lowThreshold||savedPawn.y>=layout.y-nearDefaultBand&&savedPawn.y<=layout.y+nearDefaultBand;
     return {
       x:clamp(savedPawn.x,p,maxX),
-      y:savedPawn.y>=lowThreshold||savedPawn.y<layout.y&&savedPawn.y>=layout.y-nearDefaultBand?layout.y:clamp(savedPawn.y,p,maxY)
+      y:atRest?layout.y:clamp(savedPawn.y,p,maxY)
     };
   }
+  function pawnRestY(){
+    if(container)updateBounds();
+    var p=bounds.pad,maxY=Math.max(p,bounds.h-(pawn?pawn.offsetHeight:168)-p);
+    var layout=bounds.w<600?mobilePawnLayout():desktopPawnLayout();
+    return clamp(layout.y,p,maxY);
+  }
   var pawnAutoDrop=null;
+  var pawnLandingLift=3;
+  function pawnIsAirborne(restY){
+    if(!pawn||typeof pos.pawn.y!=='number')return false;
+    return pos.pawn.y<restY-pawnLandingLift-2;
+  }
   function schedulePawnAutoDrop(){
     if(!pawnAutoDrop||!fishVisible)return;
     window.requestAnimationFrame(function(){window.requestAnimationFrame(pawnAutoDrop);});
+    window.setTimeout(pawnAutoDrop,140);
   }
   function fishRange(el){var off=Math.max(42,Math.round(el.offsetWidth*0.46));return {minX:-el.offsetWidth-off,maxX:bounds.w+off};}
   function fishDragRange(el){var off=Math.max(18,Math.round(el.offsetWidth*0.42));return {minX:-off,maxX:bounds.w-el.offsetWidth+off};}
@@ -498,7 +511,7 @@
     bindTapToggle(el,function(){return !!moved;},function(){flipBuddyDirection(state,motion,updateVisual);},function(){return fishVisible;});
   }
   function drag(el,key){
-    var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnLandingLift=3,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0,currentTilt:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0,restY:0};
+    var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0,currentTilt:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0,restY:0};
     function pulsePawnFx(className,duration){if(key!=='pawn')return;el.classList.remove(className);void el.offsetWidth;el.classList.add(className);window.setTimeout(function(){el.classList.remove(className);},duration);}
     function setPawnImpactFx(scale,opacity,bubbleScale){if(key!=='pawn')return;el.style.setProperty('--pawn-impact-scale',scale.toFixed(3));el.style.setProperty('--pawn-impact-opacity',opacity.toFixed(3));el.style.setProperty('--pawn-bubble-burst-scale',bubbleScale.toFixed(3));}
     function applyWaterDrag(){if(key==='fish')return;el.style.setProperty('--drag-water-x',waterX.toFixed(2)+'px');el.style.setProperty('--drag-water-y',waterY.toFixed(2)+'px');el.style.setProperty('--drag-water-tilt',waterTilt.toFixed(2)+'deg');}
@@ -720,11 +733,9 @@
     if(key==='pawn'){
       pawnAutoDrop=function(){
         if(!pawn||!fishVisible||el.classList.contains('postit-dragging')||el.classList.contains('pawn-sinking'))return;
-        if(container)updateBounds();
-        var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
-        var restPawnLayout=bounds.w<600?mobilePawnLayout():desktopPawnLayout();
-        var restY=clamp(restPawnLayout.y,p,maxY);
-        if(pos.pawn.y>=restY-pawnLandingLift-1)return;
+        var restY=pawnRestY();
+        if(!pawnIsAirborne(restY))return;
+        var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p);
         el.classList.remove('pawn-drop','pawn-sinking');
         clearPawnSinkFx();
         clearPawnSinkMotion();
@@ -747,4 +758,5 @@
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);
   schedulePawnAutoDrop();
+  window.addEventListener('load',schedulePawnAutoDrop);
 })();
