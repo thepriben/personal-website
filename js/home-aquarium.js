@@ -78,6 +78,11 @@
       y:savedPawn.y>=lowThreshold||savedPawn.y<layout.y&&savedPawn.y>=layout.y-nearDefaultBand?layout.y:clamp(savedPawn.y,p,maxY)
     };
   }
+  var pawnAutoDrop=null;
+  function schedulePawnAutoDrop(){
+    if(!pawnAutoDrop||!fishVisible)return;
+    window.requestAnimationFrame(function(){window.requestAnimationFrame(pawnAutoDrop);});
+  }
   function fishRange(el){var off=Math.max(42,Math.round(el.offsetWidth*0.46));return {minX:-el.offsetWidth-off,maxX:bounds.w+off};}
   function fishDragRange(el){var off=Math.max(18,Math.round(el.offsetWidth*0.42));return {minX:-off,maxX:bounds.w-el.offsetWidth+off};}
   function fishVerticalRange(el){var off=Math.max(42,Math.round(el.offsetHeight*0.95)),minY=-off,maxY=Math.max(minY,bounds.h-el.offsetHeight+off);return {minY:minY,maxY:maxY};}
@@ -214,6 +219,7 @@
       if(pawn)clampPos(pawn,'pawn');
     }
     saveAquariumMode(aquariumMode);
+    schedulePawnAutoDrop();
   }
   function rectsOverlap(a,b){return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;}
   function rectInContainer(el){if(!container||!el)return null;var cr=container.getBoundingClientRect();var r=el.getBoundingClientRect();return {left:r.left-cr.left,top:r.top-cr.top,right:r.right-cr.left,bottom:r.bottom-cr.top};}
@@ -366,6 +372,7 @@
     if(violet)clampVioletPos();
     if(green)clampGreenPos();
     if(pawn)clampPos(pawn,'pawn');
+    schedulePawnAutoDrop();
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];}});
   updateFishVisual();
@@ -710,10 +717,34 @@
     el.addEventListener('touchstart',start,{passive:false});
     el.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();}},true);
     if(key==='fish')bindTapToggle(el,function(){return !!moved;},flipSubmarineDirection,function(){return fishVisible;});
+    if(key==='pawn'){
+      pawnAutoDrop=function(){
+        if(!pawn||!fishVisible||el.classList.contains('postit-dragging')||el.classList.contains('pawn-sinking'))return;
+        if(container)updateBounds();
+        var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
+        var restPawnLayout=bounds.w<600?mobilePawnLayout():desktopPawnLayout();
+        var restY=clamp(restPawnLayout.y,p,maxY);
+        if(pos.pawn.y>=restY-pawnLandingLift-1)return;
+        el.classList.remove('pawn-drop','pawn-sinking');
+        clearPawnSinkFx();
+        clearPawnSinkMotion();
+        clearPawnRestTilt();
+        dragTargetX=clamp(pos.pawn.x,p,maxX);
+        dragTargetY=restY;
+        var dropDistance=Math.max(0,restY-pos.pawn.y);
+        var impactEnergy=clamp(dropDistance/140,0,1);
+        setPawnImpactFx(0.92+impactEnergy*0.88,0.82+impactEnergy*0.42,0.92+impactEnergy*0.46);
+        startPawnSinkMotion(0,dropDistance*4,restY);
+        startPawnSinkFx(0,dropDistance*4);
+        el.classList.add('pawn-sinking');
+        if(!dragRaf)dragRaf=window.requestAnimationFrame(animateDrag);
+      };
+    }
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];drag(p.el,p.key);}});
   if(pawn)drag(pawn,'pawn');
   if(clown)dragBuddy(clown,'clown',clownState,clownMotion,updateClownVisual);
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);
+  schedulePawnAutoDrop();
 })();
