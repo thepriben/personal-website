@@ -284,6 +284,52 @@ table.books-section td > i:first-of-type {
   opacity: 1;
 }
 
+.section-nav-sep {
+  opacity: 0.45;
+  user-select: none;
+}
+
+.section-nav-toggle {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  opacity: 0.88;
+}
+
+.section-nav-toggle:hover,
+.section-nav-toggle:focus-visible {
+  color: var(--text);
+  text-decoration: underline;
+  opacity: 1;
+  outline: none;
+}
+
+.section-nav-toggle[aria-pressed="true"] {
+  color: var(--text);
+  opacity: 1;
+}
+
+body.articles-by-year .section-nav a[href^="#"],
+body.articles-by-year .section-nav-sep {
+  display: none;
+}
+
+.articles-year-heading {
+  margin-top: 0.8rem;
+}
+
+.articles-chronology-cell .articles-year-heading:first-child {
+  margin-top: 0;
+}
+
 .lang-tag {
   display: inline-block;
   padding: 0.1em 0.45em;

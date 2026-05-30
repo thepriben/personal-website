@@ -7,7 +7,7 @@
   <title>Society</title>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
   <script src="js/site-head.js?v=20260310a"></script>
-  <link rel="stylesheet" href="css/style.css?v=20260307g" />
+  <link rel="stylesheet" href="css/style.css?v=20260530a" />
 </head>
 <body class="page-articles">
   <header>
@@ -25,6 +25,9 @@
   </header>
 
   <main>
+    <nav class="section-nav">
+      <button type="button" class="section-nav-toggle" id="articles-sort-toggle" data-sort-key="society-by-year" aria-pressed="false">By year</button>
+    </nav>
     <div class="experience-box books-section">
       <table class="books-section">
         <tbody>
@@ -32,7 +35,7 @@
             <td class="books-section info-cell">
               <h2 id="GD">GD</h2>
               <ul>
-                <li id="chapter-dustan-law-literature"><i>« Guillaume Dustan: From Law to Literature, a Reconfiguration of Normativity Through Fiction »</i>. In: Juster, A. (ed.) Artistic Freedom and Author Responsibility. Living Signs of Law, vol 7, pp. 81-95. Springer, Cham, 2026 (<a href="https://doi.org/10.1007/978-3-032-23550-3_4">doi</a>). <span class="lang-tag">en</span>
+                <li id="chapter-dustan-law-literature" data-year="2026" data-rank="1" data-section="GD"><i>« Guillaume Dustan: From Law to Literature, a Reconfiguration of Normativity Through Fiction »</i>. In: Juster, A. (ed.) Artistic Freedom and Author Responsibility. Living Signs of Law, vol 7, pp. 81-95. Springer, Cham, 2026 (<a href="https://doi.org/10.1007/978-3-032-23550-3_4">doi</a>). <span class="lang-tag">en</span>
                 </li>
               </ul>
             </td>
@@ -40,17 +43,17 @@
           </tr>
           <tr>
             <td class="books-section info-cell">
-              <h2>Misc</h2>
+              <h2 id="misc">Misc</h2>
               <ul>
-                <li><i>Un commun numérique au service de l'humanitaire</i>, <i>SDGzine</i>, 2024, Geneva, n<sup>o</sup> 4, pp. 36-39<sup><a href="#coauthoring-note" aria-label="Voir la note de co-rédaction">*</a></sup>.
+                <li data-year="2024" data-rank="4" data-section="misc"><i>Un commun numérique au service de l'humanitaire</i>, <i>SDGzine</i>, 2024, Geneva, n<sup>o</sup> 4, pp. 36-39<sup><a href="#coauthoring-note" aria-label="Voir la note de co-rédaction">*</a></sup>.
                 </li>
-                <li><i>Quarante ans de radios associatives à Lyon : Témoignages de Patrice Berger</i>, <i>Media Graphy</i>, 2021
+                <li data-year="2021" data-rank="1" data-section="misc"><i>Quarante ans de radios associatives à Lyon : Témoignages de Patrice Berger</i>, <i>Media Graphy</i>, 2021
                   (<a href="https://doi.org/10.58079/t7y1">doi</a>).
                 </li>
-                <li><i>Ce que les riches pensent des pauvres, Le Seuil, 2017, 352 p.</i> [review],
+                <li data-year="2020" data-rank="12" data-section="misc"><i>Ce que les riches pensent des pauvres, Le Seuil, 2017, 352 p.</i> [review],
                   <i>Terrains/Théories</i>, 2020, n<sup>o</sup> 12 (<a href="https://doi.org/10.4000/teth.3122">doi</a>).
                 </li>
-                <li><i>Jean Forestier ou la conquête de Paris-Roubaix 1955</i> [book], Amazon CreateSpace, 2018, ISBN 978-1-7218-4149-3, 40 p. (<a href="https://www.amazon.fr/Jean-Forestier-conqu%C3%AAte-Paris-Roubaix-1955/dp/1721841490">link</a>).
+                <li data-year="2018" data-rank="1" data-section="misc"><i>Jean Forestier ou la conquête de Paris-Roubaix 1955</i> [book], Amazon CreateSpace, 2018, ISBN 978-1-7218-4149-3, 40 p. (<a href="https://www.amazon.fr/Jean-Forestier-conqu%C3%AAte-Paris-Roubaix-1955/dp/1721841490">link</a>).
                 </li>
               </ul>
             </td>
@@ -67,5 +70,6 @@
   <footer>
   </footer>
   <script src="js/theme.js?v=20260307b" defer></script>
+  <script src="js/articles-sort.js?v=20260530b"></script>
 </body>
 </html>
