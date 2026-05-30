@@ -2313,6 +2313,10 @@ body.page-home .main.postit-container {
   top: 432px;
 }
 
+.page-home .postit.postit-quakes {
+  display: none;
+}
+
 .language-note {
   display: flex;
   flex-direction: column;
