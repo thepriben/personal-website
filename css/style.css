@@ -600,6 +600,7 @@ footer {
   font-size: 0.68rem;
   font-weight: 500;
   opacity: 0.82;
+  transform: translateY(1px);
 }
 
 .footer-society-mark > span {
