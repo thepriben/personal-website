@@ -93,7 +93,7 @@
     toggle.setAttribute('aria-pressed', 'true');
     toggle.textContent = 'By topic';
     try {
-      localStorage.setItem(storageKey, '1');
+      localStorage.setItem(storageKey, 'year');
     } catch (e) {}
   }
 
@@ -119,7 +119,9 @@
     else enableYearView();
   });
 
+  disableYearView();
+
   try {
-    if (localStorage.getItem(storageKey) === '1') enableYearView();
+    if (localStorage.getItem(storageKey) === 'year') enableYearView();
   } catch (e) {}
 })();

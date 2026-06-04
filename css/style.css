@@ -588,6 +588,28 @@ footer {
   transform: translateY(0.02em);
 }
 
+.footer-society-mark {
+  position: relative;
+  min-width: 16px;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0;
+  letter-spacing: -0.02em;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-style: italic;
+}
+
+.footer-society-mark > span {
+  display: block;
+  line-height: 1;
+}
+
+.footer-society-mark > span:last-child {
+  font-size: 0.74em;
+  margin-left: -0.02em;
+  transform: translateY(0.01em);
+}
+
 .footer-brand:hover {
   background: var(--footer-brand-bg-hover);
 }
