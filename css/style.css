@@ -590,13 +590,16 @@ footer {
 
 .footer-society-mark {
   position: relative;
-  min-width: 16px;
+  min-width: 14px;
   justify-content: center;
   align-items: baseline;
   gap: 0;
   letter-spacing: -0.02em;
   font-family: Georgia, "Times New Roman", Times, serif;
   font-style: italic;
+  font-size: 0.68rem;
+  font-weight: 500;
+  opacity: 0.82;
 }
 
 .footer-society-mark > span {
@@ -605,9 +608,13 @@ footer {
 }
 
 .footer-society-mark > span:last-child {
-  font-size: 0.74em;
+  font-size: 0.72em;
   margin-left: -0.02em;
   transform: translateY(0.01em);
+}
+
+.footer-society.footer-brand:hover .footer-society-mark {
+  opacity: 0.92;
 }
 
 .footer-brand:hover {
