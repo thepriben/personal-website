@@ -730,46 +730,6 @@ header nav {
   padding: 0;
 }
 
-/* Quakes page */
-.controls,
-.legend {
-  background: var(--bg-soft);
-  color: var(--text);
-  box-shadow: 0 2px 8px var(--shadow);
-}
-
-.quakes-footer {
-  border-top-color: var(--border-dotted);
-}
-
-.quakes-footer a {
-  color: var(--text-muted);
-}
-
-.quakes-footer a:hover {
-  color: var(--text);
-}
-
-[data-theme="light"] .controls,
-[data-theme="light"] .legend {
-  background: rgba(245, 240, 230, 0.92);
-  border: 1px solid var(--border);
-}
-
-[data-theme="dark"] .controls,
-[data-theme="dark"] .legend {
-  background: rgba(30, 30, 30, 0.95);
-  color: var(--text);
-}
-
-[data-theme="dark"] .quakes-footer {
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .quakes-footer a {
-  color: var(--text);
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   nav a {
@@ -822,8 +782,7 @@ header nav {
     height: 62px;
   }
 
-  .postit.language-note,
-  .postit.postit-quakes {
+  .postit.language-note {
     width: 250px;
     height: 236px;
   }
@@ -864,8 +823,7 @@ header nav {
     height: 54px;
   }
 
-  .postit.language-note,
-  .postit.postit-quakes {
+  .postit.language-note {
     width: 224px;
     height: 224px;
   }
@@ -873,16 +831,6 @@ header nav {
   .postit.last-book {
     width: 220px;
     height: 280px;
-  }
-
-  .postit-quakes-link {
-    min-height: 116px;
-    padding: 0.7rem 0.6rem;
-  }
-
-  .postit-quakes-ornament {
-    width: 94px;
-    height: 62px;
   }
 }
 
