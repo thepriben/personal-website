@@ -1127,6 +1127,60 @@ body.page-home .main.postit-container {
 .aquarium-plant-leaf-f2 { left: 2px; top: 40px; width: 17px; height: 11px; transform: rotate(20deg); }
 .aquarium-plant-leaf-f3 { left: -10px; top: 58px; width: 18px; height: 12px; transform: rotate(-20deg); }
 
+.aquarium-bloom {
+  --drag-water-x: 0px;
+  --drag-water-y: 0px;
+  --drag-water-tilt: 0deg;
+  --bloom-ink: 18, 64, 84;
+  --bloom-alpha: 66;
+  position: absolute;
+  left: 280px;
+  top: 96px;
+  width: 104px;
+  height: 248px;
+  z-index: 3;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  opacity: 1;
+  transition: opacity 0.22s ease;
+}
+
+.aquarium-bloom-orb {
+  --bloom-alpha: 96;
+  left: 560px;
+  top: 150px;
+  width: 174px;
+  height: 174px;
+}
+
+.aquarium-bloom-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.aquarium-bloom-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.aquarium-bloom.postit-dragging,
+.aquarium-bloom.postit-water-settling {
+  cursor: grabbing;
+}
+
+.aquarium-bloom.postit-dragging .aquarium-bloom-canvas,
+.aquarium-bloom.postit-water-settling .aquarium-bloom-canvas {
+  transform: translate(var(--drag-water-x), var(--drag-water-y)) rotate(var(--drag-water-tilt));
+}
+
+[data-theme="dark"] .aquarium-bloom {
+  --bloom-ink: 214, 236, 244;
+}
+
 .swim-fish {
   --sub-hit-shift: 0px;
   --sub-hit-lift: 0px;
