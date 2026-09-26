@@ -2,7 +2,7 @@
   var k='postit-pos';
   var sk='submarine-visible';
   var legacyDef={lang:{x:40,y:40},book:{x:328,y:80}};
-  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},chapter:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364},plume:{x:280,y:96},orb:{x:560,y:150}};
+  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},chapter:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364},plume:{x:280,y:96}};
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
   function wrapCoord(value,min,max){var span=Math.max(1,max-min);if(value<min)return max-(min-value)%span;if(value>max)return min+(value-max)%span;return value;}
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
@@ -27,7 +27,6 @@
   if(typeof pos.pawn.x!=='number')pos.pawn.x=def.pawn.x;
   if(typeof pos.pawn.y!=='number')pos.pawn.y=def.pawn.y;
   if(!pos.plume||typeof pos.plume.x!=='number'||typeof pos.plume.y!=='number')pos.plume={x:def.plume.x,y:def.plume.y};
-  if(!pos.orb||typeof pos.orb.x!=='number'||typeof pos.orb.y!=='number')pos.orb={x:def.orb.x,y:def.orb.y};
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var article=document.getElementById('postit-article');
@@ -38,7 +37,6 @@
   var green=document.getElementById('green-fish');
   var pawn=document.getElementById('wrecked-pawn');
   var plume=document.getElementById('aquarium-plume');
-  var orb=document.getElementById('aquarium-orb');
   var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
   var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:article,key:'article'},{el:chapter,key:'chapter'},{el:fish,key:'fish'}];
@@ -215,7 +213,6 @@
     if(green){green.classList.toggle('clown-fish-hidden',!fishVisible);green.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(pawn){pawn.classList.toggle('wrecked-pawn-hidden',!fishVisible);pawn.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
-    if(orb){orb.classList.toggle('aquarium-bloom-hidden',!fishVisible);orb.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
     if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.classList.toggle('is-muted',cardsHidden);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',aquariumMode===0?'Show aquarium':aquariumMode===1?'Hide cards':'Turn aquarium off');}
@@ -389,7 +386,6 @@
     placeBlooms(loaded);
     posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});
     if(plume)clampPos(plume,'plume');
-    if(orb)clampPos(orb,'orb');
     if(clown)clampClownPos();
     if(violet)clampVioletPos();
     if(green)clampGreenPos();
@@ -652,6 +648,9 @@
         fishState.anchorY=ny;
         el.style.left=nx+'px';el.style.top=ny+'px';
         maybePushPostsWithFish(nx-prevX,ny-prevY);
+      }else if(key==='plume'){
+        pos[key].x=nx;pos[key].y=ny;
+        el.style.left=nx+'px';el.style.top=ny+'px';
       }else{
         dragTargetX=nx;dragTargetY=ny;
         if(!dragRaf)dragRaf=window.requestAnimationFrame(animateDrag);
@@ -699,11 +698,11 @@
         var links=el.querySelectorAll('a[href]');
         if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}
       }
-      if(key==='fish'||!dragRaf)save(pos);
+      if(key==='fish'||key==='plume'||!dragRaf)save(pos);
       setTimeout(function(){moved=false;},0);
     }
     function start(e){
-      if((key==='fish'||key==='pawn')&&!fishVisible)return;
+      if((key==='fish'||key==='pawn'||key==='plume')&&!fishVisible)return;
       e.preventDefault();
       moved=false;
       pointerVx=0;
@@ -763,25 +762,14 @@
   }
   function bloomFallback(){
     var p=bounds.pad;
-    if(bounds.w<720){
-      return {
-        plume:{x:p+10,y:Math.max(p,Math.round(bounds.h*0.38))},
-        orb:{x:Math.max(p,bounds.w-186),y:p+12}
-      };
-    }
-    return {
-      plume:{x:Math.max(p,Math.round(bounds.w*0.22)),y:Math.max(p,Math.round(bounds.h*0.16))},
-      orb:{x:Math.max(p,Math.round(bounds.w*0.48)),y:Math.max(p,Math.round(bounds.h*0.28))}
-    };
+    if(bounds.w<720)return {x:p+10,y:Math.max(p,Math.round(bounds.h*0.38))};
+    return {x:Math.max(p,Math.round(bounds.w*0.22)),y:Math.max(p,Math.round(bounds.h*0.16))};
   }
   function placeBlooms(loaded){
-    var fb=bloomFallback();
-    [{key:'plume',el:plume},{key:'orb',el:orb}].forEach(function(item){
-      if(!item.el)return;
-      var saved=loaded&&loaded[item.key];
-      if(saved&&typeof saved.x==='number'&&typeof saved.y==='number')pos[item.key]={x:saved.x,y:saved.y};
-      else pos[item.key]={x:fb[item.key].x,y:fb[item.key].y};
-    });
+    if(!plume)return;
+    var saved=loaded&&loaded.plume;
+    if(saved&&typeof saved.x==='number'&&typeof saved.y==='number')pos.plume={x:saved.x,y:saved.y};
+    else pos.plume=bloomFallback();
   }
   // Deux esquisses #つぶやきProcessing (yuruyurau), recadrées sur leur masse
   // visible et dessinées en encre qui s'accumule, pour rester lisibles dans l'eau.
@@ -808,7 +796,7 @@
     };
   }
   function bloomInk(){
-    var el=(plume&&plume)||orb;
+    var el=plume;
     var raw=el?getComputedStyle(el).getPropertyValue('--bloom-ink'):'';
     if(!raw||raw.indexOf(',')===-1){
       var dark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -860,7 +848,7 @@
     if(bloomReduce&&bloomReduce.matches){drawBlooms();return;}
     if(!bloomRaf)bloomRaf=window.requestAnimationFrame(bloomFrame);
   }
-  if(plume||orb){
+  if(plume){
     blooms=[
       makeBloom(plume,{
         x0:118,y0:0,scale:104/168,alpha:66,step:Math.PI/80,
@@ -875,18 +863,6 @@
           var py=99*Math.cos(c/3)+(6/d)*Math.sin(k*2)+y/(97*Math.sin(e/2)+0.1)*k*e/2+(d*d/2)*Math.cos(t*3-d*d/4)+200;
           return [x,py];
         }
-      }),
-      makeBloom(orb,{
-        x0:52,y0:48,scale:174/300,alpha:96,step:Math.PI/60,
-        point:function(i,t){
-          var y=i/638;
-          var k=(3+Math.cos(y))*Math.sin(i/7)+1e-4;
-          var e=y/5-9;
-          var d=Math.hypot(k,e)-3;
-          var c=d/3-t/4+(i%2)*9;
-          var q=99+3*Math.sin(8/k)-d*3*Math.sin(t*3-d+e)+(y/13)*k*(e+Math.sin(d*3));
-          return [q*Math.sin(c)+200,q*Math.cos(c)+200];
-        }
       })
     ].filter(Boolean);
     if(window.MutationObserver){
@@ -900,7 +876,6 @@
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);
   if(plume)drag(plume,'plume');
-  if(orb)drag(orb,'orb');
   schedulePawnAutoDrop();
   window.addEventListener('load',schedulePawnAutoDrop);
 })();

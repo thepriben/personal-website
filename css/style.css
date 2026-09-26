@@ -134,7 +134,7 @@ nav a:hover {
   background-color: var(--bg);
   padding: 16px;
   margin: 40px auto;
-  width: min(960px, calc(100% - 32px));
+  width: min(1008px, calc(100% - 32px));
   border-radius: 12px;
   box-shadow: 0 1px 3px var(--shadow);
 }
@@ -180,7 +180,7 @@ table.books-section td.cover-placeholder {
 
 /* Articles: utiliser toute la largeur et masquer la colonne jaquette */
 body.page-articles .experience-box {
-  width: min(1100px, calc(100% - 8px));
+  width: min(1155px, calc(100% - 8px));
   margin: 16px auto;
   padding: 12px;
 }
@@ -250,7 +250,7 @@ table.books-section td > i:first-of-type {
 
 /* Section navigation */
 .section-nav {
-  width: min(1100px, calc(100% - 8px));
+  width: min(1155px, calc(100% - 8px));
   margin: 0.2rem auto 0;
   padding: 0.4rem 0 0.25rem 0;
   display: flex;
@@ -765,7 +765,7 @@ header nav {
   .experience-box {
     margin: 20px auto;
     padding: 12px;
-    width: min(960px, calc(100% - 24px));
+    width: min(1008px, calc(100% - 24px));
   }
 
   .postit-container {
