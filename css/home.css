@@ -1152,6 +1152,12 @@ body.page-home .main.postit-container {
   pointer-events: none;
 }
 
+.aquarium-bloom-motion {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .aquarium-bloom-canvas {
   display: block;
   width: 100%;
@@ -1159,12 +1165,41 @@ body.page-home .main.postit-container {
   pointer-events: none;
 }
 
-.aquarium-bloom.postit-dragging {
+.aquarium-bloom-credit {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: rgba(18, 64, 84, 0.72);
+  opacity: 0.38;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.aquarium-bloom-credit:hover,
+.aquarium-bloom-credit:focus-visible {
+  opacity: 0.8;
+}
+
+.aquarium-bloom.postit-dragging,
+.aquarium-bloom.postit-water-settling {
   cursor: grabbing;
+}
+
+.aquarium-bloom.postit-dragging .aquarium-bloom-motion,
+.aquarium-bloom.postit-water-settling .aquarium-bloom-motion {
+  transform: translate(var(--drag-water-x), var(--drag-water-y)) rotate(var(--drag-water-tilt));
 }
 
 [data-theme="dark"] .aquarium-bloom {
   --bloom-ink: 214, 236, 244;
+}
+
+[data-theme="dark"] .aquarium-bloom-credit {
+  color: rgba(214, 236, 244, 0.8);
 }
 
 .swim-fish {
