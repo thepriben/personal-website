@@ -716,6 +716,13 @@
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       startX=x;startY=y;
+      if(key==='plume'&&x!=null){
+        var loupeRect=el.getBoundingClientRect();
+        var loupeX=loupeRect.width?((x-loupeRect.left)/loupeRect.width)*100:50;
+        var loupeY=loupeRect.height?((y-loupeRect.top)/loupeRect.height)*100:42;
+        el.style.setProperty('--loupe-x',Math.max(12,Math.min(88,loupeX))+'%');
+        el.style.setProperty('--loupe-y',Math.max(8,Math.min(92,loupeY))+'%');
+      }
       ox=pos[key].x;oy=pos[key].y;
       dragTargetX=ox;dragTargetY=oy;
       lastPointerX=x;lastPointerY=y;lastPointerTs=performance.now();lastHitTs=0;

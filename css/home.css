@@ -1131,6 +1131,9 @@ body.page-home .main.postit-container {
   --drag-water-x: 0px;
   --drag-water-y: 0px;
   --drag-water-tilt: 0deg;
+  --loupe-x: 50%;
+  --loupe-y: 42%;
+  --loupe: 1;
   --bloom-ink: 18, 64, 84;
   --bloom-alpha: 66;
   position: absolute;
@@ -1156,6 +1159,9 @@ body.page-home .main.postit-container {
   position: relative;
   width: 100%;
   height: 100%;
+  transform-origin: var(--loupe-x) var(--loupe-y);
+  transform: translate(var(--drag-water-x), var(--drag-water-y)) rotate(var(--drag-water-tilt)) scale(var(--loupe));
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .aquarium-bloom-canvas {
@@ -1184,14 +1190,38 @@ body.page-home .main.postit-container {
   opacity: 0.8;
 }
 
+.aquarium-bloom::after {
+  content: "";
+  position: absolute;
+  left: var(--loupe-x);
+  top: var(--loupe-y);
+  width: 156px;
+  height: 156px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.82);
+  border: 1.5px solid rgba(255, 255, 255, 0.78);
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.08) 42%, rgba(255, 255, 255, 0) 68%);
+  box-shadow:
+    inset 0 0 0 8px rgba(255, 255, 255, 0.16),
+    0 14px 30px rgba(18, 64, 84, 0.14);
+  transition: opacity 0.28s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .aquarium-bloom.postit-dragging,
 .aquarium-bloom.postit-water-settling {
   cursor: grabbing;
 }
 
-.aquarium-bloom.postit-dragging .aquarium-bloom-motion,
-.aquarium-bloom.postit-water-settling .aquarium-bloom-motion {
-  transform: translate(var(--drag-water-x), var(--drag-water-y)) rotate(var(--drag-water-tilt));
+.aquarium-bloom.postit-dragging {
+  --loupe: 1.62;
+  z-index: 8;
+}
+
+.aquarium-bloom.postit-dragging::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 [data-theme="dark"] .aquarium-bloom {
@@ -3169,6 +3199,19 @@ body.page-home .postit-container {
   .clown-fish-bubble,
   .wrecked-pawn-grain {
     animation: none;
+  }
+
+  .aquarium-bloom-motion,
+  .aquarium-bloom::after {
+    transition: none;
+  }
+
+  .aquarium-bloom.postit-dragging {
+    --loupe: 1;
+  }
+
+  .aquarium-bloom.postit-dragging::after {
+    opacity: 0;
   }
 
   [data-theme="light"] .postit-container.aquarium-active::after {
