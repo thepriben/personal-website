@@ -643,19 +643,19 @@
       var rawNy=oy+dy;
       var ny=Math.max(p,Math.min(maxY,rawNy));
       if(key==='fish')ny=wrapCoord(rawNy,fyr.minY,fyr.maxY);
-      if(key==='fish'){
+      if(key==='fish'||key==='plume'){
         pos[key].x=nx;pos[key].y=ny;
-        fishState.anchorY=ny;
-        el.style.left=nx+'px';el.style.top=ny+'px';
-        maybePushPostsWithFish(nx-prevX,ny-prevY);
-      }else if(key==='plume'){
-        pos[key].x=nx;pos[key].y=ny;
+        dragTargetX=nx;dragTargetY=ny;
+        if(key==='fish'){
+          fishState.anchorY=ny;
+          maybePushPostsWithFish(nx-prevX,ny-prevY);
+        }
         el.style.left=nx+'px';el.style.top=ny+'px';
       }else{
         dragTargetX=nx;dragTargetY=ny;
         if(!dragRaf)dragRaf=window.requestAnimationFrame(animateDrag);
       }
-      if(lastPointerTs&&key!=='fish'){
+      if(lastPointerTs&&key!=='fish'&&key!=='plume'){
         var dtMs=Math.max(16,now-lastPointerTs);
         var vx=(x-lastPointerX)/(dtMs/1000);
         var vy=(y-lastPointerY)/(dtMs/1000);
@@ -674,7 +674,7 @@
       el.style.cursor='';
       fishState.lastTs=0;
       dragActive=false;
-      if(key!=='fish'){
+      if(key!=='fish'&&key!=='plume'){
         if(key==='pawn'){
           if(container)updateBounds();
           var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
