@@ -908,7 +908,36 @@
   var verre=document.getElementById('poste-direct-verre');
   var zapette=document.getElementById('zapette');
   if(!ecran||!verre)return;
-  var cadre=null,allume=false,niveau=50;
+  var cadre=null,allume=false,niveau=50,joue=false,attente=null,bat=null;
+
+  /* Le lecteur ne parle que si on lui parle : il faut lui dire qu'on écoute,
+     et répéter tant qu'il n'a pas répondu, parce qu'on ne sait pas quand
+     l'iframe est prête. */
+  function ecoute(){
+    var tours=0;
+    if(bat)window.clearInterval(bat);
+    bat=window.setInterval(function(){
+      tours++;
+      if(joue||tours>20||!cadre){window.clearInterval(bat);bat=null;return;}
+      dis('listening');
+      dis('playVideo');
+      dis('setVolume',[niveau]);
+    },700);
+  }
+
+  window.addEventListener('message',function(e){
+    if(!cadre||!/youtube/.test(e.origin))return;
+    var dit;
+    try{dit=typeof e.data==='string'?JSON.parse(e.data):e.data;}catch(err){return;}
+    if(!dit)return;
+    var etat=dit.info&&typeof dit.info.playerState!=='undefined'?dit.info.playerState:null;
+    if(dit.event==='onReady'){dis('playVideo');dis('setVolume',[niveau]);}
+    if(etat===1){
+      joue=true;
+      ecran.classList.remove('poste-direct-muet');
+      if(attente)window.clearTimeout(attente);
+    }
+  });
   function dis(ordre,args){
     if(!cadre||!cadre.contentWindow)return;
     cadre.contentWindow.postMessage(JSON.stringify({event:'command',func:ordre,args:args||[]}),'*');
@@ -933,17 +962,26 @@
       if(!cadre){
         cadre=document.createElement('iframe');
         cadre.src='https://www.youtube-nocookie.com/embed/live_stream?channel='+CHAINE+
-                  '&autoplay=1&rel=0&enablejsapi=1&playsinline=1';
+                  '&autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin='+
+                  encodeURIComponent(window.location.origin);
         cadre.title='Ventoux Watch — 24/7 live';
         cadre.allow='autoplay; encrypted-media; picture-in-picture';
         cadre.setAttribute('allowfullscreen','');
         cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
         verre.appendChild(cadre);
       }
-      window.setTimeout(function(){dis('setVolume',[niveau]);},1400);
+      ecoute();
+      /* Un navigateur a le droit de refuser qu'une image parte toute seule
+         avec du son. S'il refuse, on ne laisse pas un rectangle noir et muet :
+         au bout de quatre secondes sans lecture, on affiche de quoi la
+         lancer à la main. */
+      attente=window.setTimeout(function(){if(!joue)ecran.classList.add('poste-direct-muet');},4000);
     }else if(cadre){
       verre.innerHTML='';
       cadre=null;
+      joue=false;
+      ecran.classList.remove('poste-direct-muet');
+      if(attente)window.clearTimeout(attente);
     }
     marque();
   }
@@ -954,6 +992,9 @@
     if(niveau===0)dis('mute');else dis('unMute');
   }
   if(bouton)bouton.addEventListener('click',function(e){e.preventDefault();mets(!allume);});
+  /* Le carton « à vous de jouer » lance la lecture quand on le pousse. */
+  var rien=document.getElementById('poste-direct-rien');
+  if(rien)rien.addEventListener('click',function(){dis('playVideo');dis('unMute');dis('setVolume',[niveau]);});
   var sortie=document.getElementById('zapette-sortie');
   if(sortie)sortie.addEventListener('click',function(){mets(false);});
   var plus=document.getElementById('zapette-plus');
