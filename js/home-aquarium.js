@@ -903,12 +903,49 @@
 --------------------------------------------------------------------------- */
 (function(){
   var CHAINE='UCvN0sNcj5JM9tklIkAlGi7g';
+  /* La veille écrit là le numéro du direct qu'elle alimente en ce moment.
+     Sans lui il faudrait demander à YouTube de résoudre « le direct de cette
+     chaîne », ce qu'il ne fait plus de façon fiable dans une incrustation :
+     la page se charge, le lecteur s'ouvre, et il annonce une vidéo
+     indisponible. Et le numéro n'est pas constant — YouTube en donne un
+     nouveau chaque fois qu'il termine la diffusion et qu'on en rouvre une —,
+     donc l'écrire en dur ici reviendrait à incruster, tôt ou tard, un
+     enregistrement fini. */
+  var VEILLE='https://medialoco.github.io/ventoux-watch/data/direct.json';
   var poste=document.getElementById('wrecked-pawn');
   var bouton=document.getElementById('poste-bouton');
   var ecran=document.getElementById('poste-direct');
   var verre=document.getElementById('poste-direct-verre');
+  var lien=document.getElementById('poste-y');
   if(!ecran||!verre)return;
-  var cadre=null,allume=false,niveau=50,joue=false,bat=null;
+  var cadre=null,allume=false,niveau=50,joue=false,bat=null,numero='';
+
+  /* L'adresse à incruster : le direct en cours quand on le connaît, et la
+     vieille demande de résolution quand on ne le connaît pas encore. Mieux
+     vaut une adresse incertaine que pas de radio du tout. */
+  function adresse(){
+    return 'https://www.youtube-nocookie.com/embed/'+
+           (numero?numero:'live_stream?channel='+CHAINE)+
+           (numero?'?':'&')+
+           'autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin='+
+           encodeURIComponent(window.location.origin);
+  }
+
+  /* Demandé au chargement et non au premier clic : au clic il serait trop
+     tard, on partirait sur l'adresse incertaine le temps que la réponse
+     arrive. Le fichier fait cent octets. */
+  function demande(){
+    if(!window.fetch)return;
+    fetch(VEILLE,{cache:'no-cache'}).then(function(r){return r.ok?r.json():null;})
+      .then(function(d){
+        if(!d||!d.video)return;
+        numero=d.video;
+        if(lien)lien.href='https://www.youtube.com/watch?v='+numero;
+        /* Si la radio jouait déjà sur l'adresse incertaine, on la recale. */
+        if(allume&&cadre)cadre.src=adresse();
+      }).catch(function(){});
+  }
+  demande();
 
   /* Le lecteur ne parle que si on lui parle : il faut lui dire qu'on écoute,
      et répéter tant qu'il n'a pas répondu, parce qu'on ne sait pas quand
@@ -952,9 +989,7 @@
     if(allume){
       if(!cadre){
         cadre=document.createElement('iframe');
-        cadre.src='https://www.youtube-nocookie.com/embed/live_stream?channel='+CHAINE+
-                  '&autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin='+
-                  encodeURIComponent(window.location.origin);
+        cadre.src=adresse();
         cadre.title='Ventoux Watch — 24/7 live';
         cadre.allow='autoplay; encrypted-media; picture-in-picture';
         cadre.setAttribute('allowfullscreen','');
