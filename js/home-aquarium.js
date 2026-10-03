@@ -891,9 +891,9 @@
    LE POSTE DE RADIO
    ---------------------------------------------------------------------------
    On pousse le gros bouton et la paroi du fond de l'aquarium devient le direct
-   de la chaîne. On en sort par la télécommande, par le bouton 24/7 RADIO de
-   l'en-tête, ou par Échap : trois portes, parce qu'une seule finit toujours
-   par être celle qu'on ne trouve pas.
+   de la chaîne. Rien n'est ajouté en haut de page : la seule commande est sur
+   l'objet, là où on la cherche. On en sort par la télécommande qui lévite, par
+   le gros bouton lui-même, ou par Échap.
 
    L'iframe n'est posée qu'au premier allumage — on ne fait pas charger YouTube
    à quelqu'un venu lire une liste de livres — et elle est retirée à
@@ -907,7 +907,6 @@
   var ecran=document.getElementById('poste-direct');
   var verre=document.getElementById('poste-direct-verre');
   var zapette=document.getElementById('zapette');
-  var bascule=document.getElementById('radio-toggle');
   if(!ecran||!verre)return;
   var cadre=null,allume=false,niveau=50;
   function dis(ordre,args){
@@ -923,10 +922,6 @@
     if(bouton){
       bouton.setAttribute('aria-pressed',allume?'true':'false');
       bouton.setAttribute('aria-label',allume?'Switch the radio off':'Switch the radio on');
-    }
-    if(bascule){
-      bascule.setAttribute('aria-pressed',allume?'true':'false');
-      bascule.setAttribute('aria-label',allume?'Stop the 24/7 radio':'Listen to the 24/7 radio');
     }
     ecran.hidden=!allume;
     if(zapette)zapette.hidden=!allume;
@@ -959,13 +954,6 @@
     if(niveau===0)dis('mute');else dis('unMute');
   }
   if(bouton)bouton.addEventListener('click',function(e){e.preventDefault();mets(!allume);});
-  /* Allumer la radio depuis l'en-tête ouvre l'aquarium s'il est fermé : un
-     fond d'aquarium sans aquarium devant ne veut rien dire. */
-  function ouvreLAquarium(){
-    var sm=document.getElementById('submarine-toggle');
-    if(sm&&sm.getAttribute('aria-pressed')!=='true')sm.click();
-  }
-  if(bascule)bascule.addEventListener('click',function(){if(!allume)ouvreLAquarium();mets(!allume);});
   var sortie=document.getElementById('zapette-sortie');
   if(sortie)sortie.addEventListener('click',function(){mets(false);});
   var plus=document.getElementById('zapette-plus');
