@@ -908,7 +908,7 @@
   var ecran=document.getElementById('poste-direct');
   var verre=document.getElementById('poste-direct-verre');
   if(!ecran||!verre)return;
-  var cadre=null,allume=false,niveau=50,joue=false,attente=null,bat=null;
+  var cadre=null,allume=false,niveau=50,joue=false,bat=null;
 
   /* Le lecteur ne parle que si on lui parle : il faut lui dire qu'on écoute,
      et répéter tant qu'il n'a pas répondu, parce qu'on ne sait pas quand
@@ -932,11 +932,7 @@
     if(!dit)return;
     var etat=dit.info&&typeof dit.info.playerState!=='undefined'?dit.info.playerState:null;
     if(dit.event==='onReady'){dis('playVideo');dis('setVolume',[niveau]);}
-    if(etat===1){
-      joue=true;
-      ecran.classList.remove('poste-direct-muet');
-      if(attente)window.clearTimeout(attente);
-    }
+    if(etat===1)joue=true;
   });
   function dis(ordre,args){
     if(!cadre||!cadre.contentWindow)return;
@@ -966,24 +962,14 @@
         verre.appendChild(cadre);
       }
       ecoute();
-      /* Un navigateur a le droit de refuser qu'une image parte toute seule
-         avec du son. S'il refuse, on ne laisse pas un rectangle noir et muet :
-         au bout de quatre secondes sans lecture, on affiche de quoi la
-         lancer à la main. */
-      attente=window.setTimeout(function(){if(!joue)ecran.classList.add('poste-direct-muet');},4000);
     }else if(cadre){
       verre.innerHTML='';
       cadre=null;
       joue=false;
-      ecran.classList.remove('poste-direct-muet');
-      if(attente)window.clearTimeout(attente);
     }
     marque();
   }
   if(bouton)bouton.addEventListener('click',function(e){e.preventDefault();mets(!allume);});
-  /* Le carton « à vous de jouer » lance la lecture quand on le pousse. */
-  var rien=document.getElementById('poste-direct-rien');
-  if(rien)rien.addEventListener('click',function(){dis('playVideo');dis('unMute');dis('setVolume',[niveau]);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
   marque();
 })();

@@ -3561,38 +3561,6 @@ body.page-home .postit-container {
   display: block;
 }
 
-/* Le carton ne sert qu'au cas ou le navigateur refuse de lancer l'image tout
-   seul. Tant que ca joue, il n'a rien a dire et il n'est pas la. */
-.poste-direct-rien {
-  position: relative;
-  z-index: 2;
-  display: none;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  padding: 11px 18px 11px 13px;
-  border-radius: 999px;
-  background: rgba(13, 20, 24, 0.86);
-  border: 3px solid var(--poste-creme, #f6e3bc);
-  color: var(--poste-creme, #f6e3bc);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.poste-direct.poste-direct-muet .poste-direct-rien { display: inline-flex; }
-
-.poste-direct-rien-rond {
-  width: 0;
-  height: 0;
-  margin-left: 4px;
-  border-left: 13px solid var(--poste-creme, #f6e3bc);
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .poste-direct { animation: none; }
 }
