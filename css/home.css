@@ -3404,29 +3404,40 @@ body.page-home .postit-container {
 
 /* --- Les commandes ----------------------------------------------------- */
 
-.poste-molette {
-  position: absolute;
-  right: 20px;
-  bottom: 14px;
-  width: 20px;
-  height: 20px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  background: var(--poste-creme);
-  border: 3px solid var(--poste-trait);
-}
-
 /* La colonne de droite, laissée libre dans la caisse pour les commandes. */
 .poste-cadran { margin-right: 50px; }
+
+/* Le petit bouton rouge sous le gros : la seule porte vers YouTube. Pas de
+   pointer-events, comme le gros — c'est la tenue du glisser qui le
+   déclenche, et lui rendre l'écoute le ferait partir deux fois. */
+.poste-y {
+  position: absolute;
+  right: 19px;
+  top: 81px;
+  width: 25px;
+  height: 25px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--poste-rouge);
+  border: 3px solid var(--poste-trait);
+  color: #fff6e6;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  z-index: 3;
+}
 
 /* Le gros bouton. Il déborde de la caisse par le bas, à gauche, pour qu'on le
    voie comme une chose à pousser et non comme un détail du dessin. */
 .poste-bouton {
   position: absolute;
-  right: 14px;
-  top: 32px;
-  width: 40px;
-  height: 40px;
+  right: 13px;
+  top: 40px;
+  width: 37px;
+  height: 37px;
   padding: 0;
   border-radius: 50%;
   background: var(--poste-creme);
@@ -3436,7 +3447,11 @@ body.page-home .postit-container {
   transition: transform 0.18s ease, background 0.18s ease;
 }
 
-.wrecked-pawn .poste-bouton { pointer-events: auto; }
+/* Surtout pas de pointer-events ici. L'objet se traine, et pour cela tous
+   ses enfants sont sourds au pointeur : c'est la tenue du glisser qui teste
+   ou on a relache et declenche le bouton. Lui rendre l'ecoute, c'est le
+   declencher deux fois pour un seul clic -- il s'allume puis s'eteint, et on
+   croit que rien ne marche. */
 .poste-bouton:hover { transform: scale(1.09); }
 .poste-bouton:active { transform: scale(0.94); }
 .poste-bouton:focus-visible { outline: 3px solid var(--poste-vert); outline-offset: 3px; }
@@ -3460,7 +3475,7 @@ body.page-home .postit-container {
   margin-left: -1.5px;
   border-radius: 2px;
   background: var(--poste-trait);
-  transform-origin: 50% 14px;
+  transform-origin: 50% 13px;
   transform: rotate(-40deg);
   transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.5, 1);
 }
@@ -3578,147 +3593,8 @@ body.page-home .postit-container {
   border-bottom: 8px solid transparent;
 }
 
-/* ===========================================================================
-   LA TÉLÉCOMMANDE QUI LÉVITE
-   ---------------------------------------------------------------------------
-   Elle flotte devant le direct, en haut à droite, et porte les trois seules
-   choses dont on a besoin : le son, YouTube, et la sortie. On doit pouvoir
-   s'en aller aussi vite qu'on est entré.
-   ======================================================================== */
-
-.zapette {
-  position: absolute;
-  right: 22px;
-  top: 22px;
-  z-index: 41;   /* devant tout : on doit pouvoir sortir sans chercher */
-  animation: zapette-levite 4.4s ease-in-out infinite;
-}
-
-.zapette[hidden] { display: none; }
-
-@keyframes zapette-levite {
-  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
-  50%      { transform: translateY(-7px) rotate(1.5deg); }
-}
-
-.zapette-corps {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 9px;
-  width: 106px;
-  padding: 12px 11px 11px;
-  box-sizing: border-box;
-  border-radius: 14px;
-  background: var(--poste-creme, #f6e3bc);
-  border: 4px solid var(--poste-trait, #2a1a10);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
-}
-
-.zapette-oeil {
-  width: 11px;
-  height: 11px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  background: var(--poste-rouge, #d6452f);
-  border: 3px solid var(--poste-trait, #2a1a10);
-}
-
-.zapette-marque {
-  font-size: 0.56rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--poste-trait, #2a1a10);
-  opacity: 0.6;
-}
-
-.zapette-touches {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-}
-
-.zapette-touche {
-  width: 34px;
-  height: 30px;
-  padding: 0;
-  border-radius: 9px;
-  background: #fffaf0;
-  border: 3px solid var(--poste-trait, #2a1a10);
-  color: var(--poste-trait, #2a1a10);
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-  transition: transform 0.14s ease, background 0.14s ease;
-}
-
-.zapette-touche:hover { background: #fff; transform: translateY(-1px); }
-.zapette-touche:active { transform: translateY(1px); }
-
-/* La jauge : six crans, parce qu'un chiffre ne dit rien et qu'une barre
-   continue ne se lit pas d'un coup d'œil. */
-.zapette-jauge {
-  width: 10px;
-  height: 46px;
-  border-radius: 6px;
-  background: #fffaf0;
-  border: 3px solid var(--poste-trait, #2a1a10);
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-}
-
-.zapette-jauge-plein {
-  width: 100%;
-  height: 50%;
-  background: var(--poste-vert, #4fb27a);
-  transition: height 0.18s ease;
-}
-
-.zapette-yt,
-.zapette-sortie {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  width: 100%;
-  padding: 6px 0;
-  box-sizing: border-box;
-  border-radius: 9px;
-  border: 3px solid var(--poste-trait, #2a1a10);
-  background: #fffaf0;
-  color: var(--poste-trait, #2a1a10);
-  font-size: 0.54rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.14s ease, transform 0.14s ease;
-}
-
-.zapette-yt:hover,
-.zapette-sortie:hover { background: #fff; transform: translateY(-1px); }
-
-.zapette-yt-carre {
-  width: 11px;
-  height: 11px;
-  box-sizing: border-box;
-  border-radius: 2px;
-  background: var(--poste-rouge, #d6452f);
-  border: 2px solid var(--poste-trait, #2a1a10);
-}
-
-.zapette-sortie { background: var(--poste-rouge, #d6452f); color: #fffaf0; }
-.zapette-sortie:hover { background: #e2563f; }
-
 @media (prefers-reduced-motion: reduce) {
-  .zapette { animation: none; }
   .poste-direct { animation: none; }
 }
 
-@media (max-width: 720px) {
-  .zapette { right: 12px; top: 12px; }
-  .zapette-corps { width: 78px; }
-}
+

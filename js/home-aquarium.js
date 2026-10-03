@@ -891,9 +891,10 @@
    LE POSTE DE RADIO
    ---------------------------------------------------------------------------
    On pousse le gros bouton et la paroi du fond de l'aquarium devient le direct
-   de la chaîne. Rien n'est ajouté en haut de page : la seule commande est sur
-   l'objet, là où on la cherche. On en sort par la télécommande qui lévite, par
-   le gros bouton lui-même, ou par Échap.
+   de la chaîne. On rappuie dessus et ça s'éteint. Rien n'est ajouté ailleurs
+   sur la page : les deux seules commandes sont sur l'objet, là où on les
+   cherche — le gros bouton, et le petit rouge en dessous qui mène à YouTube.
+   Échap éteint aussi, pour qui a les mains sur le clavier.
 
    L'iframe n'est posée qu'au premier allumage — on ne fait pas charger YouTube
    à quelqu'un venu lire une liste de livres — et elle est retirée à
@@ -906,7 +907,6 @@
   var bouton=document.getElementById('poste-bouton');
   var ecran=document.getElementById('poste-direct');
   var verre=document.getElementById('poste-direct-verre');
-  var zapette=document.getElementById('zapette');
   if(!ecran||!verre)return;
   var cadre=null,allume=false,niveau=50,joue=false,attente=null,bat=null;
 
@@ -942,10 +942,6 @@
     if(!cadre||!cadre.contentWindow)return;
     cadre.contentWindow.postMessage(JSON.stringify({event:'command',func:ordre,args:args||[]}),'*');
   }
-  function montreJauge(){
-    var plein=document.getElementById('zapette-jauge-plein');
-    if(plein)plein.style.height=niveau+'%';
-  }
   function marque(){
     if(poste)poste.classList.toggle('poste-allume',allume);
     if(bouton){
@@ -953,7 +949,6 @@
       bouton.setAttribute('aria-label',allume?'Switch the radio off':'Switch the radio on');
     }
     ecran.hidden=!allume;
-    if(zapette)zapette.hidden=!allume;
   }
   function mets(oui){
     if(oui===allume)return;
@@ -985,23 +980,10 @@
     }
     marque();
   }
-  function sonne(pas){
-    niveau=Math.max(0,Math.min(100,niveau+pas));
-    montreJauge();
-    dis('setVolume',[niveau]);
-    if(niveau===0)dis('mute');else dis('unMute');
-  }
   if(bouton)bouton.addEventListener('click',function(e){e.preventDefault();mets(!allume);});
   /* Le carton « à vous de jouer » lance la lecture quand on le pousse. */
   var rien=document.getElementById('poste-direct-rien');
   if(rien)rien.addEventListener('click',function(){dis('playVideo');dis('unMute');dis('setVolume',[niveau]);});
-  var sortie=document.getElementById('zapette-sortie');
-  if(sortie)sortie.addEventListener('click',function(){mets(false);});
-  var plus=document.getElementById('zapette-plus');
-  if(plus)plus.addEventListener('click',function(){sonne(10);});
-  var moins=document.getElementById('zapette-moins');
-  if(moins)moins.addEventListener('click',function(){sonne(-10);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
-  montreJauge();
   marque();
 })();
