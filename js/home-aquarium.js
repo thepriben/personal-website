@@ -695,8 +695,8 @@
       }
       if(!moved){
         var x=e.clientX||(e.changedTouches&&e.changedTouches[0].clientX),y=e.clientY||(e.changedTouches&&e.changedTouches[0].clientY);
-        var links=el.querySelectorAll('a[href]');
-        if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}
+        var links=el.querySelectorAll('a[href],button');
+        if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].tagName==='BUTTON')links[i].click();else if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}
       }
       if(key==='fish'||key==='plume'||!dragRaf)save(pos);
       setTimeout(function(){moved=false;},0);
@@ -734,7 +734,7 @@
     function updateCursor(e){
       var x=e.clientX,y=e.clientY;
       if(x==null)return;
-      var links=el.querySelectorAll('a[href]');
+      var links=el.querySelectorAll('a[href],button');
       var over=false;
       for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){over=true;break;}}
       el.style.cursor=over?'pointer':'grab';
@@ -887,36 +887,92 @@
   window.addEventListener('load',schedulePawnAutoDrop);
 })();
 
-/* La télé qui lévite : le gros bouton l'allume, et l'écran devient le direct
-   de la chaîne. L'iframe n'est posée qu'au premier clic — on ne fait pas
-   charger YouTube à quelqu'un qui vient lire une liste de livres, et on ne
-   lui pose pas de cookie tiers tant qu'il n'a rien demandé. */
+/* ---------------------------------------------------------------------------
+   LE POSTE DE RADIO
+   ---------------------------------------------------------------------------
+   On pousse le gros bouton et la paroi du fond de l'aquarium devient le direct
+   de la chaîne. On en sort par la télécommande, par le bouton 24/7 RADIO de
+   l'en-tête, ou par Échap : trois portes, parce qu'une seule finit toujours
+   par être celle qu'on ne trouve pas.
+
+   L'iframe n'est posée qu'au premier allumage — on ne fait pas charger YouTube
+   à quelqu'un venu lire une liste de livres — et elle est retirée à
+   l'extinction, parce qu'une image cachée qui continue de jouer derrière est
+   une radio qu'on croit avoir éteinte.
+--------------------------------------------------------------------------- */
 (function(){
-  var tele=document.getElementById('tele');
-  var bouton=document.getElementById('tele-bouton');
-  var ecran=document.getElementById('tele-video');
-  if(!tele||!bouton||!ecran)return;
   var CHAINE='UCvN0sNcj5JM9tklIkAlGi7g';
-  var posee=false;
-  function allume(oui){
-    tele.classList.toggle('tele-allumee',oui);
-    bouton.setAttribute('aria-pressed',oui?'true':'false');
-    bouton.setAttribute('aria-label',oui?'Turn the television off':'Turn the television on');
-    if(oui&&!posee){
-      posee=true;
-      var cadre=document.createElement('iframe');
-      cadre.src='https://www.youtube-nocookie.com/embed/live_stream?channel='+CHAINE+'&autoplay=1&rel=0';
-      cadre.title='Ventoux Watch live';
-      cadre.allow='autoplay; encrypted-media; picture-in-picture';
-      cadre.setAttribute('allowfullscreen','');
-      cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
-      ecran.appendChild(cadre);
-    }
-    /* Éteindre coupe vraiment le son : une image cachée qui continue de
-       jouer derrière, c'est une télé qu'on croit avoir éteinte. */
-    if(!oui&&posee){ecran.innerHTML='';posee=false;}
+  var poste=document.getElementById('wrecked-pawn');
+  var bouton=document.getElementById('poste-bouton');
+  var ecran=document.getElementById('poste-direct');
+  var verre=document.getElementById('poste-direct-verre');
+  var zapette=document.getElementById('zapette');
+  var bascule=document.getElementById('radio-toggle');
+  if(!ecran||!verre)return;
+  var cadre=null,allume=false,niveau=50;
+  function dis(ordre,args){
+    if(!cadre||!cadre.contentWindow)return;
+    cadre.contentWindow.postMessage(JSON.stringify({event:'command',func:ordre,args:args||[]}),'*');
   }
-  bouton.addEventListener('click',function(){
-    allume(!tele.classList.contains('tele-allumee'));
-  });
+  function montreJauge(){
+    var plein=document.getElementById('zapette-jauge-plein');
+    if(plein)plein.style.height=niveau+'%';
+  }
+  function marque(){
+    if(poste)poste.classList.toggle('poste-allume',allume);
+    if(bouton){
+      bouton.setAttribute('aria-pressed',allume?'true':'false');
+      bouton.setAttribute('aria-label',allume?'Switch the radio off':'Switch the radio on');
+    }
+    if(bascule){
+      bascule.setAttribute('aria-pressed',allume?'true':'false');
+      bascule.setAttribute('aria-label',allume?'Stop the 24/7 radio':'Listen to the 24/7 radio');
+    }
+    ecran.hidden=!allume;
+    if(zapette)zapette.hidden=!allume;
+  }
+  function mets(oui){
+    if(oui===allume)return;
+    allume=oui;
+    if(allume){
+      if(!cadre){
+        cadre=document.createElement('iframe');
+        cadre.src='https://www.youtube-nocookie.com/embed/live_stream?channel='+CHAINE+
+                  '&autoplay=1&rel=0&enablejsapi=1&playsinline=1';
+        cadre.title='Ventoux Watch — 24/7 live';
+        cadre.allow='autoplay; encrypted-media; picture-in-picture';
+        cadre.setAttribute('allowfullscreen','');
+        cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+        verre.appendChild(cadre);
+      }
+      window.setTimeout(function(){dis('setVolume',[niveau]);},1400);
+    }else if(cadre){
+      verre.innerHTML='';
+      cadre=null;
+    }
+    marque();
+  }
+  function sonne(pas){
+    niveau=Math.max(0,Math.min(100,niveau+pas));
+    montreJauge();
+    dis('setVolume',[niveau]);
+    if(niveau===0)dis('mute');else dis('unMute');
+  }
+  if(bouton)bouton.addEventListener('click',function(e){e.preventDefault();mets(!allume);});
+  /* Allumer la radio depuis l'en-tête ouvre l'aquarium s'il est fermé : un
+     fond d'aquarium sans aquarium devant ne veut rien dire. */
+  function ouvreLAquarium(){
+    var sm=document.getElementById('submarine-toggle');
+    if(sm&&sm.getAttribute('aria-pressed')!=='true')sm.click();
+  }
+  if(bascule)bascule.addEventListener('click',function(){if(!allume)ouvreLAquarium();mets(!allume);});
+  var sortie=document.getElementById('zapette-sortie');
+  if(sortie)sortie.addEventListener('click',function(){mets(false);});
+  var plus=document.getElementById('zapette-plus');
+  if(plus)plus.addEventListener('click',function(){sonne(10);});
+  var moins=document.getElementById('zapette-moins');
+  if(moins)moins.addEventListener('click',function(){sonne(-10);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
+  montreJauge();
+  marque();
 })();

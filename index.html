@@ -23,6 +23,14 @@
         <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
           <img id="theme-icon" src="images/ui/theme-moon.svg" alt="" width="18" height="18" aria-hidden="true">
         </button>
+        <button type="button" id="radio-toggle" class="theme-toggle radio-toggle" aria-pressed="false" aria-controls="poste-direct" aria-label="Listen to the 24/7 radio">
+          <span class="radio-toggle-ondes" aria-hidden="true">
+            <span class="radio-toggle-onde"></span>
+            <span class="radio-toggle-onde"></span>
+            <span class="radio-toggle-onde"></span>
+          </span>
+          <span class="radio-toggle-mot">24/7 RADIO</span>
+        </button>
         <button type="button" id="submarine-toggle" class="theme-toggle submarine-toggle" aria-pressed="false" aria-controls="swim-fish clown-fish violet-fish green-fish wrecked-pawn aquarium-plume" aria-label="Show submarine">
           <svg class="submarine-toggle-icon" viewBox="0 0 24 24" fill="none" width="18" height="18" aria-hidden="true" focusable="false">
             <circle class="submarine-toggle-porthole" cx="12" cy="12.4" r="6.4"></circle>
@@ -227,52 +235,70 @@
           </span>
         </div>
       </div>
-      <div class="tele" id="tele">
-        <div class="tele-levite">
-          <span class="tele-ombre" aria-hidden="true"></span>
-          <span class="tele-antenne" aria-hidden="true">
-            <span class="tele-antenne-tige tele-antenne-tige-g"><span class="tele-antenne-boule"></span></span>
-            <span class="tele-antenne-tige tele-antenne-tige-d"><span class="tele-antenne-boule"></span></span>
-            <span class="tele-antenne-pied"></span>
-          </span>
-          <div class="tele-caisse">
-            <div class="tele-ecran">
-              <span class="tele-ecran-eteint" aria-hidden="true">
-                <span class="tele-ecran-ligne"></span>
-                <span class="tele-ecran-point"></span>
-              </span>
-              <div class="tele-ecran-video" id="tele-video"></div>
-              <span class="tele-ecran-reflet" aria-hidden="true"></span>
-            </div>
-            <div class="tele-panneau">
-              <button type="button" class="tele-bouton" id="tele-bouton"
-                      aria-pressed="false" aria-controls="tele-video"
-                      aria-label="Turn the television on">
-                <span class="tele-bouton-cran" aria-hidden="true"></span>
-                <span class="tele-bouton-repere" aria-hidden="true"></span>
-              </button>
-              <span class="tele-temoin" aria-hidden="true"></span>
-              <span class="tele-grille" aria-hidden="true">
-                <span></span><span></span><span></span><span></span>
-              </span>
-            </div>
+      <div class="poste-direct" id="poste-direct" hidden>
+        <div class="poste-direct-verre" id="poste-direct-verre"></div>
+        <p class="poste-direct-rien" id="poste-direct-rien">
+          Tuning in&hellip;
+        </p>
+      </div>
+      <div class="zapette" id="zapette" hidden>
+        <div class="zapette-corps">
+          <span class="zapette-oeil" aria-hidden="true"></span>
+          <span class="zapette-marque" aria-hidden="true">24/7</span>
+          <div class="zapette-touches">
+            <button type="button" class="zapette-touche zapette-plus" id="zapette-plus" aria-label="Louder">
+              <span aria-hidden="true">+</span>
+            </button>
+            <span class="zapette-jauge" aria-hidden="true">
+              <span class="zapette-jauge-plein" id="zapette-jauge-plein"></span>
+            </span>
+            <button type="button" class="zapette-touche zapette-moins" id="zapette-moins" aria-label="Quieter">
+              <span aria-hidden="true">&minus;</span>
+            </button>
           </div>
-          <span class="tele-pieds" aria-hidden="true">
-            <span class="tele-pied tele-pied-g"></span>
-            <span class="tele-pied tele-pied-d"></span>
-          </span>
-          <a class="tele-carre" id="tele-carre"
-             href="https://www.youtube.com/channel/UCvN0sNcj5JM9tklIkAlGi7g/live"
-             target="_blank" rel="noopener"
-             aria-label="Watch the Ventoux Watch live on YouTube">
-            <span class="tele-carre-ecran" aria-hidden="true"></span>
-            <span class="tele-carre-mot">LIVE ON YOUTUBE</span>
+          <a class="zapette-yt" href="https://www.youtube.com/channel/UCvN0sNcj5JM9tklIkAlGi7g/live"
+             target="_blank" rel="noopener">
+            <span class="zapette-yt-carre" aria-hidden="true"></span>
+            YOUTUBE
           </a>
+          <button type="button" class="zapette-sortie" id="zapette-sortie" aria-label="Switch the radio off">
+            <span aria-hidden="true">&times;</span> OFF
+          </button>
         </div>
       </div>
       <div class="wrecked-pawn wrecked-pawn-hidden" id="wrecked-pawn" data-postit="pawn" aria-hidden="true">
         <div class="wrecked-pawn-motion">
-          <span class="wrecked-pawn-illustration" aria-hidden="true"></span>
+          <span class="poste" aria-hidden="true">
+            <span class="poste-poignee"></span>
+            <span class="poste-caisse">
+              <span class="poste-grille">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </span>
+              <span class="poste-cadran">
+                <span class="poste-cadran-verre"></span>
+                <span class="poste-cadran-graduation">
+                  <span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                </span>
+                <span class="poste-cadran-bandes">
+                  <span>GO</span><span>PO</span><span>OC</span>
+                </span>
+                <span class="poste-cadran-aiguille"></span>
+                <span class="poste-cadran-oeil"></span>
+              </span>
+              <span class="poste-molette"></span>
+            </span>
+            <span class="poste-pieds">
+              <span></span><span></span>
+            </span>
+          </span>
+          <button type="button" class="poste-bouton" id="poste-bouton"
+                  aria-pressed="false" aria-controls="poste-direct"
+                  aria-label="Switch the radio on">
+            <span class="poste-bouton-cran" aria-hidden="true"></span>
+            <span class="poste-bouton-repere" aria-hidden="true"></span>
+          </button>
           <span class="wrecked-pawn-impact" aria-hidden="true">
             <span class="wrecked-pawn-impact-sand"></span>
             <span class="wrecked-pawn-impact-froth"></span>

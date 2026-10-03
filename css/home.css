@@ -1433,8 +1433,10 @@ body.page-home .main.postit-container {
   --pawn-rest-tilt: 0deg;
   --pawn-lift-y: 0px;
   position: absolute;
-  width: 128px;
-  height: 176px;
+  /* Un poste est plus large que haut, là où un pion était plus haut que
+     large. La boîte suit l'objet ; la physique, elle, mesure la boîte. */
+  width: 212px;
+  height: 142px;
   left: 748px;
   top: 336px;
   cursor: grab;
@@ -3220,390 +3222,537 @@ body.page-home .postit-container {
 }
 
 /* ===========================================================================
-   LA TÉLÉ QUI LÉVITE — ligne claire franco-belge
+   LE POSTE DE RADIO
    ---------------------------------------------------------------------------
-   Aplats francs, un seul noir de contour, pas un dégradé : c'est tout ce qui
-   fait la ligne claire, et c'est ce qui la distingue du reste de la page, qui
-   est plus douce. Elle lévite parce qu'une télé posée par terre dans une page
-   de livres n'a aucune raison d'être là, alors qu'une télé en l'air en a une.
+   Un poste de table en bakélite, posé au fond de l'aquarium à la place du
+   pion. Il garde la boîte et toute la physique du pion — on le soulève, on le
+   lâche, il coule et il soulève du sable — parce que c'est l'objet qui change,
+   pas la façon dont il se comporte.
 
-   Le gros bouton l'allume : l'écran devient le direct de la chaîne. Le carré
-   en dessous mène au direct sur YouTube.
+   Aplats et contours, comme les poissons : la page n'a pas de dégradés et
+   celui-ci n'en aura pas non plus. Ce qui fait la radio, c'est le cadran avec
+   ses bandes GO/PO/OC, l'œil magique vert, la grille de haut-parleur et la
+   poignée. Un gros bouton allume : le direct prend tout l'aquarium.
    ======================================================================== */
 
-.tele {
-  --tele-trait: #1b1b1b;
-  --tele-bois: #d79a3c;
-  --tele-bois-sombre: #b87c25;
-  --tele-creme: #f6e7c8;
-  --tele-verre: #2d3f45;
-  --tele-verre-clair: #3d555d;
-  --tele-rouge: #d64b3a;
-  --tele-vert: #4fb477;
-  /* Posée dans le bas du conteneur, qui est vide : les quatre fiches
-     occupent la bande du haut et la colonne de gauche. Centrée plutôt que
-     calée à gauche parce que les fiches sont replacées par le script selon
-     la largeur, et qu'un nombre de pixels écrit ici serait juste une fois
-     sur trois. */
+.wrecked-pawn {
+  --poste-trait: #2a1a10;
+  --poste-bois: #c2762c;
+  --poste-bois-sombre: #9b5a1c;
+  --poste-creme: #f6e3bc;
+  --poste-verre: #fff4dc;
+  --poste-rouge: #d6452f;
+  --poste-vert: #4fb27a;
+}
+
+[data-theme="dark"] .wrecked-pawn {
+  --poste-bois: #a4601f;
+  --poste-bois-sombre: #7d4714;
+  --poste-creme: #e7d2a8;
+  --poste-verre: #f1e2c2;
+}
+
+.poste {
   position: absolute;
-  left: 50%;
-  top: 452px;
-  margin-left: -158px;
-  width: 316px;
-  height: 352px;
-  z-index: 2;
+  left: 2%;
+  top: 14%;
+  width: 96%;
+  height: 74%;
 }
 
-.tele-levite {
+/* La poignée : un arc, et c'est à elle qu'on voit que l'objet se portait. */
+.poste-poignee {
   position: absolute;
-  inset: 0;
-  animation: tele-levite 5.6s ease-in-out infinite;
-}
-
-@keyframes tele-levite {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-9px); }
-}
-
-/* L'ombre ne monte pas avec elle : elle s'étale quand la télé redescend et
-   se resserre quand elle est haut. C'est ce qui la fait flotter plutôt que
-   glisser. */
-.tele-ombre {
-  position: absolute;
-  left: 78px;
-  top: 282px;
-  width: 160px;
-  height: 16px;
-  border-radius: 50%;
-  background: rgba(27, 27, 27, 0.17);
-  animation: tele-ombre 5.6s ease-in-out infinite;
-}
-
-@keyframes tele-ombre {
-  0%, 100% { transform: scale(1); opacity: 0.22; }
-  50%      { transform: scale(0.82); opacity: 0.12; }
-}
-
-/* --- Les oreilles de lapin ------------------------------------------- */
-
-.tele-antenne {
-  position: absolute;
-  left: 124px;
+  left: 27%;
   top: 0;
-  width: 68px;
-  height: 76px;
-}
-
-.tele-antenne-tige {
-  position: absolute;
-  bottom: 0;
-  left: 32px;
-  width: 4px;
-  height: 66px;
-  background: var(--tele-trait);
-  border-radius: 2px;
-  transform-origin: 50% 100%;
-}
-
-.tele-antenne-tige-g { transform: rotate(-26deg); }
-.tele-antenne-tige-d { transform: rotate(24deg); }
-
-.tele-antenne-boule {
-  position: absolute;
-  left: -5px;
-  top: -8px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--tele-creme);
-  border: 3px solid var(--tele-trait);
+  width: 46%;
+  height: 20px;
   box-sizing: border-box;
+  border: 4px solid var(--poste-trait);
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
 }
 
-.tele-antenne-pied {
+.poste-caisse {
   position: absolute;
-  left: 22px;
-  bottom: -4px;
-  width: 24px;
-  height: 12px;
-  border-radius: 6px 6px 3px 3px;
-  background: var(--tele-trait);
-}
-
-/* --- La caisse -------------------------------------------------------- */
-
-.tele-caisse {
-  position: absolute;
-  left: 8px;
-  top: 64px;
-  width: 300px;
-  height: 212px;
+  left: 0;
+  top: 16px;
+  right: 0;
+  bottom: 9px;
   box-sizing: border-box;
   display: flex;
-  gap: 10px;
-  padding: 12px;
-  border-radius: 20px;
-  background: var(--tele-bois);
-  border: 4px solid var(--tele-trait);
-  /* Un seul aplat plus sombre en bas, et c'est tout le volume qu'on
-     s'autorise : une ligne claire n'a pas d'ombre portée interne. */
-  box-shadow: inset 0 -14px 0 var(--tele-bois-sombre);
+  align-items: stretch;
+  gap: 8px;
+  padding: 8px 9px;
+  border-radius: 14px;
+  background: var(--poste-bois);
+  border: 4px solid var(--poste-trait);
+  box-shadow: inset 0 -10px 0 var(--poste-bois-sombre);
 }
 
-.tele-ecran {
+/* --- Le haut-parleur --------------------------------------------------- */
+
+.poste-grille {
   position: relative;
-  flex: 1 1 auto;
-  border-radius: 14px;
-  background: var(--tele-verre);
-  border: 4px solid var(--tele-trait);
+  flex: 0 0 44px;
+  align-self: center;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--poste-creme);
+  border: 3px solid var(--poste-trait);
   overflow: hidden;
 }
 
-/* L'écran éteint : le trait blanc qui se rétracte en un point, comme quand on
-   coupait le courant. Il ne bouge pas tant qu'on n'a pas cliqué ; c'est au
-   clic qu'il s'ouvre. */
-.tele-ecran-eteint {
+/* Des anneaux concentriques plutôt que des lamelles droites : c'est le
+   haut-parleur rond des postes de table, et c'est ce qui dit « radio » avant
+   même qu'on ait lu le cadran. */
+.poste-grille span {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 2px solid var(--poste-trait);
+  opacity: 0.42;
+  transform: translate(-50%, -50%);
+}
+
+.poste-grille span:nth-child(1) { width: 36px; height: 36px; }
+.poste-grille span:nth-child(2) { width: 27px; height: 27px; }
+.poste-grille span:nth-child(3) { width: 18px; height: 18px; }
+.poste-grille span:nth-child(4) {
+  width: 9px; height: 9px; background: var(--poste-trait); opacity: 0.8;
+}
+.poste-grille span:nth-child(n+5) { display: none; }
+
+/* --- Le cadran --------------------------------------------------------- */
+
+.poste-cadran {
+  position: relative;
+  flex: 1 1 auto;
+  align-self: stretch;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 3px solid var(--poste-trait);
+  background: var(--poste-verre);
+}
+
+.poste-cadran-verre { display: none; }
+
+.poste-cadran-graduation {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 30%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.poste-cadran-graduation span {
+  width: 2px;
+  height: 8px;
+  background: var(--poste-trait);
+  opacity: 0.7;
+}
+
+.poste-cadran-graduation span:nth-child(odd) { height: 5px; }
+
+.poste-cadran-bandes {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 9%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--poste-trait);
+  opacity: 0.75;
+}
+
+/* L'aiguille rouge, posée sur une station et qui n'en bouge plus : c'est la
+   nôtre, elle émet vingt-quatre heures sur vingt-quatre. */
+.poste-cadran-aiguille {
+  position: absolute;
+  left: 62%;
+  top: 14%;
+  width: 3px;
+  height: 46%;
+  border-radius: 2px;
+  background: var(--poste-rouge);
+  box-shadow: 0 0 0 1px rgba(42, 26, 16, 0.5);
+}
+
+/* L'œil magique : vert quand ça capte. Éteint, il est juste sombre. */
+.poste-cadran-oeil {
+  position: absolute;
+  right: 7%;
+  top: 9%;
+  width: 9px;
+  height: 9px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid var(--poste-trait);
+  background: #6d6a60;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wrecked-pawn.poste-allume .poste-cadran-oeil {
+  background: var(--poste-vert);
+  box-shadow: 0 0 7px rgba(79, 178, 122, 0.95);
+}
+
+/* --- Les commandes ----------------------------------------------------- */
+
+.poste-molette {
+  position: absolute;
+  right: 20px;
+  bottom: 14px;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: var(--poste-creme);
+  border: 3px solid var(--poste-trait);
+}
+
+/* La colonne de droite, laissée libre dans la caisse pour les commandes. */
+.poste-cadran { margin-right: 50px; }
+
+/* Le gros bouton. Il déborde de la caisse par le bas, à gauche, pour qu'on le
+   voie comme une chose à pousser et non comme un détail du dessin. */
+.poste-bouton {
+  position: absolute;
+  right: 14px;
+  top: 32px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--poste-creme);
+  border: 4px solid var(--poste-trait);
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.wrecked-pawn .poste-bouton { pointer-events: auto; }
+.poste-bouton:hover { transform: scale(1.09); }
+.poste-bouton:active { transform: scale(0.94); }
+.poste-bouton:focus-visible { outline: 3px solid var(--poste-vert); outline-offset: 3px; }
+
+.poste-bouton-cran {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 2px solid var(--poste-trait);
+  opacity: 0.32;
+}
+
+/* Le repère tourne d'un quart de tour : la seule chose qui dise, sans un mot,
+   que ce bouton est un interrupteur. */
+.poste-bouton-repere {
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  width: 3px;
+  height: 10px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--poste-trait);
+  transform-origin: 50% 14px;
+  transform: rotate(-40deg);
+  transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.wrecked-pawn.poste-allume .poste-bouton-repere { transform: rotate(44deg); }
+
+.poste-pieds {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 9px;
+}
+
+.poste-pieds span {
+  position: absolute;
+  bottom: 0;
+  width: 13px;
+  height: 9px;
+  border-radius: 0 0 4px 4px;
+  background: var(--poste-trait);
+}
+
+.poste-pieds span:first-child { left: 13%; }
+.poste-pieds span:last-child { right: 13%; }
+
+/* ===========================================================================
+   LE DIRECT, QUI PREND TOUT L'AQUARIUM
+   ======================================================================== */
+
+/* L'écran est la paroi du fond, pas une bâche posée devant : il s'arrête au
+   haut du sable, il est en retrait des quatre côtés, et il passe derrière
+   tout le reste. Les poissons, le poste, les plantes et les bulles continuent
+   de passer devant — c'est ce qui en fait le fond de l'aquarium et non un
+   couvercle. */
+.poste-direct {
+  position: absolute;
+  left: 34px;
+  right: 34px;
+  top: 28px;
+  bottom: 84px;
+  z-index: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0d1418;
+  border: 3px solid rgba(42, 26, 16, 0.55);
   display: grid;
   place-items: center;
-  background: var(--tele-verre);
-  transition: opacity 0.26s ease;
+  animation: poste-allumage 0.42s ease both;
 }
 
-.tele-ecran-ligne {
-  position: absolute;
-  left: 10%;
-  width: 80%;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(246, 231, 200, 0.5);
-}
-
-.tele-ecran-point {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(246, 231, 200, 0.78);
-  animation: tele-point 3.4s ease-in-out infinite;
-}
-
-@keyframes tele-point {
-  0%, 92%, 100% { opacity: 0.78; transform: scale(1); }
-  96%           { opacity: 0.25; transform: scale(0.6); }
-}
-
-.tele-ecran-video {
+/* Le verre qui le sépare de l'eau : un voile bleu très léger et un bord plus
+   sombre. Sans lui, l'image flotte au-dessus de l'aquarium au lieu d'être
+   dedans. */
+.poste-direct::after {
+  content: "";
   position: absolute;
   inset: 0;
-  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease 0.1s;
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(120, 203, 227, 0.16), rgba(60, 140, 175, 0.24));
+  box-shadow: inset 0 0 36px rgba(8, 36, 48, 0.55);
 }
 
-.tele-ecran-video iframe {
+.poste-direct[hidden] { display: none; }
+
+/* L'allumage d'un vieux poste : ça part d'un trait et ça s'ouvre. */
+@keyframes poste-allumage {
+  0%   { transform: scaleY(0.012) scaleX(0.7); opacity: 0; }
+  45%  { transform: scaleY(0.012) scaleX(1); opacity: 1; }
+  100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+}
+
+.poste-direct-verre {
+  position: absolute;
+  inset: 0;
+}
+
+.poste-direct-verre iframe {
   width: 100%;
   height: 100%;
   border: 0;
   display: block;
 }
 
-/* Le reflet en diagonale sur le verre : deux bandes claires, le seul
-   ornement. Il reste quand l'image est là, parce que c'est du verre. */
-.tele-ecran-reflet {
-  position: absolute;
-  left: -20%;
-  top: -40%;
-  width: 60%;
-  height: 180%;
-  transform: rotate(24deg);
-  pointer-events: none;
-  background: linear-gradient(90deg,
-    rgba(255,255,255,0.11) 0 38%, rgba(255,255,255,0) 39% 62%,
-    rgba(255,255,255,0.07) 63% 82%, rgba(255,255,255,0) 83%);
+/* Le mot d'attente s'efface dès que l'image est posée : il n'est là que pour
+   les quelques secondes où YouTube se décide. */
+.poste-direct-verre:not(:empty) ~ .poste-direct-rien { display: none; }
+
+.poste-direct-rien {
+  position: relative;
+  margin: 0;
+  color: rgba(246, 227, 188, 0.72);
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
-.tele.tele-allumee .tele-ecran-eteint { opacity: 0; }
-.tele.tele-allumee .tele-ecran-video { opacity: 1; pointer-events: auto; }
+/* ===========================================================================
+   LA TÉLÉCOMMANDE QUI LÉVITE
+   ---------------------------------------------------------------------------
+   Elle flotte devant le direct, en haut à droite, et porte les trois seules
+   choses dont on a besoin : le son, YouTube, et la sortie. On doit pouvoir
+   s'en aller aussi vite qu'on est entré.
+   ======================================================================== */
 
-/* --- Le panneau de commande ------------------------------------------ */
+.zapette {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  z-index: 41;   /* devant tout : on doit pouvoir sortir sans chercher */
+  animation: zapette-levite 4.4s ease-in-out infinite;
+}
 
-.tele-panneau {
-  position: relative;
-  flex: 0 0 62px;
+.zapette[hidden] { display: none; }
+
+@keyframes zapette-levite {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50%      { transform: translateY(-7px) rotate(1.5deg); }
+}
+
+.zapette-corps {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 9px;
-  padding-top: 6px;
+  width: 106px;
+  padding: 12px 11px 11px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  background: var(--poste-creme, #f6e3bc);
+  border: 4px solid var(--poste-trait, #2a1a10);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
 }
 
-.tele-bouton {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  padding: 0;
-  border-radius: 50%;
-  background: var(--tele-creme);
-  border: 4px solid var(--tele-trait);
-  cursor: pointer;
-  transition: transform 0.18s ease;
-}
-
-.tele-bouton:hover { transform: scale(1.06); }
-.tele-bouton:active { transform: scale(0.95); }
-
-.tele-bouton:focus-visible {
-  outline: 3px solid var(--tele-vert);
-  outline-offset: 3px;
-}
-
-/* Le cran du bouton tourne d'un quart de tour quand on allume. C'est la seule
-   chose qui dise, sans un mot, que ce bouton est un interrupteur. */
-.tele-bouton-repere {
-  position: absolute;
-  left: 50%;
-  top: 4px;
-  width: 4px;
-  height: 15px;
-  margin-left: -2px;
-  border-radius: 2px;
-  background: var(--tele-trait);
-  transform-origin: 50% 17px;
-  transform: rotate(-42deg);
-  transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.5, 1);
-}
-
-.tele-bouton-cran {
-  position: absolute;
-  inset: 9px;
-  border-radius: 50%;
-  border: 3px solid var(--tele-trait);
-  opacity: 0.34;
-}
-
-.tele.tele-allumee .tele-bouton-repere { transform: rotate(46deg); }
-
-.tele-temoin {
+.zapette-oeil {
   width: 11px;
   height: 11px;
-  border-radius: 50%;
-  background: var(--tele-rouge);
-  border: 3px solid var(--tele-trait);
   box-sizing: border-box;
-  opacity: 0.4;
-  transition: opacity 0.2s ease, background 0.2s ease;
+  border-radius: 50%;
+  background: var(--poste-rouge, #d6452f);
+  border: 3px solid var(--poste-trait, #2a1a10);
 }
 
-.tele.tele-allumee .tele-temoin {
-  opacity: 1;
-  background: var(--tele-vert);
+.zapette-marque {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--poste-trait, #2a1a10);
+  opacity: 0.6;
 }
 
-.tele-grille {
+.zapette-touches {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  width: 36px;
-  margin-top: 2px;
+  align-items: center;
+  gap: 7px;
 }
 
-.tele-grille span {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--tele-trait);
-  opacity: 0.68;
+.zapette-touche {
+  width: 34px;
+  height: 30px;
+  padding: 0;
+  border-radius: 9px;
+  background: #fffaf0;
+  border: 3px solid var(--poste-trait, #2a1a10);
+  color: var(--poste-trait, #2a1a10);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.14s ease, background 0.14s ease;
 }
 
-/* --- Les pieds -------------------------------------------------------- */
+.zapette-touche:hover { background: #fff; transform: translateY(-1px); }
+.zapette-touche:active { transform: translateY(1px); }
 
-.tele-pieds {
-  position: absolute;
-  left: 8px;
-  top: 272px;
-  width: 300px;
-  height: 20px;
+/* La jauge : six crans, parce qu'un chiffre ne dit rien et qu'une barre
+   continue ne se lit pas d'un coup d'œil. */
+.zapette-jauge {
+  width: 10px;
+  height: 46px;
+  border-radius: 6px;
+  background: #fffaf0;
+  border: 3px solid var(--poste-trait, #2a1a10);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
 }
 
-.tele-pied {
-  position: absolute;
-  top: 0;
-  width: 7px;
-  height: 20px;
-  border-radius: 0 0 4px 4px;
-  background: var(--tele-trait);
+.zapette-jauge-plein {
+  width: 100%;
+  height: 50%;
+  background: var(--poste-vert, #4fb27a);
+  transition: height 0.18s ease;
 }
 
-.tele-pied-g { left: 46px; transform: rotate(13deg); }
-.tele-pied-d { right: 46px; transform: rotate(-13deg); }
-
-/* --- Le carré qui mène sur YouTube ----------------------------------- */
-
-.tele-carre {
-  position: absolute;
-  left: 50%;
-  top: 300px;
-  transform: translateX(-50%);
+.zapette-yt,
+.zapette-sortie {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 7px 13px 7px 9px;
-  border-radius: 11px;
-  background: var(--tele-creme);
-  border: 3px solid var(--tele-trait);
-  color: var(--tele-trait);
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: transform 0.18s ease, background 0.18s ease;
-}
-
-.tele-carre:hover {
-  transform: translateX(-50%) translateY(-2px);
-  background: #fff6e3;
-}
-
-/* Un carré, parce qu'on a demandé un carré, et le carré c'est le bouton
-   « arrêt » des vieux magnétoscopes : ici il n'arrête rien, il emmène. */
-.tele-carre-ecran {
-  width: 15px;
-  height: 15px;
-  border-radius: 3px;
-  background: var(--tele-rouge);
-  border: 3px solid var(--tele-trait);
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  padding: 6px 0;
   box-sizing: border-box;
+  border-radius: 9px;
+  border: 3px solid var(--poste-trait, #2a1a10);
+  background: #fffaf0;
+  color: var(--poste-trait, #2a1a10);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.14s ease, transform 0.14s ease;
 }
 
-[data-theme="dark"] .tele {
-  --tele-bois: #b8822f;
-  --tele-bois-sombre: #8f611c;
-  --tele-creme: #ecdcbd;
-  --tele-verre: #1d2a2f;
+.zapette-yt:hover,
+.zapette-sortie:hover { background: #fff; transform: translateY(-1px); }
+
+.zapette-yt-carre {
+  width: 11px;
+  height: 11px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  background: var(--poste-rouge, #d6452f);
+  border: 2px solid var(--poste-trait, #2a1a10);
 }
 
-/* En dessous de mille cent pixels les post-it se rangent autrement et la
-   place du milieu disparaît : la télé passe alors dans le flux, centrée,
-   et cesse de léviter. Une chose qui flotte dans une colonne qui défile
-   donne le mal de mer. */
-@media (max-width: 1100px) {
-  .tele {
-    position: relative;
-    left: auto;
-    top: auto;
-    margin: 18px auto 30px;
-    width: 300px;
-    height: 348px;
-  }
+.zapette-sortie { background: var(--poste-rouge, #d6452f); color: #fffaf0; }
+.zapette-sortie:hover { background: #e2563f; }
 
-  .tele-levite,
-  .tele-ombre { animation: none; }
+/* ===========================================================================
+   LE BOUTON 24/7 RADIO, DANS L'EN-TÊTE
+   ======================================================================== */
+
+.radio-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: auto;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.radio-toggle-ondes {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.radio-toggle-onde {
+  width: 3px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.radio-toggle-onde:nth-child(1) { height: 5px; }
+.radio-toggle-onde:nth-child(2) { height: 9px; }
+.radio-toggle-onde:nth-child(3) { height: 12px; }
+
+/* Les barres montent quand ça émet. Elles ne bougent pas quand c'est éteint,
+   sinon le bouton raconte quelque chose qui n'a pas lieu. */
+.radio-toggle[aria-pressed="true"] .radio-toggle-onde {
+  opacity: 1;
+  animation: radio-onde 1.1s ease-in-out infinite;
+}
+
+.radio-toggle[aria-pressed="true"] .radio-toggle-onde:nth-child(2) { animation-delay: 0.18s; }
+.radio-toggle[aria-pressed="true"] .radio-toggle-onde:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes radio-onde {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.45); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tele-levite,
-  .tele-ombre,
-  .tele-ecran-point { animation: none; }
+  .zapette,
+  .radio-toggle[aria-pressed="true"] .radio-toggle-onde { animation: none; }
+  .poste-direct { animation: none; }
+}
+
+@media (max-width: 720px) {
+  .radio-toggle-mot { display: none; }
+  .radio-toggle { padding: 0 9px; }
+  .zapette { right: 12px; top: 12px; }
+  .zapette-corps { width: 78px; }
 }
