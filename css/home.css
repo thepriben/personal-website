@@ -3218,3 +3218,392 @@ body.page-home .postit-container {
     animation: none;
   }
 }
+
+/* ===========================================================================
+   LA TÉLÉ QUI LÉVITE — ligne claire franco-belge
+   ---------------------------------------------------------------------------
+   Aplats francs, un seul noir de contour, pas un dégradé : c'est tout ce qui
+   fait la ligne claire, et c'est ce qui la distingue du reste de la page, qui
+   est plus douce. Elle lévite parce qu'une télé posée par terre dans une page
+   de livres n'a aucune raison d'être là, alors qu'une télé en l'air en a une.
+
+   Le gros bouton l'allume : l'écran devient le direct de la chaîne. Le carré
+   en dessous mène au direct sur YouTube.
+   ======================================================================== */
+
+.tele {
+  --tele-trait: #1b1b1b;
+  --tele-bois: #d79a3c;
+  --tele-bois-sombre: #b87c25;
+  --tele-creme: #f6e7c8;
+  --tele-verre: #2d3f45;
+  --tele-verre-clair: #3d555d;
+  --tele-rouge: #d64b3a;
+  --tele-vert: #4fb477;
+  /* Posée dans le bas du conteneur, qui est vide : les quatre fiches
+     occupent la bande du haut et la colonne de gauche. Centrée plutôt que
+     calée à gauche parce que les fiches sont replacées par le script selon
+     la largeur, et qu'un nombre de pixels écrit ici serait juste une fois
+     sur trois. */
+  position: absolute;
+  left: 50%;
+  top: 452px;
+  margin-left: -158px;
+  width: 316px;
+  height: 352px;
+  z-index: 2;
+}
+
+.tele-levite {
+  position: absolute;
+  inset: 0;
+  animation: tele-levite 5.6s ease-in-out infinite;
+}
+
+@keyframes tele-levite {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+
+/* L'ombre ne monte pas avec elle : elle s'étale quand la télé redescend et
+   se resserre quand elle est haut. C'est ce qui la fait flotter plutôt que
+   glisser. */
+.tele-ombre {
+  position: absolute;
+  left: 78px;
+  top: 282px;
+  width: 160px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(27, 27, 27, 0.17);
+  animation: tele-ombre 5.6s ease-in-out infinite;
+}
+
+@keyframes tele-ombre {
+  0%, 100% { transform: scale(1); opacity: 0.22; }
+  50%      { transform: scale(0.82); opacity: 0.12; }
+}
+
+/* --- Les oreilles de lapin ------------------------------------------- */
+
+.tele-antenne {
+  position: absolute;
+  left: 124px;
+  top: 0;
+  width: 68px;
+  height: 76px;
+}
+
+.tele-antenne-tige {
+  position: absolute;
+  bottom: 0;
+  left: 32px;
+  width: 4px;
+  height: 66px;
+  background: var(--tele-trait);
+  border-radius: 2px;
+  transform-origin: 50% 100%;
+}
+
+.tele-antenne-tige-g { transform: rotate(-26deg); }
+.tele-antenne-tige-d { transform: rotate(24deg); }
+
+.tele-antenne-boule {
+  position: absolute;
+  left: -5px;
+  top: -8px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--tele-creme);
+  border: 3px solid var(--tele-trait);
+  box-sizing: border-box;
+}
+
+.tele-antenne-pied {
+  position: absolute;
+  left: 22px;
+  bottom: -4px;
+  width: 24px;
+  height: 12px;
+  border-radius: 6px 6px 3px 3px;
+  background: var(--tele-trait);
+}
+
+/* --- La caisse -------------------------------------------------------- */
+
+.tele-caisse {
+  position: absolute;
+  left: 8px;
+  top: 64px;
+  width: 300px;
+  height: 212px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 20px;
+  background: var(--tele-bois);
+  border: 4px solid var(--tele-trait);
+  /* Un seul aplat plus sombre en bas, et c'est tout le volume qu'on
+     s'autorise : une ligne claire n'a pas d'ombre portée interne. */
+  box-shadow: inset 0 -14px 0 var(--tele-bois-sombre);
+}
+
+.tele-ecran {
+  position: relative;
+  flex: 1 1 auto;
+  border-radius: 14px;
+  background: var(--tele-verre);
+  border: 4px solid var(--tele-trait);
+  overflow: hidden;
+}
+
+/* L'écran éteint : le trait blanc qui se rétracte en un point, comme quand on
+   coupait le courant. Il ne bouge pas tant qu'on n'a pas cliqué ; c'est au
+   clic qu'il s'ouvre. */
+.tele-ecran-eteint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--tele-verre);
+  transition: opacity 0.26s ease;
+}
+
+.tele-ecran-ligne {
+  position: absolute;
+  left: 10%;
+  width: 80%;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(246, 231, 200, 0.5);
+}
+
+.tele-ecran-point {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(246, 231, 200, 0.78);
+  animation: tele-point 3.4s ease-in-out infinite;
+}
+
+@keyframes tele-point {
+  0%, 92%, 100% { opacity: 0.78; transform: scale(1); }
+  96%           { opacity: 0.25; transform: scale(0.6); }
+}
+
+.tele-ecran-video {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease 0.1s;
+}
+
+.tele-ecran-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Le reflet en diagonale sur le verre : deux bandes claires, le seul
+   ornement. Il reste quand l'image est là, parce que c'est du verre. */
+.tele-ecran-reflet {
+  position: absolute;
+  left: -20%;
+  top: -40%;
+  width: 60%;
+  height: 180%;
+  transform: rotate(24deg);
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.11) 0 38%, rgba(255,255,255,0) 39% 62%,
+    rgba(255,255,255,0.07) 63% 82%, rgba(255,255,255,0) 83%);
+}
+
+.tele.tele-allumee .tele-ecran-eteint { opacity: 0; }
+.tele.tele-allumee .tele-ecran-video { opacity: 1; pointer-events: auto; }
+
+/* --- Le panneau de commande ------------------------------------------ */
+
+.tele-panneau {
+  position: relative;
+  flex: 0 0 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding-top: 6px;
+}
+
+.tele-bouton {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--tele-creme);
+  border: 4px solid var(--tele-trait);
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.tele-bouton:hover { transform: scale(1.06); }
+.tele-bouton:active { transform: scale(0.95); }
+
+.tele-bouton:focus-visible {
+  outline: 3px solid var(--tele-vert);
+  outline-offset: 3px;
+}
+
+/* Le cran du bouton tourne d'un quart de tour quand on allume. C'est la seule
+   chose qui dise, sans un mot, que ce bouton est un interrupteur. */
+.tele-bouton-repere {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 4px;
+  height: 15px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--tele-trait);
+  transform-origin: 50% 17px;
+  transform: rotate(-42deg);
+  transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.tele-bouton-cran {
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  border: 3px solid var(--tele-trait);
+  opacity: 0.34;
+}
+
+.tele.tele-allumee .tele-bouton-repere { transform: rotate(46deg); }
+
+.tele-temoin {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--tele-rouge);
+  border: 3px solid var(--tele-trait);
+  box-sizing: border-box;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.tele.tele-allumee .tele-temoin {
+  opacity: 1;
+  background: var(--tele-vert);
+}
+
+.tele-grille {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 36px;
+  margin-top: 2px;
+}
+
+.tele-grille span {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--tele-trait);
+  opacity: 0.68;
+}
+
+/* --- Les pieds -------------------------------------------------------- */
+
+.tele-pieds {
+  position: absolute;
+  left: 8px;
+  top: 272px;
+  width: 300px;
+  height: 20px;
+}
+
+.tele-pied {
+  position: absolute;
+  top: 0;
+  width: 7px;
+  height: 20px;
+  border-radius: 0 0 4px 4px;
+  background: var(--tele-trait);
+}
+
+.tele-pied-g { left: 46px; transform: rotate(13deg); }
+.tele-pied-d { right: 46px; transform: rotate(-13deg); }
+
+/* --- Le carré qui mène sur YouTube ----------------------------------- */
+
+.tele-carre {
+  position: absolute;
+  left: 50%;
+  top: 300px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 13px 7px 9px;
+  border-radius: 11px;
+  background: var(--tele-creme);
+  border: 3px solid var(--tele-trait);
+  color: var(--tele-trait);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.tele-carre:hover {
+  transform: translateX(-50%) translateY(-2px);
+  background: #fff6e3;
+}
+
+/* Un carré, parce qu'on a demandé un carré, et le carré c'est le bouton
+   « arrêt » des vieux magnétoscopes : ici il n'arrête rien, il emmène. */
+.tele-carre-ecran {
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  background: var(--tele-rouge);
+  border: 3px solid var(--tele-trait);
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .tele {
+  --tele-bois: #b8822f;
+  --tele-bois-sombre: #8f611c;
+  --tele-creme: #ecdcbd;
+  --tele-verre: #1d2a2f;
+}
+
+/* En dessous de mille cent pixels les post-it se rangent autrement et la
+   place du milieu disparaît : la télé passe alors dans le flux, centrée,
+   et cesse de léviter. Une chose qui flotte dans une colonne qui défile
+   donne le mal de mer. */
+@media (max-width: 1100px) {
+  .tele {
+    position: relative;
+    left: auto;
+    top: auto;
+    margin: 18px auto 30px;
+    width: 300px;
+    height: 348px;
+  }
+
+  .tele-levite,
+  .tele-ombre { animation: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tele-levite,
+  .tele-ombre,
+  .tele-ecran-point { animation: none; }
+}

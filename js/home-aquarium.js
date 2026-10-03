@@ -886,3 +886,37 @@
   schedulePawnAutoDrop();
   window.addEventListener('load',schedulePawnAutoDrop);
 })();
+
+/* La télé qui lévite : le gros bouton l'allume, et l'écran devient le direct
+   de la chaîne. L'iframe n'est posée qu'au premier clic — on ne fait pas
+   charger YouTube à quelqu'un qui vient lire une liste de livres, et on ne
+   lui pose pas de cookie tiers tant qu'il n'a rien demandé. */
+(function(){
+  var tele=document.getElementById('tele');
+  var bouton=document.getElementById('tele-bouton');
+  var ecran=document.getElementById('tele-video');
+  if(!tele||!bouton||!ecran)return;
+  var CHAINE='UCvN0sNcj5JM9tklIkAlGi7g';
+  var posee=false;
+  function allume(oui){
+    tele.classList.toggle('tele-allumee',oui);
+    bouton.setAttribute('aria-pressed',oui?'true':'false');
+    bouton.setAttribute('aria-label',oui?'Turn the television off':'Turn the television on');
+    if(oui&&!posee){
+      posee=true;
+      var cadre=document.createElement('iframe');
+      cadre.src='https://www.youtube-nocookie.com/embed/live_stream?channel='+CHAINE+'&autoplay=1&rel=0';
+      cadre.title='Ventoux Watch live';
+      cadre.allow='autoplay; encrypted-media; picture-in-picture';
+      cadre.setAttribute('allowfullscreen','');
+      cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+      ecran.appendChild(cadre);
+    }
+    /* Éteindre coupe vraiment le son : une image cachée qui continue de
+       jouer derrière, c'est une télé qu'on croit avoir éteinte. */
+    if(!oui&&posee){ecran.innerHTML='';posee=false;}
+  }
+  bouton.addEventListener('click',function(){
+    allume(!tele.classList.contains('tele-allumee'));
+  });
+})();
