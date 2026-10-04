@@ -961,12 +961,19 @@
     return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
   }
   function adresseSite(){
-    return SITE+'?theme='+themeActuel()+'#watch';
+    return SITE+'?theme='+themeActuel();
+  }
+  function adresseLive(){
+    return numero
+      ? 'https://www.youtube.com/watch?v='+numero
+      : 'https://www.youtube.com/channel/'+CHAINE+'/live';
   }
   function poseLien(){
     if(!lien)return;
-    lien.href=adresseSite();
-    lien.setAttribute('aria-label','Open Mont Serein');
+    lien.href=adresseLive();
+    lien.target='_blank';
+    lien.rel='noopener';
+    lien.setAttribute('aria-label','Open the live on YouTube');
   }
   if(!ecran||!verre)return;
   var cadre=null,allume=false,niveau=50,joue=false,bat=null,numero='';
@@ -991,6 +998,7 @@
       .then(function(d){
         if(!d||!d.video)return;
         numero=d.video;
+        poseLien();
         /* Si la radio jouait déjà sur l'adresse incertaine, on la recale. */
         if(allume&&cadre)cadre.src=adresse();
       }).catch(function(){});
@@ -1059,7 +1067,10 @@
     }
     marque();
   }
-  if(bouton)bouton.addEventListener('click',function(e){e.preventDefault();mets(!allume);});
+  if(bouton)bouton.addEventListener('click',function(e){
+    e.preventDefault();
+    window.location.assign(adresseSite());
+  });
   document.addEventListener('sismo-demande',function(){mets(false);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
   marque();
