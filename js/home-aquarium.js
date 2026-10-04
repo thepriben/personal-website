@@ -985,6 +985,9 @@
   }
   function mets(oui){
     if(oui===allume)return;
+    /* L'autre objet du fond utilise la même vitre. Il s'éteint d'abord,
+       sinon les deux images s'empilent. */
+    if(oui)document.dispatchEvent(new CustomEvent('poste-demande'));
     allume=oui;
     if(allume){
       if(!cadre){
@@ -1005,6 +1008,65 @@
     marque();
   }
   if(bouton)bouton.addEventListener('click',function(e){e.preventDefault();mets(!allume);});
+  document.addEventListener('sismo-demande',function(){mets(false);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
+  marque();
+})();
+
+/* ---------------------------------------------------------------------------
+   LE SISMOGRAPHE
+   ---------------------------------------------------------------------------
+   Même geste que le poste : on pousse l'objet, la paroi du fond de
+   l'aquarium devient le site de la station, on rappuie et ça s'éteint.
+   L'iframe n'est posée qu'à l'allumage et retirée à l'extinction. Le petit
+   lien ouvre le même site dans un onglet, comme le bouton rouge du poste
+   ouvre YouTube. Les deux objets partagent la vitre, donc un seul est
+   allumé à la fois.
+--------------------------------------------------------------------------- */
+(function(){
+  var SITE='https://medialoco.github.io/sismo-la/';
+  var station=document.getElementById('sismo-station');
+  var bouton=document.getElementById('sismo-bouton');
+  var ecran=document.getElementById('poste-direct');
+  var verre=document.getElementById('poste-direct-verre');
+  var bac=document.querySelector('.postit-container');
+  if(!station||!bouton||!ecran||!verre)return;
+  var cadre=null,allume=false;
+
+  function marque(){
+    station.classList.toggle('sismo-allume',allume);
+    bouton.setAttribute('aria-pressed',allume?'true':'false');
+    bouton.setAttribute('aria-label',allume?'Hide Sismo-LA':'Show Sismo-LA');
+    /* La vitre n'est à nous que pendant qu'on est allumé. L'éteindre ici
+       pendant que la radio joue la cacherait avec. */
+    if(allume)ecran.hidden=false;
+    else if(!document.querySelector('.wrecked-pawn.poste-allume'))ecran.hidden=true;
+  }
+  function mets(oui){
+    if(oui===allume)return;
+    if(oui)document.dispatchEvent(new CustomEvent('sismo-demande'));
+    allume=oui;
+    if(allume){
+      if(!cadre){
+        cadre=document.createElement('iframe');
+        cadre.src=SITE;
+        cadre.title='Sismo-LA';
+        cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+        verre.appendChild(cadre);
+      }
+    }else if(cadre){
+      cadre.remove();
+      cadre=null;
+    }
+    marque();
+  }
+  bouton.addEventListener('click',function(){mets(!allume);});
+  document.addEventListener('poste-demande',function(){mets(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
+  if(window.MutationObserver&&bac){
+    new MutationObserver(function(){
+      if(!bac.classList.contains('aquarium-active'))mets(false);
+    }).observe(bac,{attributes:true,attributeFilter:['class']});
+  }
   marque();
 })();
