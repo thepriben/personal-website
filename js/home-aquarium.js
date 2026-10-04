@@ -928,11 +928,10 @@
 /* ---------------------------------------------------------------------------
    LE POSTE DE RADIO
    ---------------------------------------------------------------------------
-   On pousse le gros bouton et la paroi du fond de l'aquarium devient le direct
-   de la chaîne. On rappuie dessus et ça s'éteint. Rien n'est ajouté ailleurs
-   sur la page : les deux seules commandes sont sur l'objet, là où on les
-   cherche — le gros bouton, et le petit rouge en dessous qui ouvre le site
-   avec le même thème que cette page.
+   On pousse le gros bouton et la paroi du fond de l'aquarium devient le site
+   de la veille, le direct déjà lancé, dans le même thème que cette page.
+   On rappuie dessus et ça s'éteint. Le petit Y, en dessous, ouvre le direct
+   YouTube dans un autre onglet.
    Échap éteint aussi, pour qui a les mains sur le clavier.
 
    L'iframe n'est posée qu'au premier allumage — on ne fait pas charger YouTube
@@ -961,7 +960,7 @@
     return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
   }
   function adresseSite(){
-    return SITE+'?theme='+themeActuel();
+    return SITE+'?theme='+themeActuel()+'&play=1';
   }
   function adresseLive(){
     return numero
@@ -999,13 +998,14 @@
         if(!d||!d.video)return;
         numero=d.video;
         poseLien();
-        /* Si la radio jouait déjà sur l'adresse incertaine, on la recale. */
-        if(allume&&cadre)cadre.src=adresse();
       }).catch(function(){});
   }
   demande();
   poseLien();
-  document.addEventListener('theme-change',poseLien);
+  document.addEventListener('theme-change',function(){
+    poseLien();
+    if(allume&&cadre)cadre.src=adresseSite();
+  });
 
   /* Le lecteur ne parle que si on lui parle : il faut lui dire qu'on écoute,
      et répéter tant qu'il n'a pas répondu, parce qu'on ne sait pas quand
@@ -1052,14 +1052,13 @@
     if(allume){
       if(!cadre){
         cadre=document.createElement('iframe');
-        cadre.src=adresse();
-        cadre.title='Ventoux Watch — 24/7 live';
+        cadre.src=adresseSite();
+        cadre.title='Mont Serein';
         cadre.allow='autoplay; encrypted-media; picture-in-picture';
         cadre.setAttribute('allowfullscreen','');
         cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
         verre.appendChild(cadre);
       }
-      ecoute();
     }else if(cadre){
       verre.innerHTML='';
       cadre=null;
@@ -1069,7 +1068,7 @@
   }
   if(bouton)bouton.addEventListener('click',function(e){
     e.preventDefault();
-    window.location.assign(adresseSite());
+    mets(!allume);
   });
   document.addEventListener('sismo-demande',function(){mets(false);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
