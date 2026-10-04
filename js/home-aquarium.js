@@ -931,7 +931,8 @@
    On pousse le gros bouton et la paroi du fond de l'aquarium devient le direct
    de la chaîne. On rappuie dessus et ça s'éteint. Rien n'est ajouté ailleurs
    sur la page : les deux seules commandes sont sur l'objet, là où on les
-   cherche — le gros bouton, et le petit rouge en dessous qui mène à YouTube.
+   cherche — le gros bouton, et le petit rouge en dessous qui ouvre le site
+   avec le même thème que cette page.
    Échap éteint aussi, pour qui a les mains sur le clavier.
 
    L'iframe n'est posée qu'au premier allumage — on ne fait pas charger YouTube
@@ -950,11 +951,23 @@
      donc l'écrire en dur ici reviendrait à incruster, tôt ou tard, un
      enregistrement fini. */
   var VEILLE='https://medialoco.github.io/ventoux-watch/data/direct.json';
+  var SITE='https://medialoco.github.io/ventoux-watch/';
   var poste=document.getElementById('wrecked-pawn');
   var bouton=document.getElementById('poste-bouton');
   var ecran=document.getElementById('poste-direct');
   var verre=document.getElementById('poste-direct-verre');
   var lien=document.getElementById('poste-y');
+  function themeActuel(){
+    return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+  }
+  function adresseSite(){
+    return SITE+'?theme='+themeActuel()+'#watch';
+  }
+  function poseLien(){
+    if(!lien)return;
+    lien.href=adresseSite();
+    lien.setAttribute('aria-label','Open Mont Serein');
+  }
   if(!ecran||!verre)return;
   var cadre=null,allume=false,niveau=50,joue=false,bat=null,numero='';
 
@@ -978,12 +991,13 @@
       .then(function(d){
         if(!d||!d.video)return;
         numero=d.video;
-        if(lien)lien.href='https://www.youtube.com/watch?v='+numero;
         /* Si la radio jouait déjà sur l'adresse incertaine, on la recale. */
         if(allume&&cadre)cadre.src=adresse();
       }).catch(function(){});
   }
   demande();
+  poseLien();
+  document.addEventListener('theme-change',poseLien);
 
   /* Le lecteur ne parle que si on lui parle : il faut lui dire qu'on écoute,
      et répéter tant qu'il n'a pas répondu, parce qu'on ne sait pas quand

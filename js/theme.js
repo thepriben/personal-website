@@ -31,6 +31,7 @@
       localStorage.setItem(STORAGE_KEY, theme);
     } catch (e) {}
     updateIcon(theme);
+    document.dispatchEvent(new CustomEvent('theme-change', { detail: theme }));
   }
 
   function updateIcon(theme) {
