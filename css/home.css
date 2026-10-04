@@ -3568,9 +3568,9 @@ body.page-home .postit-container {
 /* ===========================================================================
    LE SISMOGRAPHE
    ---------------------------------------------------------------------------
-   L'instrument du projet, posé au fond à côté du poste. Aplats et contours,
-   comme le poste : un tambour, un capteur, le mot SISMO, un œil. On pousse
-   l'objet et le site prend la vitre du fond. Il n'existe que dans l'aquarium.
+   Un petit boîtier, pas un poste. On le pousse : il suit avec le retard de
+   l'eau, et quand on le lâche il glisse encore un peu. Un clic, sans
+   déplacement, allume le site dans la vitre du fond. Rien ne flotte à côté.
    ======================================================================== */
 
 .sismo-station {
@@ -3580,12 +3580,18 @@ body.page-home .postit-container {
   --sismo-creme: #f6e3bc;
   --sismo-rouge: #d6452f;
   --sismo-vert: #4fb27a;
+  --drag-water-x: 0px;
+  --drag-water-y: 0px;
+  --drag-water-tilt: 0deg;
   position: absolute;
   z-index: 2;
-  width: 176px;
-  height: 118px;
-  left: clamp(220px, 28%, 480px);
-  bottom: 22px;
+  width: 124px;
+  height: 72px;
+  left: 32%;
+  top: 78%;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -3603,6 +3609,18 @@ body.page-home .postit-container {
   pointer-events: auto;
 }
 
+.sismo-station * { pointer-events: none; }
+
+.sismo-station.postit-dragging { cursor: grabbing; }
+
+.sismo-motion {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(var(--drag-water-x), var(--drag-water-y), 0)
+    rotate(var(--drag-water-tilt));
+  transform-origin: 50% 72%;
+}
+
 .sismo-bouton {
   position: absolute;
   inset: 0;
@@ -3612,75 +3630,41 @@ body.page-home .postit-container {
   background: none;
   color: inherit;
   font: inherit;
-  cursor: pointer;
   text-align: left;
 }
 
-.sismo-bouton:hover { transform: translateY(-2px); }
-.sismo-bouton:active { transform: translateY(1px); }
-.sismo-bouton:focus-visible { outline: 3px solid var(--sismo-vert); outline-offset: 3px; border-radius: 12px; }
+.sismo-bouton:focus-visible { outline: 3px solid var(--sismo-vert); outline-offset: 3px; border-radius: 10px; }
 
 .sismo {
   position: absolute;
   inset: 0;
-}
-
-.sismo-caisse {
-  position: absolute;
-  left: 0;
-  right: 34px;
-  top: 0;
-  bottom: 9px;
   box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 28px 1fr;
-  grid-template-rows: 1fr auto;
-  gap: 6px 7px;
-  padding: 8px;
-  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 5px 6px 4px;
+  border-radius: 10px;
   background: var(--sismo-caisse);
-  border: 4px solid var(--sismo-trait);
-  box-shadow: inset 0 -8px 0 var(--sismo-caisse-sombre);
-}
-
-.sismo-capteur {
-  grid-row: 1 / span 2;
-  align-self: center;
-  position: relative;
-  width: 28px;
-  height: 28px;
-  box-sizing: border-box;
-  border-radius: 6px;
-  background: var(--sismo-creme);
   border: 3px solid var(--sismo-trait);
+  box-shadow: inset 0 -5px 0 var(--sismo-caisse-sombre);
 }
 
-.sismo-capteur span {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
-  border-radius: 50%;
-  background: var(--sismo-trait);
-}
-
-.sismo-tambour {
+.sismo-ecran {
   position: relative;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
-  min-height: 36px;
-  border-radius: 5px;
+  border-radius: 4px;
   background: var(--sismo-creme);
-  border: 3px solid var(--sismo-trait);
+  border: 2px solid var(--sismo-trait);
 }
 
 .sismo-trace {
   position: absolute;
   left: 0;
-  top: 16%;
+  top: 12%;
   width: 200%;
-  height: 68%;
+  height: 76%;
   color: var(--sismo-rouge);
 }
 
@@ -3695,10 +3679,10 @@ body.page-home .postit-container {
 
 .sismo-stylet {
   position: absolute;
-  right: 10px;
-  top: 4px;
-  bottom: 4px;
-  width: 3px;
+  right: 8px;
+  top: 3px;
+  bottom: 3px;
+  width: 2px;
   border-radius: 2px;
   background: var(--sismo-trait);
 }
@@ -3707,30 +3691,58 @@ body.page-home .postit-container {
   content: "";
   position: absolute;
   left: 50%;
-  top: 46%;
-  width: 7px;
-  height: 7px;
+  top: 42%;
+  width: 6px;
+  height: 6px;
   margin: -3px 0 0 -3px;
   border-radius: 50%;
   background: var(--sismo-rouge);
   border: 2px solid var(--sismo-trait);
 }
 
+.sismo-bas {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 14px;
+  flex: none;
+}
+
+.sismo-capteur {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  flex: none;
+  box-sizing: border-box;
+  border-radius: 3px;
+  background: var(--sismo-creme);
+  border: 2px solid var(--sismo-trait);
+}
+
+.sismo-capteur span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: var(--sismo-trait);
+}
+
 .sismo-nom {
-  align-self: end;
+  flex: 1;
   color: var(--sismo-creme);
-  font-size: 10px;
+  font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   line-height: 1;
 }
 
 .sismo-oeil {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
+  flex: none;
   box-sizing: border-box;
   border-radius: 50%;
   border: 2px solid var(--sismo-trait);
@@ -3739,69 +3751,16 @@ body.page-home .postit-container {
 
 .sismo-station.sismo-allume .sismo-oeil {
   background: var(--sismo-vert);
-  box-shadow: 0 0 7px rgba(79, 178, 122, 0.95);
+  box-shadow: 0 0 6px rgba(79, 178, 122, 0.95);
 }
-
-.sismo-pieds {
-  position: absolute;
-  left: 0;
-  right: 34px;
-  bottom: 0;
-  height: 9px;
-}
-
-.sismo-pieds span {
-  position: absolute;
-  bottom: 0;
-  width: 12px;
-  height: 9px;
-  border-radius: 0 0 4px 4px;
-  background: var(--sismo-trait);
-}
-
-.sismo-pieds span:first-child { left: 14%; }
-.sismo-pieds span:last-child { right: 16%; }
-
-/* Le petit passage vers le site lui-même, comme le bouton rouge du poste. */
-.sismo-lien {
-  position: absolute;
-  right: 0;
-  top: 28px;
-  width: 26px;
-  height: 26px;
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--sismo-creme);
-  border: 3px solid var(--sismo-trait);
-  color: var(--sismo-trait);
-  font-size: 0.85rem;
-  font-weight: 800;
-  line-height: 1;
-  text-decoration: none;
-  z-index: 2;
-}
-
-.sismo-lien:hover { transform: scale(1.08); }
-.sismo-lien:focus-visible { outline: 3px solid var(--sismo-vert); outline-offset: 3px; }
 
 @media (max-width: 768px) {
-  .sismo-station {
-    width: 108px;
-    height: 92px;
-    left: 6px;
-    bottom: 14px;
-  }
-  .sismo-caisse { right: 26px; padding: 6px; gap: 4px 5px; }
-  .sismo-pieds { right: 26px; }
-  .sismo-nom { font-size: 8px; letter-spacing: 0.1em; }
-  .sismo-lien { width: 22px; height: 22px; top: 22px; }
+  .sismo-station { width: 112px; height: 66px; }
+  .sismo-nom { font-size: 7px; letter-spacing: 0.04em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sismo-station.sismo-allume .sismo-trace { animation: none; }
-  .sismo-bouton:hover { transform: none; }
 }
 
 

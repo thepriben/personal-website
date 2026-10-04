@@ -2,7 +2,7 @@
   var k='postit-pos';
   var sk='submarine-visible';
   var legacyDef={lang:{x:40,y:40},book:{x:328,y:80}};
-  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},chapter:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364},plume:{x:280,y:96}};
+  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},chapter:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364},plume:{x:280,y:96},sismo:{x:360,y:420}};
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
   function wrapCoord(value,min,max){var span=Math.max(1,max-min);if(value<min)return max-(min-value)%span;if(value>max)return min+(value-max)%span;return value;}
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
@@ -27,6 +27,7 @@
   if(typeof pos.pawn.x!=='number')pos.pawn.x=def.pawn.x;
   if(typeof pos.pawn.y!=='number')pos.pawn.y=def.pawn.y;
   if(!pos.plume||typeof pos.plume.x!=='number'||typeof pos.plume.y!=='number')pos.plume={x:def.plume.x,y:def.plume.y};
+  if(!pos.sismo||typeof pos.sismo.x!=='number'||typeof pos.sismo.y!=='number')pos.sismo={x:def.sismo.x,y:def.sismo.y};
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var article=document.getElementById('postit-article');
@@ -37,6 +38,7 @@
   var green=document.getElementById('green-fish');
   var pawn=document.getElementById('wrecked-pawn');
   var plume=document.getElementById('aquarium-plume');
+  var sismo=document.getElementById('sismo-station');
   var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
   var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:article,key:'article'},{el:chapter,key:'chapter'},{el:fish,key:'fish'}];
@@ -68,6 +70,8 @@
   function desktopVioletLayout(layout){var xr=violet?clownRange(violet):{minX:def.violet.x,maxX:def.violet.x},yr=violet?clownVerticalRange(violet):{minY:def.violet.y,maxY:def.violet.y},x=clamp(Math.round(bounds.w*0.18),xr.minX,xr.maxX),y=clamp(desktopFishY(layout)+118,yr.minY,yr.maxY);return {x:x,y:y};}
   function desktopGreenLayout(layout){var xr=green?clownRange(green):{minX:def.green.x,maxX:def.green.x},yr=green?clownVerticalRange(green):{minY:def.green.y,maxY:def.green.y},x=clamp(Math.round(bounds.w*0.5),xr.minX,xr.maxX),y=clamp(desktopFishY(layout)+44,yr.minY,yr.maxY);return {x:x,y:y};}
   function desktopPawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:120,h=pawn?pawn.offsetHeight:168,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.66),p,maxX),y=clamp(Math.round(bounds.h-h-24),p,maxY);return {x:x,y:y};}
+  function sismoLayout(){var p=bounds.pad,w=sismo?sismo.offsetWidth:124,h=sismo?sismo.offsetHeight:72,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=bounds.w<720?p:clamp(Math.round(bounds.w*0.32),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?14:26)),p,maxY);return {x:x,y:y};}
+  function placeSismo(loaded){if(!sismo)return;var layout=sismoLayout();if(loaded&&loaded.sismo&&typeof loaded.sismo.x==='number'&&typeof loaded.sismo.y==='number')pos.sismo={x:loaded.sismo.x,y:loaded.sismo.y};else pos.sismo=layout;}
   function mobilePawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:100,h=pawn?pawn.offsetHeight:138,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.58),p,maxX),y=clamp(Math.round(bounds.h-h-10),p,maxY);return {x:x,y:y};}
   function resolveSavedPawnPos(savedPawn,layout){
     if(!savedPawn||typeof savedPawn.x!=='number'||typeof savedPawn.y!=='number')return null;
@@ -233,6 +237,7 @@
       if(violet){violetState.lastTs=0;violetState.nextDecisionAt=0;clampVioletPos();updateVioletVisual();}
       if(green){greenState.lastTs=0;greenState.nextDecisionAt=0;clampGreenPos();updateGreenVisual();}
       if(pawn)clampPos(pawn,'pawn');
+      if(sismo)clampPos(sismo,'sismo');
     }
     saveAquariumMode(aquariumMode);
     schedulePawnAutoDrop();
@@ -316,6 +321,7 @@
         if(savedMobilePawn)pos.pawn=savedMobilePawn;
         else pos.pawn={x:mobilePawn.x,y:mobilePawn.y};
       }
+      placeSismo(loaded);
     }else if(bounds.w<1040){
       var mediumDefaults=mediumLayout();
       posts.forEach(function(p){
@@ -345,6 +351,7 @@
         var savedMediumPawn=resolveSavedPawnPos(loaded.pawn,mediumPawn);
         pos.pawn=savedMediumPawn||{x:mediumPawn.x,y:mediumPawn.y};
       }
+      placeSismo(loaded);
     }else{
       var wideDefaults=desktopLayout();
       var useWideDefaults=shouldUseAquariumDefaults(loaded);
@@ -382,6 +389,7 @@
           pos.pawn=savedDesktopPawn||{x:desktopPawn.x,y:desktopPawn.y};
         }
       }
+      placeSismo(useWideDefaults?null:loaded);
     }
     placeBlooms(loaded);
     posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});
@@ -390,6 +398,7 @@
     if(violet)clampVioletPos();
     if(green)clampGreenPos();
     if(pawn)clampPos(pawn,'pawn');
+    if(sismo)clampPos(sismo,'sismo');
     schedulePawnAutoDrop();
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];}});
@@ -595,8 +604,8 @@
           pawnSinking=false;
         }
       }else{
-        var easeX=dragActive?0.14:key==='pawn'?0.095:0.11;
-        var easeY=dragActive?0.14:key==='pawn'?0.095:0.11;
+        var easeX=dragActive?0.14:key==='sismo'?0.05:key==='pawn'?0.095:0.11;
+        var easeY=dragActive?0.14:key==='sismo'?0.05:key==='pawn'?0.095:0.11;
         pos[key].x+=(dragTargetX-pos[key].x)*easeX;
         pos[key].y+=(dragTargetY-pos[key].y)*easeY;
         if(Math.abs(dragTargetX-pos[key].x)<0.25)pos[key].x=dragTargetX;
@@ -689,6 +698,11 @@
           startPawnSinkMotion(pointerVx,pointerVy,restY);
           startPawnSinkFx(pointerVx,pointerVy);
           el.classList.add('pawn-sinking');
+        }else if(key==='sismo'&&moved){
+          if(container)updateBounds();
+          var sp=bounds.pad,sMaxX=Math.max(sp,bounds.w-el.offsetWidth-sp),sMaxY=Math.max(sp,bounds.h-el.offsetHeight-sp);
+          dragTargetX=clamp(pos[key].x+clamp(pointerVx*0.18,-150,150),sp,sMaxX);
+          dragTargetY=clamp(pos[key].y+clamp(pointerVy*0.18,-110,110),sp,sMaxY);
         }
         settleWaterDrag();
         if(!dragRaf&&(Math.abs(dragTargetX-pos[key].x)>0.25||Math.abs(dragTargetY-pos[key].y)>0.25))dragRaf=window.requestAnimationFrame(animateDrag);
@@ -702,7 +716,7 @@
       setTimeout(function(){moved=false;},0);
     }
     function start(e){
-      if((key==='fish'||key==='pawn'||key==='plume')&&!fishVisible)return;
+      if((key==='fish'||key==='pawn'||key==='plume'||key==='sismo')&&!fishVisible)return;
       e.preventDefault();
       moved=false;
       pointerVx=0;
@@ -879,6 +893,7 @@
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];drag(p.el,p.key);}});
   if(pawn)drag(pawn,'pawn');
+  if(sismo)drag(sismo,'sismo');
   if(clown)dragBuddy(clown,'clown',clownState,clownMotion,updateClownVisual);
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);
@@ -1016,12 +1031,10 @@
 /* ---------------------------------------------------------------------------
    LE SISMOGRAPHE
    ---------------------------------------------------------------------------
-   Même geste que le poste : on pousse l'objet, la paroi du fond de
-   l'aquarium devient le site de la station, on rappuie et ça s'éteint.
-   L'iframe n'est posée qu'à l'allumage et retirée à l'extinction. Le petit
-   lien ouvre le même site dans un onglet, comme le bouton rouge du poste
-   ouvre YouTube. Les deux objets partagent la vitre, donc un seul est
-   allumé à la fois.
+   Même geste que le poste : un clic allume le site dans la vitre du fond,
+   un second clic l'éteint. Le glisser est ailleurs — l'objet suit le
+   doigt avec le retard de l'eau, puis continue un peu une fois lâché.
+   Les deux objets partagent la vitre, donc un seul est allumé à la fois.
 --------------------------------------------------------------------------- */
 (function(){
   var SITE='https://medialoco.github.io/sismo-la/';

@@ -8,7 +8,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
   <script src="js/site-head.js?v=20260310a"></script>
   <link rel="stylesheet" href="css/style.css?v=20260926a" />
-  <link rel="stylesheet" href="css/home.css?v=20261004a" />
+  <link rel="stylesheet" href="css/home.css?v=20261004c" />
 </head>
 <body class="page-home">
   <header>
@@ -289,26 +289,25 @@
         </div>
       </div>
       <div class="sismo-station" id="sismo-station">
-        <button type="button" class="sismo-bouton" id="sismo-bouton"
-                aria-pressed="false" aria-controls="poste-direct"
-                aria-label="Show Sismo-LA">
-          <span class="sismo" aria-hidden="true">
-            <span class="sismo-caisse">
-              <span class="sismo-capteur"><span></span></span>
-              <span class="sismo-tambour">
+        <div class="sismo-motion">
+          <button type="button" class="sismo-bouton" id="sismo-bouton"
+                  aria-pressed="false" aria-controls="poste-direct"
+                  aria-label="Show Sismo-LA">
+            <span class="sismo" aria-hidden="true">
+              <span class="sismo-ecran">
                 <svg class="sismo-trace" viewBox="0 0 180 32" preserveAspectRatio="none">
                   <polyline points="0,16 12,16 18,5 24,27 30,16 48,16 54,8 60,24 66,16 90,16 102,16 108,5 114,27 120,16 138,16 144,8 150,24 156,16 180,16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
                 </svg>
                 <span class="sismo-stylet"></span>
               </span>
-              <span class="sismo-nom">SISMO</span>
-              <span class="sismo-oeil"></span>
+              <span class="sismo-bas">
+                <span class="sismo-capteur"><span></span></span>
+                <span class="sismo-nom">SISMO-LA</span>
+                <span class="sismo-oeil"></span>
+              </span>
             </span>
-            <span class="sismo-pieds"><span></span><span></span></span>
-          </span>
-        </button>
-        <a class="sismo-lien" href="https://medialoco.github.io/sismo-la/"
-           target="_blank" rel="noopener" aria-label="Open Sismo-LA">↗</a>
+          </button>
+        </div>
       </div>
       <div class="aquarium-front-frame" aria-hidden="true"></div>
       <div class="aquarium-bloom aquarium-bloom-hidden" id="aquarium-plume" aria-hidden="true">
@@ -411,6 +410,6 @@
     </a>
   </footer>
   <script src="js/theme.js?v=20260307b" defer></script>
-  <script src="js/home-aquarium.js?v=20261004a"></script>
+  <script src="js/home-aquarium.js?v=20261004c"></script>
 </body>
 </html>
