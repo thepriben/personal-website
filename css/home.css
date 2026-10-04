@@ -100,7 +100,7 @@
   --drag-water-x: 0px;
   --drag-water-y: 0px;
   --drag-water-tilt: 0deg;
-  animation: postit-float-a 9s ease-in-out infinite;
+  animation: none;
 }
 
 .postit-container .postit.postit-dragging,
@@ -109,22 +109,22 @@
   transform: translate(var(--drag-water-x), var(--drag-water-y)) rotate(var(--drag-water-tilt));
 }
 
-.postit-container .postit.language-note {
+.postit-container.aquarium-active .postit.language-note {
   animation: postit-float-a 9s ease-in-out infinite;
   animation-delay: 0s;
 }
 
-.postit-container .postit.last-book {
+.postit-container.aquarium-active .postit.last-book {
   animation: postit-float-b 11s ease-in-out infinite;
   animation-delay: 1s;
 }
 
-.postit-container .postit.last-article {
+.postit-container.aquarium-active .postit.last-article {
   animation: postit-float-c 10.5s ease-in-out infinite;
   animation-delay: 1.8s;
 }
 
-.postit-container .postit.last-chapter {
+.postit-container.aquarium-active .postit.last-chapter {
   animation: postit-float-b 10.8s ease-in-out infinite;
   animation-delay: 2.4s;
 }
@@ -3583,6 +3583,10 @@ body.page-home .postit-container {
   --drag-water-x: 0px;
   --drag-water-y: 0px;
   --drag-water-tilt: 0deg;
+  --pawn-sink-sway-x: 0px;
+  --pawn-sink-sway-y: 0px;
+  --pawn-sink-sway-tilt: 0deg;
+  --pawn-rest-tilt: 0deg;
   position: absolute;
   z-index: 2;
   width: 124px;
@@ -3617,8 +3621,19 @@ body.page-home .postit-container {
   position: absolute;
   inset: 0;
   transform: translate3d(var(--drag-water-x), var(--drag-water-y), 0)
-    rotate(var(--drag-water-tilt));
+    rotate(calc(var(--pawn-rest-tilt) + var(--drag-water-tilt)));
   transform-origin: 50% 72%;
+}
+
+.sismo-station.postit-dragging .sismo-motion,
+.sismo-station.postit-water-settling .sismo-motion,
+.sismo-station.pawn-sinking .sismo-motion {
+  transform: translate3d(
+      calc(var(--drag-water-x) + var(--pawn-sink-sway-x)),
+      calc(var(--drag-water-y) + var(--pawn-sink-sway-y)),
+      0
+    )
+    rotate(calc(var(--pawn-rest-tilt) + var(--drag-water-tilt) + var(--pawn-sink-sway-tilt)));
 }
 
 .sismo-bouton {
