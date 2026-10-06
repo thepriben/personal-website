@@ -223,6 +223,8 @@
     if(violet){violet.classList.toggle('clown-fish-hidden',!fishVisible);violet.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(green){green.classList.toggle('clown-fish-hidden',!fishVisible);green.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(pawn){pawn.classList.toggle('wrecked-pawn-hidden',!fishVisible);pawn.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    var carte=document.getElementById('carte-vaucluse');
+    if(carte){carte.classList.toggle('carte-vaucluse-hidden',!fishVisible);carte.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
@@ -926,6 +928,47 @@
 })();
 
 /* ---------------------------------------------------------------------------
+   LA PAROI DU FOND
+   ---------------------------------------------------------------------------
+   Une seule image à la fois. Le poste y met Mont Serein, la carte du
+   Vaucluse y met les routes, le sismographe y met le sien. La dernière
+   pression gagne, Échap éteint, et l'iframe n'existe que tant que
+   quelque chose est allumé.
+--------------------------------------------------------------------------- */
+var mur=(function(){
+  var ecran=document.getElementById('poste-direct');
+  var verre=document.getElementById('poste-direct-verre');
+  var cadre=null,qui='';
+  function annonce(){document.dispatchEvent(new CustomEvent('mur-change',{detail:qui}));}
+  function retire(){
+    if(verre)verre.innerHTML='';
+    cadre=null;
+    qui='';
+    if(ecran)ecran.hidden=true;
+    annonce();
+  }
+  function pose(nom,src,titre,allow){
+    if(!ecran||!verre)return null;
+    if(cadre){verre.innerHTML='';cadre=null;}
+    cadre=document.createElement('iframe');
+    cadre.src=src;
+    cadre.title=titre;
+    if(allow)cadre.allow=allow;
+    cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    verre.appendChild(cadre);
+    qui=nom;
+    ecran.hidden=false;
+    ecran.style.animation='none';
+    void ecran.offsetWidth;
+    ecran.style.animation='';
+    annonce();
+    return cadre;
+  }
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&qui)retire();});
+  return {pose:pose,retire:retire,qui:function(){return qui;},cadre:function(){return cadre;}};
+})();
+
+/* ---------------------------------------------------------------------------
    LE POSTE DE RADIO
    ---------------------------------------------------------------------------
    On pousse le gros bouton et la paroi du fond de l'aquarium devient le site
@@ -934,8 +977,8 @@
    YouTube dans un autre onglet.
    Échap éteint aussi, pour qui a les mains sur le clavier.
 
-   L'iframe n'est posée qu'au premier allumage — on ne fait pas charger YouTube
-   à quelqu'un venu lire une liste de livres — et elle est retirée à
+   L'iframe n'est posée qu'au premier allumage — on ne fait pas charger le
+   site à quelqu'un venu lire une liste de livres — et elle est retirée à
    l'extinction, parce qu'une image cachée qui continue de jouer derrière est
    une radio qu'on croit avoir éteinte.
 --------------------------------------------------------------------------- */
@@ -953,8 +996,6 @@
   var SITE='https://medialoco.github.io/ventoux-watch/';
   var poste=document.getElementById('wrecked-pawn');
   var bouton=document.getElementById('poste-bouton');
-  var ecran=document.getElementById('poste-direct');
-  var verre=document.getElementById('poste-direct-verre');
   var lien=document.getElementById('poste-y');
   function themeActuel(){
     return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
@@ -974,23 +1015,8 @@
     lien.rel='noopener';
     lien.setAttribute('aria-label','Open the live on YouTube');
   }
-  if(!ecran||!verre)return;
-  var cadre=null,allume=false,niveau=50,joue=false,bat=null,numero='';
+  var allume=false,numero='';
 
-  /* L'adresse à incruster : le direct en cours quand on le connaît, et la
-     vieille demande de résolution quand on ne le connaît pas encore. Mieux
-     vaut une adresse incertaine que pas de radio du tout. */
-  function adresse(){
-    return 'https://www.youtube-nocookie.com/embed/'+
-           (numero?numero:'live_stream?channel='+CHAINE)+
-           (numero?'?':'&')+
-           'autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin='+
-           encodeURIComponent(window.location.origin);
-  }
-
-  /* Demandé au chargement et non au premier clic : au clic il serait trop
-     tard, on partirait sur l'adresse incertaine le temps que la réponse
-     arrive. Le fichier fait cent octets. */
   function demande(){
     if(!window.fetch)return;
     fetch(VEILLE,{cache:'no-cache'}).then(function(r){return r.ok?r.json():null;})
@@ -1004,74 +1030,72 @@
   poseLien();
   document.addEventListener('theme-change',function(){
     poseLien();
-    if(allume&&cadre)cadre.src=adresseSite();
+    if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresseSite();
   });
 
-  /* Le lecteur ne parle que si on lui parle : il faut lui dire qu'on écoute,
-     et répéter tant qu'il n'a pas répondu, parce qu'on ne sait pas quand
-     l'iframe est prête. */
-  function ecoute(){
-    var tours=0;
-    if(bat)window.clearInterval(bat);
-    bat=window.setInterval(function(){
-      tours++;
-      if(joue||tours>20||!cadre){window.clearInterval(bat);bat=null;return;}
-      dis('listening');
-      dis('playVideo');
-      dis('setVolume',[niveau]);
-    },700);
-  }
-
-  window.addEventListener('message',function(e){
-    if(!cadre||!/youtube/.test(e.origin))return;
-    var dit;
-    try{dit=typeof e.data==='string'?JSON.parse(e.data):e.data;}catch(err){return;}
-    if(!dit)return;
-    var etat=dit.info&&typeof dit.info.playerState!=='undefined'?dit.info.playerState:null;
-    if(dit.event==='onReady'){dis('playVideo');dis('setVolume',[niveau]);}
-    if(etat===1)joue=true;
-  });
-  function dis(ordre,args){
-    if(!cadre||!cadre.contentWindow)return;
-    cadre.contentWindow.postMessage(JSON.stringify({event:'command',func:ordre,args:args||[]}),'*');
-  }
   function marque(){
     if(poste)poste.classList.toggle('poste-allume',allume);
     if(bouton){
       bouton.setAttribute('aria-pressed',allume?'true':'false');
       bouton.setAttribute('aria-label',allume?'Switch the radio off':'Switch the radio on');
     }
-    ecran.hidden=!allume;
   }
+  function coupe(){allume=false;}
   function mets(oui){
-    if(oui===allume)return;
-    /* L'autre objet du fond utilise la même vitre. Il s'éteint d'abord,
-       sinon les deux images s'empilent. */
-    if(oui)document.dispatchEvent(new CustomEvent('poste-demande'));
-    allume=oui;
-    if(allume){
-      if(!cadre){
-        cadre=document.createElement('iframe');
-        cadre.src=adresseSite();
-        cadre.title='Mont Serein';
-        cadre.allow='autoplay; encrypted-media; picture-in-picture';
-        cadre.setAttribute('allowfullscreen','');
-        cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
-        verre.appendChild(cadre);
-      }
-    }else if(cadre){
-      verre.innerHTML='';
-      cadre=null;
-      joue=false;
+    if(oui===allume&&(oui===false||mur.qui()==='radio'))return;
+    if(oui){
+      var cadre=mur.pose('radio',adresseSite(),'Mont Serein','autoplay; encrypted-media; picture-in-picture');
+      if(cadre)cadre.setAttribute('allowfullscreen','');
+      allume=true;
+    }else{
+      coupe();
+      if(mur.qui()==='radio')mur.retire();
     }
     marque();
   }
+  document.addEventListener('mur-change',function(){
+    if(mur.qui()==='radio')return;
+    if(!allume)return;
+    coupe();
+    marque();
+  });
   if(bouton)bouton.addEventListener('click',function(e){
     e.preventDefault();
     mets(!allume);
   });
-  document.addEventListener('sismo-demande',function(){mets(false);});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
+  marque();
+})();
+
+/* ---------------------------------------------------------------------------
+   LA CARTE DU VAUCLUSE
+   ---------------------------------------------------------------------------
+   Collée sur la vitre, un coin décollé. Le clic met les routes sur la même
+   paroi que le direct et le sismographe. Pas d'enseigne : Avignon se
+   reconnaît au pont cassé.
+--------------------------------------------------------------------------- */
+(function(){
+  var ADRESSE='https://dataroads-fr84.info/';
+  var bouton=document.getElementById('carte-vaucluse');
+  var bac=document.querySelector('.postit-container');
+  if(!bouton)return;
+  function marque(){
+    var on=mur.qui()==='carte';
+    bouton.classList.toggle('carte-vaucluse-on',on);
+    bouton.setAttribute('aria-pressed',on?'true':'false');
+    bouton.setAttribute('aria-label',on?'Hide the Vaucluse roads':'Show the Vaucluse roads');
+  }
+  function mets(oui){
+    if(oui)mur.pose('carte',ADRESSE,'Vaucluse roads');
+    else if(mur.qui()==='carte')mur.retire();
+    marque();
+  }
+  bouton.addEventListener('click',function(){mets(mur.qui()!=='carte');});
+  document.addEventListener('mur-change',marque);
+  if(window.MutationObserver&&bac){
+    new MutationObserver(function(){
+      if(!bac.classList.contains('aquarium-active'))mets(false);
+    }).observe(bac,{attributes:true,attributeFilter:['class']});
+  }
   marque();
 })();
 
@@ -1081,48 +1105,40 @@
    Même geste que le poste : un clic allume le site dans la vitre du fond,
    un second clic l'éteint. Le glisser est ailleurs — l'objet suit le
    doigt avec le retard de l'eau, puis continue un peu une fois lâché.
-   Les deux objets partagent la vitre, donc un seul est allumé à la fois.
+   La radio, la carte et le sismographe partagent la vitre : une seule image.
 --------------------------------------------------------------------------- */
 (function(){
   var SITE='https://medialoco.github.io/sismo-la/';
   var station=document.getElementById('sismo-station');
   var bouton=document.getElementById('sismo-bouton');
-  var ecran=document.getElementById('poste-direct');
-  var verre=document.getElementById('poste-direct-verre');
   var bac=document.querySelector('.postit-container');
-  if(!station||!bouton||!ecran||!verre)return;
-  var cadre=null,allume=false;
+  if(!station||!bouton)return;
+  var allume=false;
 
   function marque(){
     station.classList.toggle('sismo-allume',allume);
     bouton.setAttribute('aria-pressed',allume?'true':'false');
     bouton.setAttribute('aria-label',allume?'Hide Sismo-LA':'Show Sismo-LA');
-    /* La vitre n'est à nous que pendant qu'on est allumé. L'éteindre ici
-       pendant que la radio joue la cacherait avec. */
-    if(allume)ecran.hidden=false;
-    else if(!document.querySelector('.wrecked-pawn.poste-allume'))ecran.hidden=true;
   }
+  function coupe(){allume=false;}
   function mets(oui){
-    if(oui===allume)return;
-    if(oui)document.dispatchEvent(new CustomEvent('sismo-demande'));
-    allume=oui;
-    if(allume){
-      if(!cadre){
-        cadre=document.createElement('iframe');
-        cadre.src=SITE;
-        cadre.title='Sismo-LA';
-        cadre.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
-        verre.appendChild(cadre);
-      }
-    }else if(cadre){
-      cadre.remove();
-      cadre=null;
+    if(oui===allume&&(oui===false||mur.qui()==='sismo'))return;
+    if(oui){
+      mur.pose('sismo',SITE,'Sismo-LA');
+      allume=true;
+    }else{
+      coupe();
+      if(mur.qui()==='sismo')mur.retire();
     }
     marque();
   }
   bouton.addEventListener('click',function(){mets(!allume);});
-  document.addEventListener('poste-demande',function(){mets(false);});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&allume)mets(false);});
+  document.addEventListener('mur-change',function(){
+    if(mur.qui()==='sismo')return;
+    if(!allume)return;
+    coupe();
+    marque();
+  });
   if(window.MutationObserver&&bac){
     new MutationObserver(function(){
       if(!bac.classList.contains('aquarium-active'))mets(false);
