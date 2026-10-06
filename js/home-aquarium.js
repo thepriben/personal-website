@@ -74,8 +74,8 @@
   function desktopPawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:120,h=pawn?pawn.offsetHeight:168,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.66),p,maxX),y=clamp(Math.round(bounds.h-h-24),p,maxY);return {x:x,y:y};}
   function sismoLayout(){var p=bounds.pad,w=sismo?sismo.offsetWidth:124,h=sismo?sismo.offsetHeight:72,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=bounds.w<720?p:clamp(Math.round(bounds.w*0.32),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?14:26)),p,maxY);return {x:x,y:y};}
   function placeSismo(loaded){if(!sismo)return;var layout=sismoLayout();if(loaded&&loaded.sismo&&typeof loaded.sismo.x==='number'&&typeof loaded.sismo.y==='number')pos.sismo={x:loaded.sismo.x,y:loaded.sismo.y};else pos.sismo=layout;}
-  function carteLayout(){var p=bounds.pad,w=carte?carte.offsetWidth:156,h=carte?carte.offsetHeight:118,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w-w-(bounds.w<720?10:36)),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?78:108)),p,maxY);return {x:x,y:y};}
-  function placeCarte(loaded){if(!carte)return;if(loaded&&loaded.carte&&typeof loaded.carte.x==='number'&&typeof loaded.carte.y==='number')pos.carte={x:loaded.carte.x,y:loaded.carte.y};else pos.carte=carteLayout();}
+  function carteLayout(){return {x:bounds.w<720?10:16,y:bounds.w<720?8:14};}
+  function placeCarte(){if(!carte)return;pos.carte=carteLayout();}
   function mobilePawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:100,h=pawn?pawn.offsetHeight:138,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.58),p,maxX),y=clamp(Math.round(bounds.h-h-10),p,maxY);return {x:x,y:y};}
   function resolveSavedPawnPos(savedPawn,layout){
     if(!savedPawn||typeof savedPawn.x!=='number'||typeof savedPawn.y!=='number')return null;
@@ -981,10 +981,9 @@ var mur=(function(){
 /* ---------------------------------------------------------------------------
    LE POSTE DE RADIO
    ---------------------------------------------------------------------------
-   On pousse le gros bouton et la paroi du fond de l'aquarium devient le site
-   de la veille, le direct déjà lancé, dans le même thème que cette page.
-   On rappuie dessus et ça s'éteint. Le petit Y, en dessous, ouvre le direct
-   YouTube dans un autre onglet.
+   On pousse le gros bouton et la paroi du fond devient le direct YouTube,
+   rien d'autre : pas le site de la veille. On rappuie dessus et ça s'éteint.
+   Le petit Y, en dessous, ouvre ce même direct dans un autre onglet.
    Échap éteint aussi, pour qui a les mains sur le clavier.
 
    L'iframe n'est posée qu'au premier allumage — on ne fait pas charger le
@@ -1003,20 +1002,18 @@ var mur=(function(){
      donc l'écrire en dur ici reviendrait à incruster, tôt ou tard, un
      enregistrement fini. */
   var VEILLE='https://medialoco.github.io/ventoux-watch/data/direct.json';
-  var SITE='https://medialoco.github.io/ventoux-watch/';
   var poste=document.getElementById('wrecked-pawn');
   var bouton=document.getElementById('poste-bouton');
   var lien=document.getElementById('poste-y');
-  function themeActuel(){
-    return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
-  }
-  function adresseSite(){
-    return SITE+'?theme='+themeActuel()+'&play=1';
-  }
   function adresseLive(){
     return numero
       ? 'https://www.youtube.com/watch?v='+numero
       : 'https://www.youtube.com/channel/'+CHAINE+'/live';
+  }
+  function adresseMur(){
+    return numero
+      ? 'https://www.youtube.com/embed/'+numero+'?autoplay=1&rel=0'
+      : 'https://www.youtube.com/embed/live_stream?channel='+CHAINE+'&autoplay=1';
   }
   function poseLien(){
     if(!lien)return;
@@ -1032,15 +1029,17 @@ var mur=(function(){
     fetch(VEILLE,{cache:'no-cache'}).then(function(r){return r.ok?r.json():null;})
       .then(function(d){
         if(!d||!d.video)return;
+        if(d.video===numero)return;
         numero=d.video;
         poseLien();
+        if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresseMur();
       }).catch(function(){});
   }
   demande();
   poseLien();
   document.addEventListener('theme-change',function(){
     poseLien();
-    if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresseSite();
+    if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresseMur();
   });
 
   function marque(){
@@ -1054,7 +1053,7 @@ var mur=(function(){
   function mets(oui){
     if(oui===allume&&(oui===false||mur.qui()==='radio'))return;
     if(oui){
-      var cadre=mur.pose('radio',adresseSite(),'Mont Serein','autoplay; encrypted-media; picture-in-picture');
+      var cadre=mur.pose('radio',adresseMur(),'Mont Serein','autoplay; encrypted-media; picture-in-picture');
       if(cadre)cadre.setAttribute('allowfullscreen','');
       allume=true;
     }else{
@@ -1079,9 +1078,8 @@ var mur=(function(){
 /* ---------------------------------------------------------------------------
    LA CARTE DU VAUCLUSE
    ---------------------------------------------------------------------------
-   Collée sur la vitre, un coin décollé. On la pose où on veut, elle y reste.
-   Le clic met les routes sur la même paroi que le direct et le sismographe.
-   Avignon est écrit, sans enseigne.
+   Collée en haut à gauche. Le clic met les routes sur la même paroi
+   que le direct et le sismographe. Vaucluse est écrit, sans enseigne.
 --------------------------------------------------------------------------- */
 (function(){
   var ADRESSE='https://dataroads-fr84.info/';

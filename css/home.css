@@ -3782,10 +3782,9 @@ body.page-home .postit-container {
 /* ===========================================================================
    LA CARTE DU VAUCLUSE
    ---------------------------------------------------------------------------
-   Une feuille collée sur la vitre, tournée. Le coin est déplié, et le scotch
-   du haut ne tient plus que par un bout. Pas d'enseigne : le département se
-   reconnaît à sa forme, et Avignon au rempart, au palais et au pont qui s'arrête dans le
-   Rhône. Le clic allume les routes sur la paroi du fond, la même que la radio.
+   Une feuille collée en haut à gauche de la vitre. Le département est
+   dessiné d'un trait continu, Vaucluse est écrit dessus. Le clic allume
+   les routes sur la paroi du fond, la même que la radio.
    ======================================================================== */
 
 .carte-vaucluse {
@@ -3796,16 +3795,13 @@ body.page-home .postit-container {
   position: absolute;
   left: 0;
   top: 0;
-  width: 156px;
-  height: 118px;
+  width: 180px;
+  height: 132px;
   z-index: 4;
   cursor: grab;
   user-select: none;
   touch-action: none;
   overflow: visible;
-  transform: rotate(-7deg);
-  transform-origin: 18% 80%;
-  animation: carte-vaucluse-flotte 7.6s ease-in-out infinite;
 }
 
 .carte-vaucluse * { pointer-events: none; }
@@ -3833,7 +3829,7 @@ body.page-home .postit-container {
   border: 3px solid var(--carte-encre);
   border-radius: 2px;
   overflow: hidden;
-  clip-path: polygon(0 0, 64% 0, 100% 40%, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 78% 0, 100% 22%, 100% 100%, 0 100%);
 }
 
 .carte-vaucluse-dessin {
@@ -3855,31 +3851,30 @@ body.page-home .postit-container {
 }
 
 .carte-vaucluse-scotch-haut {
-  left: -2px;
-  top: -16px;
-  width: 34px;
-  transform: rotate(-52deg);
-  transform-origin: 100% 100%;
+  left: 16px;
+  top: -6px;
+  width: 30px;
+  transform: rotate(-22deg);
+  transform-origin: 80% 100%;
 }
 
 .carte-vaucluse-scotch-bas {
-  left: 8px;
-  bottom: -5px;
-  transform: rotate(8deg);
+  left: 22px;
+  bottom: -4px;
+  transform: rotate(6deg);
 }
 
 .carte-vaucluse-coin {
   position: absolute;
-  right: -2px;
-  top: -6px;
-  width: 54px;
-  height: 42px;
+  right: 2px;
+  top: -4px;
+  width: 42px;
+  height: 32px;
   background: var(--carte-coin);
   border: 3px solid var(--carte-encre);
   transform-origin: 0% 100%;
-  transform: rotate(-32deg);
-  box-shadow: 4px 5px 0 rgba(42, 26, 16, 0.28);
-  animation: carte-vaucluse-coin 3.4s ease-in-out infinite;
+  transform: rotate(-24deg);
+  box-shadow: 3px 4px 0 rgba(42, 26, 16, 0.22);
 }
 
 .carte-vaucluse-on .carte-vaucluse-coin {
@@ -3900,14 +3895,14 @@ body.page-home .postit-container {
 }
 
 @keyframes carte-vaucluse-coin {
-  0%, 100% { transform: rotate(-28deg); }
-  50% { transform: rotate(-40deg); }
+  0%, 100% { transform: rotate(-20deg); }
+  50% { transform: rotate(-30deg); }
 }
 
 @media (max-width: 768px) {
   .carte-vaucluse {
-    width: 112px;
-    height: 86px;
+    width: 128px;
+    height: 96px;
   }
 }
 
