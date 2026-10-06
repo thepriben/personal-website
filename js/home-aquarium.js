@@ -28,6 +28,7 @@
   if(typeof pos.pawn.y!=='number')pos.pawn.y=def.pawn.y;
   if(!pos.plume||typeof pos.plume.x!=='number'||typeof pos.plume.y!=='number')pos.plume={x:def.plume.x,y:def.plume.y};
   if(!pos.sismo||typeof pos.sismo.x!=='number'||typeof pos.sismo.y!=='number')pos.sismo={x:def.sismo.x,y:def.sismo.y};
+  if(!pos.carte||typeof pos.carte.x!=='number'||typeof pos.carte.y!=='number')pos.carte={x:0,y:0};
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var article=document.getElementById('postit-article');
@@ -39,6 +40,7 @@
   var pawn=document.getElementById('wrecked-pawn');
   var plume=document.getElementById('aquarium-plume');
   var sismo=document.getElementById('sismo-station');
+  var carte=document.getElementById('carte-vaucluse');
   var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
   var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:article,key:'article'},{el:chapter,key:'chapter'},{el:fish,key:'fish'}];
@@ -72,6 +74,8 @@
   function desktopPawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:120,h=pawn?pawn.offsetHeight:168,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.66),p,maxX),y=clamp(Math.round(bounds.h-h-24),p,maxY);return {x:x,y:y};}
   function sismoLayout(){var p=bounds.pad,w=sismo?sismo.offsetWidth:124,h=sismo?sismo.offsetHeight:72,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=bounds.w<720?p:clamp(Math.round(bounds.w*0.32),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?14:26)),p,maxY);return {x:x,y:y};}
   function placeSismo(loaded){if(!sismo)return;var layout=sismoLayout();if(loaded&&loaded.sismo&&typeof loaded.sismo.x==='number'&&typeof loaded.sismo.y==='number')pos.sismo={x:loaded.sismo.x,y:loaded.sismo.y};else pos.sismo=layout;}
+  function carteLayout(){var p=bounds.pad,w=carte?carte.offsetWidth:156,h=carte?carte.offsetHeight:118,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w-w-(bounds.w<720?10:36)),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?78:108)),p,maxY);return {x:x,y:y};}
+  function placeCarte(loaded){if(!carte)return;if(loaded&&loaded.carte&&typeof loaded.carte.x==='number'&&typeof loaded.carte.y==='number')pos.carte={x:loaded.carte.x,y:loaded.carte.y};else pos.carte=carteLayout();}
   function mobilePawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:100,h=pawn?pawn.offsetHeight:138,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.58),p,maxX),y=clamp(Math.round(bounds.h-h-10),p,maxY);return {x:x,y:y};}
   function resolveSavedPawnPos(savedPawn,layout){
     if(!savedPawn||typeof savedPawn.x!=='number'||typeof savedPawn.y!=='number')return null;
@@ -248,6 +252,7 @@
       if(green){greenState.lastTs=0;greenState.nextDecisionAt=0;clampGreenPos();updateGreenVisual();}
       if(pawn)clampPos(pawn,'pawn');
       if(sismo)clampPos(sismo,'sismo');
+      if(carte)clampPos(carte,'carte');
     }
     saveAquariumMode(aquariumMode);
     schedulePawnAutoDrop();
@@ -332,6 +337,7 @@
         else pos.pawn={x:mobilePawn.x,y:mobilePawn.y};
       }
       placeSismo(loaded);
+      placeCarte(loaded);
     }else if(bounds.w<1040){
       var mediumDefaults=mediumLayout();
       posts.forEach(function(p){
@@ -362,6 +368,7 @@
         pos.pawn=savedMediumPawn||{x:mediumPawn.x,y:mediumPawn.y};
       }
       placeSismo(loaded);
+      placeCarte(loaded);
     }else{
       var wideDefaults=desktopLayout();
       var useWideDefaults=shouldUseAquariumDefaults(loaded);
@@ -400,6 +407,7 @@
         }
       }
       placeSismo(useWideDefaults?null:loaded);
+      placeCarte(useWideDefaults?null:loaded);
     }
     placeBlooms(loaded);
     posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});
@@ -409,6 +417,7 @@
     if(green)clampGreenPos();
     if(pawn)clampPos(pawn,'pawn');
     if(sismo)clampPos(sismo,'sismo');
+    if(carte)clampPos(carte,'carte');
     schedulePawnAutoDrop();
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];}});
@@ -724,7 +733,7 @@
       setTimeout(function(){moved=false;},0);
     }
     function start(e){
-      if((key==='fish'||key==='pawn'||key==='plume'||key==='sismo')&&!fishVisible)return;
+      if((key==='fish'||key==='pawn'||key==='plume'||key==='sismo'||key==='carte')&&!fishVisible)return;
       e.preventDefault();
       moved=false;
       pointerVx=0;
@@ -919,6 +928,7 @@
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];drag(p.el,p.key);}});
   if(pawn)drag(pawn,'pawn');
   if(sismo)drag(sismo,'sismo');
+  if(carte)drag(carte,'carte');
   if(clown)dragBuddy(clown,'clown',clownState,clownMotion,updateClownVisual);
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);
@@ -1069,13 +1079,13 @@ var mur=(function(){
 /* ---------------------------------------------------------------------------
    LA CARTE DU VAUCLUSE
    ---------------------------------------------------------------------------
-   Collée sur la vitre, un coin décollé. Le clic met les routes sur la même
-   paroi que le direct et le sismographe. Pas d'enseigne : Avignon se
-   reconnaît au pont cassé.
+   Collée sur la vitre, un coin décollé. On la pose où on veut, elle y reste.
+   Le clic met les routes sur la même paroi que le direct et le sismographe.
+   Avignon est écrit, sans enseigne.
 --------------------------------------------------------------------------- */
 (function(){
   var ADRESSE='https://dataroads-fr84.info/';
-  var bouton=document.getElementById('carte-vaucluse');
+  var bouton=document.getElementById('carte-vaucluse-bouton');
   var bac=document.querySelector('.postit-container');
   if(!bouton)return;
   function marque(){

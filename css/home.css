@@ -3794,19 +3794,30 @@ body.page-home .postit-container {
   --carte-coin: #efe0b0;
   --carte-scotch: #f0d35a;
   position: absolute;
-  right: 36px;
-  bottom: 108px;
+  left: 0;
+  top: 0;
   width: 156px;
   height: 118px;
   z-index: 4;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
   overflow: visible;
   transform: rotate(-7deg);
   transform-origin: 18% 80%;
   animation: carte-vaucluse-flotte 7.6s ease-in-out infinite;
+}
+
+.carte-vaucluse * { pointer-events: none; }
+
+.carte-vaucluse-bouton {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
 }
 
 .carte-vaucluse-hidden {
@@ -3895,8 +3906,6 @@ body.page-home .postit-container {
 
 @media (max-width: 768px) {
   .carte-vaucluse {
-    right: 10px;
-    bottom: 78px;
     width: 112px;
     height: 86px;
   }
