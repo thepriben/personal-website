@@ -3782,9 +3782,9 @@ body.page-home .postit-container {
 /* ===========================================================================
    LA CARTE DU VAUCLUSE
    ---------------------------------------------------------------------------
-   Une feuille collée sur la vitre, tournée, un coin décollé. Deux bouts de
-   scotch tiennent encore. Pas d'enseigne : le département se reconnaît à sa
-   forme, et Avignon au rempart, au palais et au pont qui s'arrête dans le
+   Une feuille collée sur la vitre, tournée. Le coin est déplié, et le scotch
+   du haut ne tient plus que par un bout. Pas d'enseigne : le département se
+   reconnaît à sa forme, et Avignon au rempart, au palais et au pont qui s'arrête dans le
    Rhône. Le clic allume les routes sur la paroi du fond, la même que la radio.
    ======================================================================== */
 
@@ -3822,7 +3822,7 @@ body.page-home .postit-container {
   border: 3px solid var(--carte-encre);
   border-radius: 2px;
   overflow: hidden;
-  clip-path: polygon(0 0, 76% 0, 100% 26%, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 64% 0, 100% 40%, 100% 100%, 0 100%);
 }
 
 .carte-vaucluse-dessin {
@@ -3844,9 +3844,11 @@ body.page-home .postit-container {
 }
 
 .carte-vaucluse-scotch-haut {
-  left: 10px;
-  top: -5px;
-  transform: rotate(-12deg);
+  left: -2px;
+  top: -16px;
+  width: 34px;
+  transform: rotate(-52deg);
+  transform-origin: 100% 100%;
 }
 
 .carte-vaucluse-scotch-bas {
@@ -3857,22 +3859,22 @@ body.page-home .postit-container {
 
 .carte-vaucluse-coin {
   position: absolute;
-  right: 4px;
-  top: -2px;
-  width: 44px;
-  height: 34px;
+  right: -2px;
+  top: -6px;
+  width: 54px;
+  height: 42px;
   background: var(--carte-coin);
   border: 3px solid var(--carte-encre);
   transform-origin: 0% 100%;
-  transform: rotate(-16deg);
-  box-shadow: 3px 4px 0 rgba(42, 26, 16, 0.28);
+  transform: rotate(-32deg);
+  box-shadow: 4px 5px 0 rgba(42, 26, 16, 0.28);
   animation: carte-vaucluse-coin 3.4s ease-in-out infinite;
 }
 
 .carte-vaucluse-on .carte-vaucluse-coin {
   animation: none;
-  transform: rotate(-6deg);
-  box-shadow: 1px 2px 0 rgba(42, 26, 16, 0.28);
+  transform: rotate(-18deg);
+  box-shadow: 2px 3px 0 rgba(42, 26, 16, 0.28);
 }
 
 [data-theme="dark"] .carte-vaucluse {
@@ -3887,8 +3889,8 @@ body.page-home .postit-container {
 }
 
 @keyframes carte-vaucluse-coin {
-  0%, 100% { transform: rotate(-16deg); }
-  50% { transform: rotate(-24deg); }
+  0%, 100% { transform: rotate(-28deg); }
+  50% { transform: rotate(-40deg); }
 }
 
 @media (max-width: 768px) {
