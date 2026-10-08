@@ -3030,6 +3030,13 @@ body.page-home .main.postit-container {
     bottom: 50px;
   }
 
+  .parchemin {
+    left: 18px;
+    bottom: 168px;
+    width: 132px;
+    height: 78px;
+  }
+
   .aquarium-plant-mid {
     left: 35%;
     transform: scale(0.88) rotate(1.1deg);
@@ -3199,7 +3206,8 @@ body.page-home .postit-container {
   .clown-fish-tail::after,
   .clown-fish-fin,
   .clown-fish-bubble,
-  .wrecked-pawn-grain {
+  .wrecked-pawn-grain,
+  .parchemin-feuille {
     animation: none;
   }
 
@@ -3219,6 +3227,124 @@ body.page-home .postit-container {
   [data-theme="light"] .postit-container.aquarium-active::after {
     animation: none;
   }
+}
+
+/* ===========================================================================
+   LE PARCHEMIN
+   ---------------------------------------------------------------------------
+   Un bout de papier collé sur la vitre, au-dessus des plantes. Aplats et
+   contour noir, comme le poste : le mot est tracé, pas composé. Le coin
+   haut droit est replié. Un clic ouvre les routes du Vaucluse dans le fond,
+   le même geste que la radio et le sismographe.
+   ======================================================================== */
+
+.parchemin {
+  --parchemin-papier: #f3e0b4;
+  --parchemin-clair: #fff6e2;
+  --parchemin-trait: #1c140c;
+  --parchemin-sceau: #d6452f;
+  --parchemin-encre: #1c140c;
+  position: absolute;
+  left: 168px;
+  bottom: 236px;
+  z-index: 3;
+  width: 168px;
+  height: 100px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.postit-container.aquarium-active .parchemin {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+[data-theme="dark"] .parchemin {
+  --parchemin-papier: #cbb58a;
+  --parchemin-clair: #efe0bc;
+  --parchemin-sceau: #c44732;
+}
+
+.parchemin-feuille {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 14% 90%;
+  animation: parchemin-eau 7.4s ease-in-out infinite;
+}
+
+.parchemin:hover .parchemin-feuille,
+.parchemin:focus-visible .parchemin-feuille {
+  animation-play-state: paused;
+  transform: rotate(-4deg) translateY(-2px);
+}
+
+.parchemin:focus-visible {
+  outline: 3px solid #4fb27a;
+  outline-offset: 4px;
+}
+
+.parchemin-dessin {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.parchemin-papier {
+  fill: var(--parchemin-papier);
+  stroke: var(--parchemin-trait);
+  stroke-width: 3.2;
+  stroke-linejoin: round;
+}
+
+.parchemin-pli {
+  fill: var(--parchemin-clair);
+  stroke: var(--parchemin-trait);
+  stroke-width: 3.2;
+  stroke-linejoin: round;
+}
+
+.parchemin-pliure {
+  fill: none;
+  stroke: var(--parchemin-trait);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.parchemin-encre {
+  fill: none;
+  stroke: var(--parchemin-encre, #1c140c);
+  stroke-width: 3.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.parchemin-sceau {
+  fill: var(--parchemin-sceau, #d6452f);
+  stroke: var(--parchemin-trait, #1c140c);
+  stroke-width: 2.6;
+}
+
+.parchemin-numero {
+  fill: #fff6e6;
+  stroke: none;
+  font-family: ui-sans-serif, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+@keyframes parchemin-eau {
+  0%, 100% { transform: rotate(-7deg) translateY(0); }
+  50% { transform: rotate(-4.5deg) translateY(3px); }
 }
 
 /* ===========================================================================
@@ -3782,9 +3908,9 @@ body.page-home .postit-container {
 /* ===========================================================================
    LA CARTE DU VAUCLUSE
    ---------------------------------------------------------------------------
-   Une feuille collée en haut à gauche de la vitre. Le département est
-   dessiné d'un trait continu, Vaucluse est écrit dessus. Le clic allume
-   les routes sur la paroi du fond, la même que la radio.
+   Un bout de parchemin en haut à gauche de la vitre. Le mot est tracé,
+   pas composé. Le clic allume les routes sur la paroi du fond, la même
+   que le direct.
    ======================================================================== */
 
 .carte-vaucluse {
@@ -3792,6 +3918,9 @@ body.page-home .postit-container {
   --carte-papier: #f4e6c4;
   --carte-coin: #efe0b0;
   --carte-scotch: #f0d35a;
+  --parchemin-trait: #1c140c;
+  --parchemin-sceau: #d6452f;
+  --parchemin-encre: #1c140c;
   position: absolute;
   left: 0;
   top: 0;
