@@ -981,10 +981,11 @@ var mur=(function(){
 /* ---------------------------------------------------------------------------
    LE POSTE DE RADIO
    ---------------------------------------------------------------------------
-   On pousse le gros bouton et la paroi du fond devient le direct YouTube,
-   rien d'autre : pas le site de la veille. On rappuie dessus et ça s'éteint.
-   Le petit Y, en dessous, ouvre ce même direct dans un autre onglet.
-   Échap éteint aussi, pour qui a les mains sur le clavier.
+   On pousse le gros bouton et la paroi du fond devient le site de la veille.
+   Ce site porte déjà le direct, et les explications techniques sont à côté,
+   tout de suite. On rappuie dessus et ça s'éteint. Le petit Y, en dessous,
+   ouvre ce même site dans un autre onglet. Échap éteint aussi, pour qui a
+   les mains sur le clavier.
 
    L'iframe n'est posée qu'au premier allumage — on ne fait pas charger le
    site à quelqu'un venu lire une liste de livres — et elle est retirée à
@@ -992,54 +993,30 @@ var mur=(function(){
    une radio qu'on croit avoir éteinte.
 --------------------------------------------------------------------------- */
 (function(){
-  var CHAINE='UCvN0sNcj5JM9tklIkAlGi7g';
-  /* La veille écrit là le numéro du direct qu'elle alimente en ce moment.
-     Sans lui il faudrait demander à YouTube de résoudre « le direct de cette
-     chaîne », ce qu'il ne fait plus de façon fiable dans une incrustation :
-     la page se charge, le lecteur s'ouvre, et il annonce une vidéo
-     indisponible. Et le numéro n'est pas constant — YouTube en donne un
-     nouveau chaque fois qu'il termine la diffusion et qu'on en rouvre une —,
-     donc l'écrire en dur ici reviendrait à incruster, tôt ou tard, un
-     enregistrement fini. */
-  var VEILLE='https://medialoco.github.io/ventoux-watch/data/direct.json';
+  /* Le site lit lui-même data/direct.json et incruste le numéro en cours.
+     L'écrire ici reviendrait à figer un enregistrement fini le jour où
+     YouTube en ouvre un autre. play=1 lui demande de lancer le son. */
+  var SITE='https://medialoco.github.io/ventoux-watch/';
   var poste=document.getElementById('wrecked-pawn');
   var bouton=document.getElementById('poste-bouton');
   var lien=document.getElementById('poste-y');
-  function adresseLive(){
-    return numero
-      ? 'https://www.youtube.com/watch?v='+numero
-      : 'https://www.youtube.com/channel/'+CHAINE+'/live';
-  }
-  function adresseMur(){
-    return numero
-      ? 'https://www.youtube.com/embed/'+numero+'?autoplay=1&rel=0'
-      : 'https://www.youtube.com/embed/live_stream?channel='+CHAINE+'&autoplay=1';
+  function adresse(){
+    var theme=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';
+    return SITE+'?play=1&theme='+theme;
   }
   function poseLien(){
     if(!lien)return;
-    lien.href=adresseLive();
+    lien.href=adresse();
     lien.target='_blank';
     lien.rel='noopener';
-    lien.setAttribute('aria-label','Open the live on YouTube');
+    lien.setAttribute('aria-label','Open the site with the live');
   }
-  var allume=false,numero='';
+  var allume=false;
 
-  function demande(){
-    if(!window.fetch)return;
-    fetch(VEILLE,{cache:'no-cache'}).then(function(r){return r.ok?r.json():null;})
-      .then(function(d){
-        if(!d||!d.video)return;
-        if(d.video===numero)return;
-        numero=d.video;
-        poseLien();
-        if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresseMur();
-      }).catch(function(){});
-  }
-  demande();
   poseLien();
   document.addEventListener('theme-change',function(){
     poseLien();
-    if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresseMur();
+    if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresse();
   });
 
   function marque(){
@@ -1053,7 +1030,7 @@ var mur=(function(){
   function mets(oui){
     if(oui===allume&&(oui===false||mur.qui()==='radio'))return;
     if(oui){
-      var cadre=mur.pose('radio',adresseMur(),'Mont Serein','autoplay; encrypted-media; picture-in-picture');
+      var cadre=mur.pose('radio',adresse(),'Mont Serein','autoplay; encrypted-media; picture-in-picture');
       if(cadre)cadre.setAttribute('allowfullscreen','');
       allume=true;
     }else{
