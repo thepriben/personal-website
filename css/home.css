@@ -3417,7 +3417,7 @@ body.page-home .postit-container {
   width: 25px;
   height: 25px;
   box-sizing: border-box;
-  display: grid;
+  display: none;
   place-items: center;
   border-radius: 50%;
   background: var(--poste-rouge);
