@@ -3030,13 +3030,6 @@ body.page-home .main.postit-container {
     bottom: 50px;
   }
 
-  .parchemin {
-    left: 18px;
-    bottom: 168px;
-    width: 132px;
-    height: 78px;
-  }
-
   .aquarium-plant-mid {
     left: 35%;
     transform: scale(0.88) rotate(1.1deg);
@@ -3206,8 +3199,7 @@ body.page-home .postit-container {
   .clown-fish-tail::after,
   .clown-fish-fin,
   .clown-fish-bubble,
-  .wrecked-pawn-grain,
-  .parchemin-feuille {
+  .wrecked-pawn-grain {
     animation: none;
   }
 
@@ -3227,124 +3219,6 @@ body.page-home .postit-container {
   [data-theme="light"] .postit-container.aquarium-active::after {
     animation: none;
   }
-}
-
-/* ===========================================================================
-   LE PARCHEMIN
-   ---------------------------------------------------------------------------
-   Un bout de papier collé sur la vitre, au-dessus des plantes. Aplats et
-   contour noir, comme le poste : le mot est tracé, pas composé. Le coin
-   haut droit est replié. Un clic ouvre les routes du Vaucluse dans le fond,
-   le même geste que la radio et le sismographe.
-   ======================================================================== */
-
-.parchemin {
-  --parchemin-papier: #f3e0b4;
-  --parchemin-clair: #fff6e2;
-  --parchemin-trait: #1c140c;
-  --parchemin-sceau: #d6452f;
-  --parchemin-encre: #1c140c;
-  position: absolute;
-  left: 168px;
-  bottom: 236px;
-  z-index: 3;
-  width: 168px;
-  height: 100px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.postit-container.aquarium-active .parchemin {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-[data-theme="dark"] .parchemin {
-  --parchemin-papier: #cbb58a;
-  --parchemin-clair: #efe0bc;
-  --parchemin-sceau: #c44732;
-}
-
-.parchemin-feuille {
-  display: block;
-  width: 100%;
-  height: 100%;
-  transform-origin: 14% 90%;
-  animation: parchemin-eau 7.4s ease-in-out infinite;
-}
-
-.parchemin:hover .parchemin-feuille,
-.parchemin:focus-visible .parchemin-feuille {
-  animation-play-state: paused;
-  transform: rotate(-4deg) translateY(-2px);
-}
-
-.parchemin:focus-visible {
-  outline: 3px solid #4fb27a;
-  outline-offset: 4px;
-}
-
-.parchemin-dessin {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.parchemin-papier {
-  fill: var(--parchemin-papier);
-  stroke: var(--parchemin-trait);
-  stroke-width: 3.2;
-  stroke-linejoin: round;
-}
-
-.parchemin-pli {
-  fill: var(--parchemin-clair);
-  stroke: var(--parchemin-trait);
-  stroke-width: 3.2;
-  stroke-linejoin: round;
-}
-
-.parchemin-pliure {
-  fill: none;
-  stroke: var(--parchemin-trait);
-  stroke-width: 2.2;
-  stroke-linecap: round;
-}
-
-.parchemin-encre {
-  fill: none;
-  stroke: var(--parchemin-encre, #1c140c);
-  stroke-width: 3.1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.parchemin-sceau {
-  fill: var(--parchemin-sceau, #d6452f);
-  stroke: var(--parchemin-trait, #1c140c);
-  stroke-width: 2.6;
-}
-
-.parchemin-numero {
-  fill: #fff6e6;
-  stroke: none;
-  font-family: ui-sans-serif, sans-serif;
-  font-size: 11px;
-  font-weight: 800;
-  text-anchor: middle;
-}
-
-@keyframes parchemin-eau {
-  0%, 100% { transform: rotate(-7deg) translateY(0); }
-  50% { transform: rotate(-4.5deg) translateY(3px); }
 }
 
 /* ===========================================================================
@@ -3906,34 +3780,73 @@ body.page-home .postit-container {
 
 
 /* ===========================================================================
-   LA CARTE DU VAUCLUSE
+   LA BORNE DU VAUCLUSE
    ---------------------------------------------------------------------------
-   Un bout de parchemin en haut à gauche de la vitre. Le mot est tracé,
-   pas composé. Le clic allume les routes sur la paroi du fond, la même
-   que le direct.
+   Le même boîtier que le sismographe : une caisse, un écran, un nom, un œil.
+   L'écran montre une route, et la plaque jaune porte le numéro du département.
+   Un clic allume les routes sur la paroi du fond. On le lâche, il coule.
    ======================================================================== */
 
 .carte-vaucluse {
-  --carte-encre: #2a1a10;
-  --carte-papier: #f4e6c4;
-  --carte-coin: #efe0b0;
-  --carte-scotch: #f0d35a;
-  --parchemin-trait: #1c140c;
-  --parchemin-sceau: #d6452f;
-  --parchemin-encre: #1c140c;
+  --borne-trait: #2a1a10;
+  --borne-caisse: #e0b03a;
+  --borne-caisse-sombre: #b88822;
+  --borne-creme: #f6e3bc;
+  --borne-rouge: #d6452f;
+  --borne-vert: #4fb27a;
+  --drag-water-x: 0px;
+  --drag-water-y: 0px;
+  --drag-water-tilt: 0deg;
+  --pawn-sink-sway-x: 0px;
+  --pawn-sink-sway-y: 0px;
+  --pawn-sink-sway-tilt: 0deg;
+  --pawn-rest-tilt: 0deg;
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 180px;
-  height: 132px;
-  z-index: 4;
+  z-index: 2;
+  width: 136px;
+  height: 76px;
+  left: 8%;
+  top: 78%;
   cursor: grab;
   user-select: none;
   touch-action: none;
   overflow: visible;
 }
 
+[data-theme="dark"] .carte-vaucluse {
+  --borne-caisse: #c9962c;
+  --borne-caisse-sombre: #9a7420;
+  --borne-creme: #e7d2a8;
+}
+
+.carte-vaucluse-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .carte-vaucluse * { pointer-events: none; }
+
+.carte-vaucluse.postit-dragging { cursor: grabbing; }
+
+.carte-vaucluse-motion {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(var(--drag-water-x), var(--drag-water-y), 0)
+    rotate(calc(var(--pawn-rest-tilt) + var(--drag-water-tilt)));
+  transform-origin: 50% 72%;
+}
+
+.carte-vaucluse.postit-dragging .carte-vaucluse-motion,
+.carte-vaucluse.postit-water-settling .carte-vaucluse-motion,
+.carte-vaucluse.pawn-sinking .carte-vaucluse-motion {
+  transform: translate3d(
+      calc(var(--drag-water-x) + var(--pawn-sink-sway-x)),
+      calc(var(--drag-water-y) + var(--pawn-sink-sway-y)),
+      0
+    )
+    rotate(calc(var(--pawn-rest-tilt) + var(--drag-water-tilt) + var(--pawn-sink-sway-tilt)));
+}
 
 .carte-vaucluse-bouton {
   position: absolute;
@@ -3943,101 +3856,152 @@ body.page-home .postit-container {
   border: 0;
   background: none;
   color: inherit;
+  font: inherit;
+  text-align: left;
 }
 
-.carte-vaucluse-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+.carte-vaucluse-bouton:focus-visible {
+  outline: 3px solid var(--borne-vert);
+  outline-offset: 3px;
+  border-radius: 10px;
 }
 
-.carte-vaucluse-feuille {
+.borne {
   position: absolute;
   inset: 0;
-  background: var(--carte-papier);
-  border: 3px solid var(--carte-encre);
-  border-radius: 2px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 5px 6px 4px;
+  border-radius: 10px;
+  background: var(--borne-caisse);
+  border: 3px solid var(--borne-trait);
+  box-shadow: inset 0 -5px 0 var(--borne-caisse-sombre);
+}
+
+.borne-ecran {
+  position: relative;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
-  clip-path: polygon(0 0, 78% 0, 100% 22%, 100% 100%, 0 100%);
+  border-radius: 4px;
+  background: var(--borne-creme);
+  border: 2px solid var(--borne-trait);
 }
 
-.carte-vaucluse-dessin {
+.borne-route {
   position: absolute;
-  left: 7px;
-  top: 8px;
-  width: calc(100% - 14px);
-  height: calc(100% - 14px);
-  display: block;
+  left: 0;
+  top: 18%;
+  width: 200%;
+  height: 70%;
 }
 
-.carte-vaucluse-scotch {
+.borne-bord,
+.borne-bande,
+.borne-axe {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.borne-bord { stroke: var(--borne-trait); stroke-width: 14; }
+.borne-bande { stroke: var(--borne-creme); stroke-width: 8; }
+.borne-axe {
+  stroke: var(--borne-trait);
+  stroke-width: 1.6;
+  stroke-dasharray: 7 6;
+}
+
+.carte-vaucluse-bouton.carte-vaucluse-on .borne-route {
+  animation: borne-defile 4.2s linear infinite;
+}
+
+@keyframes borne-defile {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.borne-plaque {
   position: absolute;
-  width: 26px;
-  height: 11px;
-  background: var(--carte-scotch);
-  border: 2px solid var(--carte-encre);
-  z-index: 2;
+  right: 5px;
+  top: 4px;
+  min-width: 16px;
+  height: 14px;
+  padding: 0 2px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+  background: var(--borne-caisse);
+  border: 2px solid var(--borne-trait);
+  color: var(--borne-trait);
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
 
-.carte-vaucluse-scotch-haut {
-  left: 16px;
-  top: -6px;
-  width: 30px;
-  transform: rotate(-22deg);
-  transform-origin: 80% 100%;
+.borne-bas {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 14px;
+  flex: none;
 }
 
-.carte-vaucluse-scotch-bas {
-  left: 22px;
-  bottom: -4px;
-  transform: rotate(6deg);
+.borne-jalon {
+  position: relative;
+  width: 8px;
+  height: 12px;
+  flex: none;
+  box-sizing: border-box;
+  border-radius: 1px 1px 2px 2px;
+  background: var(--borne-creme);
+  border: 2px solid var(--borne-trait);
 }
 
-.carte-vaucluse-coin {
+.borne-jalon span {
   position: absolute;
-  right: 2px;
-  top: -4px;
-  width: 42px;
-  height: 32px;
-  background: var(--carte-coin);
-  border: 3px solid var(--carte-encre);
-  transform-origin: 0% 100%;
-  transform: rotate(-24deg);
-  box-shadow: 3px 4px 0 rgba(42, 26, 16, 0.22);
+  left: -2px;
+  right: -2px;
+  top: -2px;
+  height: 5px;
+  border-radius: 1px 1px 0 0;
+  background: var(--borne-rouge);
+  box-shadow: 0 0 0 2px var(--borne-trait);
 }
 
-.carte-vaucluse-on .carte-vaucluse-coin {
-  animation: none;
-  transform: rotate(-18deg);
-  box-shadow: 2px 3px 0 rgba(42, 26, 16, 0.28);
+.borne-nom {
+  flex: 1;
+  color: var(--borne-trait);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
 }
 
-[data-theme="dark"] .carte-vaucluse {
-  --carte-papier: #e6d3a4;
-  --carte-coin: #dcc592;
-  --carte-scotch: #e0c24e;
+.borne-oeil {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid var(--borne-trait);
+  background: #6d6a60;
 }
 
-@keyframes carte-vaucluse-flotte {
-  0%, 100% { transform: rotate(-7.5deg); }
-  50% { transform: rotate(-5.4deg); }
-}
-
-@keyframes carte-vaucluse-coin {
-  0%, 100% { transform: rotate(-20deg); }
-  50% { transform: rotate(-30deg); }
+.carte-vaucluse-bouton.carte-vaucluse-on .borne-oeil {
+  background: var(--borne-vert);
+  box-shadow: 0 0 6px rgba(79, 178, 122, 0.95);
 }
 
 @media (max-width: 768px) {
-  .carte-vaucluse {
-    width: 128px;
-    height: 96px;
-  }
+  .carte-vaucluse { width: 124px; height: 70px; }
+  .borne-nom { font-size: 7px; letter-spacing: 0.03em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .carte-vaucluse,
-  .carte-vaucluse-coin { animation: none; }
+  .carte-vaucluse-bouton.carte-vaucluse-on .borne-route { animation: none; }
 }
-
-

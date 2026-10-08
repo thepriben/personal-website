@@ -7,7 +7,7 @@
   function wrapCoord(value,min,max){var span=Math.max(1,max-min);if(value<min)return max-(min-value)%span;if(value>max)return min+(value-max)%span;return value;}
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
   function hasSavedPositions(){try{return !!localStorage.getItem(k);}catch(e){return false;}}
-  function loadAquariumMode(){try{var raw=localStorage.getItem(sk);if(raw==='2')return 2;if(raw==='1')return 1;return 0;}catch(e){return 0;}}
+  function loadAquariumMode(){try{var raw=localStorage.getItem(sk);if(raw==='1'||raw==='2')return 1;return 0;}catch(e){return 0;}}
   function saveAquariumMode(mode){try{localStorage.setItem(sk,String(mode));}catch(e){}}
   function save(p){try{localStorage.setItem(k,JSON.stringify(p));}catch(e){}}
   var pos=load();
@@ -60,8 +60,8 @@
   ];
   var aquariumMode=loadAquariumMode();
   var fishVisible=aquariumMode!==0;
-  function aquariumCardsHidden(){return aquariumMode===2;}
-  function cycleAquariumMode(){aquariumMode=(aquariumMode+1)%3;fishVisible=aquariumMode!==0;updateFishVisibility();}
+  function aquariumCardsHidden(){return fishVisible;}
+  function cycleAquariumMode(){aquariumMode=aquariumMode===0?1:0;fishVisible=aquariumMode!==0;updateFishVisibility();}
   function updateBounds(){var r=container?container.getBoundingClientRect():{width:0,height:0};var ft=document.querySelector('footer');bounds.w=r.width;bounds.h=ft?Math.min(r.height,Math.max(0,ft.getBoundingClientRect().top-r.top)):r.height;}
   function samePos(a,b){return !!a&&!!b&&Math.abs(a.x-b.x)<2&&Math.abs(a.y-b.y)<2;}
   function shouldUseAquariumDefaults(loaded){return !hasSavedPositions()||!loaded||!loaded.lang||!loaded.book||!loaded.article||!loaded.chapter||loaded.quakes||samePos(loaded.lang,legacyDef.lang)&&samePos(loaded.book,legacyDef.book);}
@@ -74,7 +74,7 @@
   function desktopPawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:120,h=pawn?pawn.offsetHeight:168,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.66),p,maxX),y=clamp(Math.round(bounds.h-h-24),p,maxY);return {x:x,y:y};}
   function sismoLayout(){var p=bounds.pad,w=sismo?sismo.offsetWidth:124,h=sismo?sismo.offsetHeight:72,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=bounds.w<720?p:clamp(Math.round(bounds.w*0.32),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?14:26)),p,maxY);return {x:x,y:y};}
   function placeSismo(loaded){if(!sismo)return;var layout=sismoLayout();if(loaded&&loaded.sismo&&typeof loaded.sismo.x==='number'&&typeof loaded.sismo.y==='number')pos.sismo={x:loaded.sismo.x,y:loaded.sismo.y};else pos.sismo=layout;}
-  function carteLayout(){return {x:bounds.w<720?10:16,y:bounds.w<720?8:14};}
+  function carteLayout(){var p=bounds.pad,w=carte?carte.offsetWidth:136,h=carte?carte.offsetHeight:76,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=bounds.w<720?p:clamp(Math.round(bounds.w*0.08),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?14:26)),p,maxY);return {x:x,y:y};}
   function placeCarte(){if(!carte)return;pos.carte=carteLayout();}
   function mobilePawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:100,h=pawn?pawn.offsetHeight:138,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.58),p,maxX),y=clamp(Math.round(bounds.h-h-10),p,maxY);return {x:x,y:y};}
   function resolveSavedPawnPos(savedPawn,layout){
@@ -232,7 +232,7 @@
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
-    if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.classList.toggle('is-muted',cardsHidden);fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',aquariumMode===0?'Show aquarium':aquariumMode===1?'Hide cards':'Turn aquarium off');}
+    if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.classList.remove('is-muted');fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',fishVisible?'Turn aquarium off':'Show aquarium');}
     if(!fishVisible){
       fishState.hitShift=0;
       fishState.hitLift=0;
@@ -545,7 +545,7 @@
   }
   function drag(el,key){
     var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0,currentTilt:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0,restY:0};
-    function heavyInWater(){return key==='pawn'||key==='sismo';}
+    function heavyInWater(){return key==='pawn'||key==='sismo'||key==='carte';}
     function pulsePawnFx(className,duration){if(key!=='pawn')return;el.classList.remove(className);void el.offsetWidth;el.classList.add(className);window.setTimeout(function(){el.classList.remove(className);},duration);}
     function setPawnImpactFx(scale,opacity,bubbleScale){if(key!=='pawn')return;el.style.setProperty('--pawn-impact-scale',scale.toFixed(3));el.style.setProperty('--pawn-impact-opacity',opacity.toFixed(3));el.style.setProperty('--pawn-bubble-burst-scale',bubbleScale.toFixed(3));}
     function applyWaterDrag(){if(key==='fish')return;el.style.setProperty('--drag-water-x',waterX.toFixed(2)+'px');el.style.setProperty('--drag-water-y',waterY.toFixed(2)+'px');el.style.setProperty('--drag-water-tilt',waterTilt.toFixed(2)+'deg');}
@@ -556,7 +556,7 @@
     function clearPawnSinkMotion(){if(!heavyInWater())return;pawnSinkMotion.active=false;pawnSinkMotion.vx=0;pawnSinkMotion.vy=0;pawnSinkMotion.maxVy=0;pawnSinkMotion.restY=0;}
     function startPawnSinkFx(vx,vy){if(!heavyInWater())return;pawnSinkFx.active=true;pawnSinkFx.startTs=performance.now();pawnSinkFx.ampX=clamp(4.2+Math.abs(vx)*0.0031,4.2,10.5);pawnSinkFx.ampY=clamp(1.2+Math.abs(vy)*0.001,1.2,3.2);pawnSinkFx.ampTilt=clamp(3.2+Math.abs(vx)*0.0016+Math.abs(vy)*0.0009,3.2,7.2);pawnSinkFx.phase=vx<0?Math.PI:0;pawnSinkFx.currentTilt=0;}
     function startPawnSinkMotion(vx,vy,restY){
-      if(key!=='pawn'&&key!=='sismo')return;
+      if(key!=='pawn'&&key!=='sismo'&&key!=='carte')return;
       var headingDown=restY>=pos[key].y;
       pawnSinkMotion.active=true;
       pawnSinkMotion.restY=restY;
@@ -582,7 +582,7 @@
       if(decay<0.05)clearPawnSinkFx();
     }
     function landPawn(){
-      if(key!=='pawn'&&key!=='sismo')return;
+      if(key!=='pawn'&&key!=='sismo'&&key!=='carte')return;
       var landedTilt=clamp((pawnSinkFx.currentTilt||0)*0.44 + (pawnSinkMotion.vx||0)*0.05,-2.2,2.2);
       if(Math.abs(landedTilt)<0.45)landedTilt=landedTilt<0?-0.55:0.55;
       applyPawnRestTilt(landedTilt);
@@ -707,7 +707,7 @@
         if(heavyInWater()){
           if(container)updateBounds();
           var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
-          var restLayout=key==='pawn'?(bounds.w<600?mobilePawnLayout():desktopPawnLayout()):sismoLayout();
+          var restLayout=key==='pawn'?(bounds.w<600?mobilePawnLayout():desktopPawnLayout()):key==='carte'?carteLayout():sismoLayout();
           var restY=clamp(restLayout.y,p,maxY);
           var driftX=clamp(pointerVx*0.0035,-5,5);
           var dropDistance=Math.max(0,restY-pos[key].y);
@@ -743,7 +743,7 @@
       stopDragRaf();
       dragActive=true;
       if(key==='fish'){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();}
-      if(key==='pawn'||key==='sismo'){el.classList.remove('pawn-sinking');clearPawnSinkMotion();}
+      if(key==='pawn'||key==='sismo'||key==='carte'){el.classList.remove('pawn-sinking');clearPawnSinkMotion();}
       if(key==='pawn'){el.classList.remove('pawn-drop');clearPawnSinkFx();clearPawnRestTilt();pulsePawnFx('pawn-lift',460);}
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);

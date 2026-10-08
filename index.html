@@ -8,7 +8,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q8WHXGDDWG"></script>
   <script src="js/site-head.js?v=20260310a"></script>
   <link rel="stylesheet" href="css/style.css?v=20260926a" />
-  <link rel="stylesheet" href="css/home.css?v=20261008a" />
+  <link rel="stylesheet" href="css/home.css?v=20261008b" />
 </head>
 <body class="page-home">
   <header>
@@ -310,26 +310,27 @@
         </div>
       </div>
       <div class="carte-vaucluse carte-vaucluse-hidden" id="carte-vaucluse">
-        <button type="button" class="carte-vaucluse-bouton" id="carte-vaucluse-bouton"
-                aria-pressed="false" aria-label="Show the Vaucluse roads">
-          <span class="carte-vaucluse-feuille">
-            <svg class="carte-vaucluse-dessin parchemin-dessin" viewBox="0 0 188 112" aria-hidden="true">
-              <g class="parchemin-encre">
-                <path d="M20 28 L30 60 L40 28"/>
-                <path d="M58 36 V60 M58 46 C58 32 42 32 42 46 C42 58 58 58 58 46"/>
-                <path d="M66 30 V50 C66 62 80 62 80 50 V30"/>
-                <path d="M98 34 C86 28 84 58 98 54"/>
-                <path d="M106 24 V60"/>
-                <path d="M114 30 V50 C114 62 128 62 128 50 V30"/>
-                <path d="M136 36 C126 30 124 44 134 48 C144 52 142 64 128 60"/>
-                <path d="M166 46 H150"/>
-                <path d="M164 36 C150 32 148 62 164 58"/>
-              </g>
-              <circle class="parchemin-sceau" cx="36" cy="86" r="11"/>
-              <text class="parchemin-numero" x="36" y="90">84</text>
-            </svg>
-          </span>
-        </button>
+        <div class="carte-vaucluse-motion">
+          <button type="button" class="carte-vaucluse-bouton" id="carte-vaucluse-bouton"
+                  aria-pressed="false" aria-controls="poste-direct"
+                  aria-label="Show the Vaucluse roads">
+            <span class="borne" aria-hidden="true">
+              <span class="borne-ecran">
+                <svg class="borne-route" viewBox="0 0 320 40" preserveAspectRatio="none">
+                  <path class="borne-bord" d="M0 22 C40 6 80 38 160 22 C200 6 240 38 320 22"/>
+                  <path class="borne-bande" d="M0 22 C40 6 80 38 160 22 C200 6 240 38 320 22"/>
+                  <path class="borne-axe" d="M0 22 C40 6 80 38 160 22 C200 6 240 38 320 22"/>
+                </svg>
+                <span class="borne-plaque">84</span>
+              </span>
+              <span class="borne-bas">
+                <span class="borne-jalon"><span></span></span>
+                <span class="borne-nom">VAUCLUSE</span>
+                <span class="borne-oeil"></span>
+              </span>
+            </span>
+          </button>
+        </div>
       </div>
       <div class="aquarium-front-frame" aria-hidden="true"></div>
       <div class="aquarium-bloom aquarium-bloom-hidden" id="aquarium-plume" aria-hidden="true">
@@ -432,6 +433,6 @@
     </a>
   </footer>
   <script src="js/theme.js?v=20261004e" defer></script>
-  <script src="js/home-aquarium.js?v=20261008a"></script>
+  <script src="js/home-aquarium.js?v=20261008b"></script>
 </body>
 </html>
