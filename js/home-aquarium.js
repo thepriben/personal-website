@@ -229,6 +229,8 @@
     if(pawn){pawn.classList.toggle('wrecked-pawn-hidden',!fishVisible);pawn.setAttribute('aria-hidden',fishVisible?'false':'true');}
     var carte=document.getElementById('carte-vaucluse');
     if(carte){carte.classList.toggle('carte-vaucluse-hidden',!fishVisible);carte.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    var blennie=document.getElementById('blennie');
+    if(blennie){blennie.classList.toggle('blennie-hidden',!fishVisible);blennie.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
@@ -242,7 +244,8 @@
       if(violet){violetState.hitX=0;violetState.hitY=0;updateVioletVisual();violet.classList.remove('clown-fish-bumped');}
       if(green){greenState.hitX=0;greenState.hitY=0;updateGreenVisual();green.classList.remove('clown-fish-bumped');}
       if(pawn){pawn.classList.remove('pawn-lift','pawn-drop','pawn-sinking');}
-      if(sismo){sismo.classList.remove('pawn-sinking');}
+      if(sismo){sismo.classList.remove('pawn-drop','pawn-sinking');}
+      if(carte){carte.classList.remove('pawn-drop','pawn-sinking');}
     }else{
       fishState.lastTs=0;
       fishState.anchorY=pos.fish.y;
@@ -546,8 +549,11 @@
   function drag(el,key){
     var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0,currentTilt:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0,restY:0};
     function heavyInWater(){return key==='pawn'||key==='sismo'||key==='carte';}
-    function pulsePawnFx(className,duration){if(key!=='pawn')return;el.classList.remove(className);void el.offsetWidth;el.classList.add(className);window.setTimeout(function(){el.classList.remove(className);},duration);}
-    function setPawnImpactFx(scale,opacity,bubbleScale){if(key!=='pawn')return;el.style.setProperty('--pawn-impact-scale',scale.toFixed(3));el.style.setProperty('--pawn-impact-opacity',opacity.toFixed(3));el.style.setProperty('--pawn-bubble-burst-scale',bubbleScale.toFixed(3));}
+    // Écrit pour le pion d'échecs. La radio a pris sa place, et le même
+    // nuage de sable part sous les trois objets quand ils touchent le fond.
+    function pulsePawnFx(className,duration){if(!heavyInWater())return;el.classList.remove(className);void el.offsetWidth;el.classList.add(className);window.setTimeout(function(){el.classList.remove(className);},duration);}
+    function setPawnImpactFx(scale,opacity,bubbleScale){if(!heavyInWater())return;el.style.setProperty('--pawn-impact-scale',scale.toFixed(3));el.style.setProperty('--pawn-impact-opacity',opacity.toFixed(3));el.style.setProperty('--pawn-bubble-burst-scale',bubbleScale.toFixed(3));}
+    function armImpact(dropDistance,vy){var impactEnergy=clamp((dropDistance+Math.abs(vy||0)*0.07)/140,0,1);setPawnImpactFx(0.92+impactEnergy*0.88,0.82+impactEnergy*0.42,0.92+impactEnergy*0.46);}
     function applyWaterDrag(){if(key==='fish')return;el.style.setProperty('--drag-water-x',waterX.toFixed(2)+'px');el.style.setProperty('--drag-water-y',waterY.toFixed(2)+'px');el.style.setProperty('--drag-water-tilt',waterTilt.toFixed(2)+'deg');}
     function applyPawnSinkFx(swayX,swayY,swayTilt){if(!heavyInWater())return;el.style.setProperty('--pawn-sink-sway-x',swayX.toFixed(2)+'px');el.style.setProperty('--pawn-sink-sway-y',swayY.toFixed(2)+'px');el.style.setProperty('--pawn-sink-sway-tilt',swayTilt.toFixed(2)+'deg');}
     function applyPawnRestTilt(tilt){if(!heavyInWater())return;el.style.setProperty('--pawn-rest-tilt',tilt.toFixed(2)+'deg');}
@@ -586,7 +592,7 @@
       var landedTilt=clamp((pawnSinkFx.currentTilt||0)*0.44 + (pawnSinkMotion.vx||0)*0.05,-2.2,2.2);
       if(Math.abs(landedTilt)<0.45)landedTilt=landedTilt<0?-0.55:0.55;
       applyPawnRestTilt(landedTilt);
-      if(key==='pawn')pulsePawnFx('pawn-drop',1100);
+      pulsePawnFx('pawn-drop',1100);
       pos[key].y=pawnSinkMotion.restY||dragTargetY;
       dragTargetX=pos[key].x;
       dragTargetY=pos[key].y;
@@ -643,8 +649,8 @@
       }else{
         dragRaf=0;
         dragLastTs=0;
-        if(key==='pawn'||key==='sismo'){
-          if(key==='pawn'&&pawnSinking)pulsePawnFx('pawn-drop',1100);
+        if(heavyInWater()){
+          if(pawnSinking)pulsePawnFx('pawn-drop',1100);
           el.classList.remove('pawn-sinking');
           clearPawnSinkFx();
           clearPawnSinkMotion();
@@ -713,10 +719,7 @@
           var dropDistance=Math.max(0,restY-pos[key].y);
           dragTargetX=clamp(pos[key].x+driftX,p,maxX);
           dragTargetY=restY;
-          if(key==='pawn'){
-            var impactEnergy=clamp((dropDistance+Math.abs(pointerVy)*0.07)/140,0,1);
-            setPawnImpactFx(0.92+impactEnergy*0.88,0.82+impactEnergy*0.42,0.92+impactEnergy*0.46);
-          }
+          armImpact(dropDistance,pointerVy);
           startPawnSinkMotion(pointerVx,pointerVy,restY);
           startPawnSinkFx(pointerVx,pointerVy);
           el.classList.add('pawn-sinking');
@@ -743,8 +746,8 @@
       stopDragRaf();
       dragActive=true;
       if(key==='fish'){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();}
-      if(key==='pawn'||key==='sismo'||key==='carte'){el.classList.remove('pawn-sinking');clearPawnSinkMotion();}
-      if(key==='pawn'){el.classList.remove('pawn-drop');clearPawnSinkFx();clearPawnRestTilt();pulsePawnFx('pawn-lift',460);}
+      if(key==='pawn'||key==='sismo'||key==='carte'){el.classList.remove('pawn-sinking','pawn-drop');clearPawnSinkMotion();}
+      if(key==='pawn'){clearPawnSinkFx();clearPawnRestTilt();pulsePawnFx('pawn-lift',460);}
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       startX=x;startY=y;
@@ -790,8 +793,7 @@
         dragTargetX=clamp(pos.pawn.x,p,maxX);
         dragTargetY=restY;
         var dropDistance=Math.max(0,restY-pos.pawn.y);
-        var impactEnergy=clamp(dropDistance/140,0,1);
-        setPawnImpactFx(0.92+impactEnergy*0.88,0.82+impactEnergy*0.42,0.92+impactEnergy*0.46);
+        armImpact(dropDistance,0);
         startPawnSinkMotion(0,dropDistance*4,restY);
         startPawnSinkFx(0,dropDistance*4);
         el.classList.add('pawn-sinking');
@@ -808,6 +810,8 @@
         dragTargetX=clamp(pos.sismo.x,sp,sMaxX);
         dragTargetY=restY;
         var dropDistance=Math.max(0,restY-pos.sismo.y);
+        el.classList.remove('pawn-drop');
+        armImpact(dropDistance,0);
         startPawnSinkMotion(0,dropDistance*4,restY);
         startPawnSinkFx(0,dropDistance*4);
         el.classList.add('pawn-sinking');
@@ -935,6 +939,84 @@
   if(plume)drag(plume,'plume');
   schedulePawnAutoDrop();
   window.addEventListener('load',schedulePawnAutoDrop);
+  var blennie=document.getElementById('blennie');
+  if(blennie&&container){
+    var nage=blennie.querySelector('.blennie-nage');
+    var trou=blennie.querySelector('.blennie-trou');
+    var corps=blennie.querySelector('.blennie-corps');
+    var fiche=document.getElementById('blennie-fiche');
+    var croix=blennie.querySelector('.blennie-croix');
+    var maison=0,sortie=false,ouverte=false,timer=0,retour=0,dernierSurvol=0;
+    var reduit=window.matchMedia('(prefers-reduced-motion: reduce)');
+    function ancreBlennie(){
+      var w=container.clientWidth;
+      var boites=[carte,sismo,pawn].filter(Boolean).map(function(el){
+        var l=el.offsetLeft;
+        return {l:l, r:l+el.offsetWidth};
+      }).sort(function(a,b){return a.l-b.l;});
+      var segments=[],curseur=12;
+      boites.forEach(function(b){
+        segments.push({l:curseur, r:b.l-10});
+        curseur=b.r+10;
+      });
+      segments.push({l:curseur, r:w-12});
+      var slot=null;
+      segments.forEach(function(s){
+        if(s.r-s.l<124)return;
+        if(!slot||(s.r-s.l)>(slot.r-slot.l))slot=s;
+      });
+      maison=slot?Math.round(Math.max(slot.l, slot.r-124)):Math.round(w*0.46);
+      maison=Math.max(8, Math.min(w-120, maison));
+      if(trou)trou.style.left=(maison+30)+'px';
+      if(!sortie&&nage)nage.style.left=maison+'px';
+    }
+    function fermeBlennie(){
+      ouverte=false;
+      if(fiche)fiche.hidden=true;
+      if(corps)corps.setAttribute('aria-expanded','false');
+    }
+    function basculeBlennie(){
+      ouverte=!ouverte;
+      if(fiche)fiche.hidden=!ouverte;
+      if(corps)corps.setAttribute('aria-expanded',ouverte?'true':'false');
+    }
+    if(corps){
+      corps.addEventListener('pointerenter',function(e){
+        if(e.pointerType==='touch')return;
+        dernierSurvol=performance.now();
+        basculeBlennie();
+      });
+      corps.addEventListener('click',function(){
+        if(performance.now()-dernierSurvol<450)return;
+        basculeBlennie();
+      });
+    }
+    if(croix)croix.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();fermeBlennie();});
+    function partBlennie(){
+      if(!fishVisible||ouverte||reduit.matches||!nage){timer=window.setTimeout(partBlennie,4000);return;}
+      ancreBlennie();
+      var max=Math.max(maison, container.clientWidth-nage.offsetWidth-16);
+      var pas=52+Math.random()*36;
+      var but=Math.random()<0.72?Math.min(max, maison+pas):Math.max(12, maison-pas);
+      if(Math.abs(but-maison)<24)but=Math.min(max, maison+56);
+      nage.classList.toggle('blennie-gauche', but<maison);
+      sortie=true;
+      nage.classList.add('blennie-sortie');
+      nage.style.left=but+'px';
+      retour=window.setTimeout(function(){
+        nage.classList.toggle('blennie-gauche', maison<but);
+        nage.style.left=maison+'px';
+        retour=window.setTimeout(function(){
+          sortie=false;
+          nage.classList.remove('blennie-sortie','blennie-gauche');
+          timer=window.setTimeout(partBlennie, 11000+Math.random()*7000);
+        }, 1200);
+      }, 1500);
+    }
+    ancreBlennie();
+    timer=window.setTimeout(partBlennie, 3200);
+    window.addEventListener('resize',function(){if(!sortie)ancreBlennie();});
+  }
 })();
 
 /* ---------------------------------------------------------------------------
