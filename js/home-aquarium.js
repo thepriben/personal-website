@@ -229,8 +229,6 @@
     if(pawn){pawn.classList.toggle('wrecked-pawn-hidden',!fishVisible);pawn.setAttribute('aria-hidden',fishVisible?'false':'true');}
     var carte=document.getElementById('carte-vaucluse');
     if(carte){carte.classList.toggle('carte-vaucluse-hidden',!fishVisible);carte.setAttribute('aria-hidden',fishVisible?'false':'true');}
-    var blennie=document.getElementById('blennie');
-    if(blennie){blennie.classList.toggle('blennie-hidden',!fishVisible);blennie.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
@@ -939,84 +937,6 @@
   if(plume)drag(plume,'plume');
   schedulePawnAutoDrop();
   window.addEventListener('load',schedulePawnAutoDrop);
-  var blennie=document.getElementById('blennie');
-  if(blennie&&container){
-    var nage=blennie.querySelector('.blennie-nage');
-    var trou=blennie.querySelector('.blennie-trou');
-    var corps=blennie.querySelector('.blennie-corps');
-    var fiche=document.getElementById('blennie-fiche');
-    var croix=blennie.querySelector('.blennie-croix');
-    var maison=0,sortie=false,ouverte=false,timer=0,retour=0,dernierSurvol=0;
-    var reduit=window.matchMedia('(prefers-reduced-motion: reduce)');
-    function ancreBlennie(){
-      var w=container.clientWidth;
-      var boites=[carte,sismo,pawn].filter(Boolean).map(function(el){
-        var l=el.offsetLeft;
-        return {l:l, r:l+el.offsetWidth};
-      }).sort(function(a,b){return a.l-b.l;});
-      var segments=[],curseur=12;
-      boites.forEach(function(b){
-        segments.push({l:curseur, r:b.l-10});
-        curseur=b.r+10;
-      });
-      segments.push({l:curseur, r:w-12});
-      var slot=null;
-      segments.forEach(function(s){
-        if(s.r-s.l<124)return;
-        if(!slot||(s.r-s.l)>(slot.r-slot.l))slot=s;
-      });
-      maison=slot?Math.round(Math.max(slot.l, slot.r-124)):Math.round(w*0.46);
-      maison=Math.max(8, Math.min(w-120, maison));
-      if(trou)trou.style.left=(maison+30)+'px';
-      if(!sortie&&nage)nage.style.left=maison+'px';
-    }
-    function fermeBlennie(){
-      ouverte=false;
-      if(fiche)fiche.hidden=true;
-      if(corps)corps.setAttribute('aria-expanded','false');
-    }
-    function basculeBlennie(){
-      ouverte=!ouverte;
-      if(fiche)fiche.hidden=!ouverte;
-      if(corps)corps.setAttribute('aria-expanded',ouverte?'true':'false');
-    }
-    if(corps){
-      corps.addEventListener('pointerenter',function(e){
-        if(e.pointerType==='touch')return;
-        dernierSurvol=performance.now();
-        basculeBlennie();
-      });
-      corps.addEventListener('click',function(){
-        if(performance.now()-dernierSurvol<450)return;
-        basculeBlennie();
-      });
-    }
-    if(croix)croix.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();fermeBlennie();});
-    function partBlennie(){
-      if(!fishVisible||ouverte||reduit.matches||!nage){timer=window.setTimeout(partBlennie,4000);return;}
-      ancreBlennie();
-      var max=Math.max(maison, container.clientWidth-nage.offsetWidth-16);
-      var pas=52+Math.random()*36;
-      var but=Math.random()<0.72?Math.min(max, maison+pas):Math.max(12, maison-pas);
-      if(Math.abs(but-maison)<24)but=Math.min(max, maison+56);
-      nage.classList.toggle('blennie-gauche', but<maison);
-      sortie=true;
-      nage.classList.add('blennie-sortie');
-      nage.style.left=but+'px';
-      retour=window.setTimeout(function(){
-        nage.classList.toggle('blennie-gauche', maison<but);
-        nage.style.left=maison+'px';
-        retour=window.setTimeout(function(){
-          sortie=false;
-          nage.classList.remove('blennie-sortie','blennie-gauche');
-          timer=window.setTimeout(partBlennie, 11000+Math.random()*7000);
-        }, 1200);
-      }, 1500);
-    }
-    ancreBlennie();
-    timer=window.setTimeout(partBlennie, 3200);
-    window.addEventListener('resize',function(){if(!sortie)ancreBlennie();});
-  }
 })();
 
 /* ---------------------------------------------------------------------------
