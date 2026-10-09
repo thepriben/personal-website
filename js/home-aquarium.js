@@ -981,43 +981,58 @@ var mur=(function(){
 /* ---------------------------------------------------------------------------
    LE POSTE DE RADIO
    ---------------------------------------------------------------------------
-   On pousse le gros bouton et la paroi du fond devient le site de la veille.
-   Ce site porte déjà le direct, et les explications techniques sont à côté,
-   tout de suite. On rappuie dessus et ça s'éteint. Le petit Y, en dessous,
-   ouvre ce même site dans un autre onglet. Échap éteint aussi, pour qui a
+   On pousse le gros bouton et la paroi du fond devient le direct YouTube,
+   rien d'autre. On rappuie dessus et ça s'éteint. Le petit Y, en dessous,
+   ouvre ce même direct dans un autre onglet. Échap éteint aussi, pour qui a
    les mains sur le clavier.
 
-   L'iframe n'est posée qu'au premier allumage — on ne fait pas charger le
-   site à quelqu'un venu lire une liste de livres — et elle est retirée à
+   L'iframe n'est posée qu'au premier allumage — on ne fait pas charger
+   YouTube à quelqu'un venu lire une liste de livres — et elle est retirée à
    l'extinction, parce qu'une image cachée qui continue de jouer derrière est
    une radio qu'on croit avoir éteinte.
 --------------------------------------------------------------------------- */
 (function(){
-  /* Le site lit lui-même data/direct.json et incruste le numéro en cours.
-     L'écrire ici reviendrait à figer un enregistrement fini le jour où
-     YouTube en ouvre un autre. play=1 lui demande de lancer le son. */
-  var SITE='https://medialoco.github.io/ventoux-watch/';
+  var CHAINE='UCvN0sNcj5JM9tklIkAlGi7g';
+  /* La veille écrit là le numéro du direct qu'elle alimente. YouTube en
+     donne un nouveau chaque fois qu'il termine une diffusion : l'écrire en
+     dur ici finirait par incruster un enregistrement fini. */
+  var VEILLE='https://raw.githubusercontent.com/Medialoco/ventoux-watch/main/data/direct.json';
   var poste=document.getElementById('wrecked-pawn');
   var bouton=document.getElementById('poste-bouton');
   var lien=document.getElementById('poste-y');
-  function adresse(){
-    var theme=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';
-    return SITE+'?play=1&theme='+theme;
+  var allume=false,numero='';
+
+  function adresseLive(){
+    return numero
+      ? 'https://www.youtube.com/watch?v='+numero
+      : 'https://www.youtube.com/channel/'+CHAINE+'/live';
+  }
+  function adresseMur(){
+    return numero
+      ? 'https://www.youtube.com/embed/'+numero+'?autoplay=1&rel=0'
+      : 'https://www.youtube.com/embed/live_stream?channel='+CHAINE+'&autoplay=1';
   }
   function poseLien(){
     if(!lien)return;
-    lien.href=adresse();
+    lien.href=adresseLive();
     lien.target='_blank';
     lien.rel='noopener';
-    lien.setAttribute('aria-label','Open the site with the live');
+    lien.setAttribute('aria-label','Open the live on YouTube');
   }
-  var allume=false;
-
+  function demande(){
+    if(!window.fetch)return;
+    fetch(VEILLE,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+      .then(function(d){
+        var video=d&&d.video;
+        if(!video||!/^[\w-]{11}$/.test(video)||video===numero)return;
+        numero=video;
+        poseLien();
+        if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresseMur();
+      }).catch(function(){});
+  }
+  demande();
+  setInterval(demande, 5*60*1000);
   poseLien();
-  document.addEventListener('theme-change',function(){
-    poseLien();
-    if(allume&&mur.qui()==='radio'&&mur.cadre())mur.cadre().src=adresse();
-  });
 
   function marque(){
     if(poste)poste.classList.toggle('poste-allume',allume);
@@ -1030,7 +1045,7 @@ var mur=(function(){
   function mets(oui){
     if(oui===allume&&(oui===false||mur.qui()==='radio'))return;
     if(oui){
-      var cadre=mur.pose('radio',adresse(),'Mont Serein','autoplay; encrypted-media; picture-in-picture');
+      var cadre=mur.pose('radio',adresseMur(),'Live','autoplay; encrypted-media; picture-in-picture');
       if(cadre)cadre.setAttribute('allowfullscreen','');
       allume=true;
     }else{
