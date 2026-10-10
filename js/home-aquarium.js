@@ -232,6 +232,7 @@
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
+    document.documentElement.classList.remove('aquarium-boot');
     if(fishToggle){fishToggle.classList.toggle('is-active',fishVisible);fishToggle.classList.remove('is-muted');fishToggle.setAttribute('aria-pressed',fishVisible?'true':'false');fishToggle.setAttribute('aria-label',fishVisible?'Turn aquarium off':'Show aquarium');}
     if(!fishVisible){
       fishState.hitShift=0;

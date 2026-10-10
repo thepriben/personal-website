@@ -15,4 +15,11 @@
   } catch (e) {}
 
   document.documentElement.setAttribute('data-theme', theme);
+
+  try {
+    var aquarium = localStorage.getItem('submarine-visible');
+    if (aquarium === '1' || aquarium === '2') {
+      document.documentElement.classList.add('aquarium-boot');
+    }
+  } catch (e) {}
 })();

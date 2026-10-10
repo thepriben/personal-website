@@ -276,6 +276,8 @@ body.page-home .main.postit-container {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  animation: none;
+  transition: none;
 }
 
 .aquarium-bubble-column {
@@ -888,15 +890,15 @@ body.page-home .main.postit-container {
   transform: scale(0.98) rotate(-0.6deg);
 }
 
-/* Le pion est revenu, mais sous le massif de droite, sur le sable.
+/* Le pion blanc d'avant, même boîte, même dessin, sous le massif de droite.
    Les tiges passent devant. Le clic traverse les feuilles. */
 .aquarium-pawn {
   position: absolute;
-  right: 8px;
-  bottom: 4px;
+  right: 0;
+  bottom: 0;
   z-index: 2;
-  width: 42px;
-  height: 56px;
+  width: 128px;
+  height: 176px;
   pointer-events: none;
   text-decoration: none;
 }
@@ -911,16 +913,16 @@ body.page-home .main.postit-container {
 }
 
 .aquarium-pawn-piece {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: url("../images/ui/pawn-wreck-light.svg?v=20260313a") center bottom / contain no-repeat;
-  filter: brightness(0.72) saturate(0.7);
-}
-
-[data-theme="dark"] .aquarium-pawn-piece {
+  position: absolute;
+  left: 13%;
+  top: 15%;
+  width: 76%;
+  height: 68%;
   background-image: url("../images/ui/pawn-wreck-dark.svg?v=20260313e");
-  filter: brightness(0.55) saturate(0.8);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  filter: brightness(0.93) sepia(0.08) saturate(0.94) contrast(0.98);
 }
 
 .aquarium-plant-veil {
@@ -928,17 +930,29 @@ body.page-home .main.postit-container {
   right: 0;
   bottom: 0;
   z-index: 4;
-  width: 86px;
-  height: 96px;
+  width: 140px;
+  height: 176px;
   pointer-events: none;
 }
 
-.aquarium-plant-veil-a { left: 28px; top: 28px; width: 42px; height: 26px; transform: rotate(-22deg); }
-.aquarium-plant-veil-b { left: 46px; top: 32px; width: 38px; height: 24px; transform: rotate(20deg); }
-.aquarium-plant-veil-c { left: 18px; top: 46px; width: 46px; height: 28px; transform: rotate(-14deg); }
-.aquarium-plant-veil-d { left: 44px; top: 50px; width: 40px; height: 26px; transform: rotate(16deg); }
-.aquarium-plant-veil-e { left: 24px; top: 64px; width: 48px; height: 28px; transform: rotate(-18deg); }
-.aquarium-plant-veil-f { left: 46px; top: 68px; width: 36px; height: 24px; transform: rotate(12deg); }
+.aquarium-plant-veil .aquarium-plant-veil-a { left: 8px; top: 0; width: 64px; height: 40px; transform: rotate(-22deg); }
+.aquarium-plant-veil .aquarium-plant-veil-b { left: 42px; top: -2px; width: 64px; height: 40px; transform: rotate(16deg); }
+.aquarium-plant-veil .aquarium-plant-veil-c { left: 76px; top: 2px; width: 60px; height: 38px; transform: rotate(-8deg); }
+.aquarium-plant-veil .aquarium-plant-veil-d { left: 4px; top: 28px; width: 66px; height: 40px; transform: rotate(12deg); }
+.aquarium-plant-veil .aquarium-plant-veil-e { left: 40px; top: 26px; width: 66px; height: 42px; transform: rotate(-18deg); }
+.aquarium-plant-veil .aquarium-plant-veil-f { left: 78px; top: 28px; width: 58px; height: 38px; transform: rotate(14deg); }
+.aquarium-plant-veil .aquarium-plant-veil-g { left: 10px; top: 54px; width: 64px; height: 40px; transform: rotate(-14deg); }
+.aquarium-plant-veil .aquarium-plant-veil-h { left: 46px; top: 52px; width: 64px; height: 40px; transform: rotate(20deg); }
+.aquarium-plant-veil .aquarium-plant-veil-i { left: 80px; top: 56px; width: 56px; height: 36px; transform: rotate(-10deg); }
+.aquarium-plant-veil .aquarium-plant-veil-j { left: 6px; top: 82px; width: 66px; height: 40px; transform: rotate(8deg); }
+.aquarium-plant-veil .aquarium-plant-veil-k { left: 42px; top: 80px; width: 66px; height: 42px; transform: rotate(-16deg); }
+.aquarium-plant-veil .aquarium-plant-veil-l { left: 78px; top: 84px; width: 58px; height: 36px; transform: rotate(12deg); }
+.aquarium-plant-veil .aquarium-plant-veil-m { left: 8px; top: 110px; width: 64px; height: 38px; transform: rotate(-12deg); }
+.aquarium-plant-veil .aquarium-plant-veil-n { left: 44px; top: 108px; width: 66px; height: 40px; transform: rotate(18deg); }
+.aquarium-plant-veil .aquarium-plant-veil-o { left: 76px; top: 112px; width: 58px; height: 36px; transform: rotate(-6deg); }
+.aquarium-plant-veil .aquarium-plant-veil-p { left: 22px; top: 4px; width: 84px; height: 52px; transform: rotate(-8deg); border-radius: 50%; }
+.aquarium-plant-veil .aquarium-plant-veil-q { left: 46px; top: 0; width: 76px; height: 48px; transform: rotate(14deg); border-radius: 50%; }
+.aquarium-plant-veil .aquarium-plant-veil-r { left: 30px; top: 22px; width: 80px; height: 46px; transform: rotate(-18deg); border-radius: 48%; }
 
 [data-theme="dark"] .aquarium-plant {
   --plant-stem: #639e78;
