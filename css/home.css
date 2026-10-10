@@ -888,6 +888,58 @@ body.page-home .main.postit-container {
   transform: scale(0.98) rotate(-0.6deg);
 }
 
+/* Le pion est revenu, mais sous le massif de droite, sur le sable.
+   Les tiges passent devant. Le clic traverse les feuilles. */
+.aquarium-pawn {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  z-index: 2;
+  width: 42px;
+  height: 56px;
+  pointer-events: none;
+  text-decoration: none;
+}
+
+.postit-container.aquarium-active .aquarium-pawn {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.aquarium-pawn:focus-visible {
+  outline: none;
+}
+
+.aquarium-pawn-piece {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: url("../images/ui/pawn-wreck-light.svg?v=20260313a") center bottom / contain no-repeat;
+  filter: brightness(0.72) saturate(0.7);
+}
+
+[data-theme="dark"] .aquarium-pawn-piece {
+  background-image: url("../images/ui/pawn-wreck-dark.svg?v=20260313e");
+  filter: brightness(0.55) saturate(0.8);
+}
+
+.aquarium-plant-veil {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  width: 86px;
+  height: 96px;
+  pointer-events: none;
+}
+
+.aquarium-plant-veil-a { left: 28px; top: 28px; width: 42px; height: 26px; transform: rotate(-22deg); }
+.aquarium-plant-veil-b { left: 46px; top: 32px; width: 38px; height: 24px; transform: rotate(20deg); }
+.aquarium-plant-veil-c { left: 18px; top: 46px; width: 46px; height: 28px; transform: rotate(-14deg); }
+.aquarium-plant-veil-d { left: 44px; top: 50px; width: 40px; height: 26px; transform: rotate(16deg); }
+.aquarium-plant-veil-e { left: 24px; top: 64px; width: 48px; height: 28px; transform: rotate(-18deg); }
+.aquarium-plant-veil-f { left: 46px; top: 68px; width: 36px; height: 24px; transform: rotate(12deg); }
+
 [data-theme="dark"] .aquarium-plant {
   --plant-stem: #639e78;
   --plant-stem-deep: #345a43;
