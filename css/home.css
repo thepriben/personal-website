@@ -890,31 +890,79 @@ body.page-home .main.postit-container {
   transform: scale(0.98) rotate(-0.6deg);
 }
 
-/* Le pion blanc d'origine, au plan de la vitre du fond, tout à droite.
-   Les plantes du massif passent devant. */
+/* Le pion blanc d'origine : même physique que la radio, le sismo et la carte. */
 .aquarium-pawn {
+  --drag-water-x: 0px;
+  --drag-water-y: 0px;
+  --drag-water-tilt: 0deg;
+  --pawn-sink-sway-x: 0px;
+  --pawn-sink-sway-y: 0px;
+  --pawn-sink-sway-tilt: 0deg;
+  --pawn-rest-tilt: 0deg;
+  --pawn-lift-y: 0px;
+  --pawn-grain: rgba(170, 131, 82, 0.86);
+  --pawn-grain-soft: rgba(231, 201, 150, 0.72);
+  --pawn-impact-scale: 1;
+  --pawn-impact-opacity: 1;
+  --pawn-bubble-burst-scale: 1;
   position: absolute;
-  right: -4px;
-  bottom: 6px;
-  z-index: 1;
+  z-index: 2;
   width: 128px;
   height: 176px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  overflow: visible;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  text-decoration: none;
 }
 
 .postit-container.aquarium-active .aquarium-pawn {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  cursor: pointer;
 }
 
-.aquarium-pawn:focus-visible {
-  outline: none;
+.aquarium-pawn.aquarium-pawn-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
+
+.aquarium-pawn * { pointer-events: none; }
+
+.aquarium-pawn.postit-dragging { cursor: grabbing; }
+
+.aquarium-pawn-motion {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(0, var(--pawn-lift-y), 0) rotate(var(--pawn-rest-tilt));
+  transform-origin: 50% 84%;
+  will-change: transform;
+}
+
+.aquarium-pawn.postit-dragging .aquarium-pawn-motion,
+.aquarium-pawn.postit-water-settling .aquarium-pawn-motion,
+.aquarium-pawn.pawn-sinking .aquarium-pawn-motion {
+  transform: translate3d(
+      calc(var(--drag-water-x) + var(--pawn-sink-sway-x)),
+      calc(var(--drag-water-y) + var(--pawn-sink-sway-y) + var(--pawn-lift-y)),
+      0
+    )
+    rotate(calc(var(--pawn-rest-tilt) + var(--drag-water-tilt) + var(--pawn-sink-sway-tilt)));
+}
+
+.aquarium-pawn.pawn-sinking { --pawn-lift-y: 3px; }
+
+.aquarium-pawn-lien {
+  position: absolute;
+  inset: 0;
+  display: block;
+  text-decoration: none;
+}
+
+.aquarium-pawn-lien:focus-visible { outline: none; }
 
 [data-theme="dark"] .aquarium-plant {
   --plant-stem: #639e78;
@@ -1637,16 +1685,25 @@ body.page-home .main.postit-container {
 .wrecked-pawn-grain-e { left: 58%; top: 79%; }
 .wrecked-pawn-grain-f { left: 64%; top: 74%; width: 3px; height: 3px; }
 
-.wrecked-pawn.postit-dragging .wrecked-pawn-grain-a { animation: pawn-grain-drift 0.94s linear infinite; }
-.wrecked-pawn.postit-dragging .wrecked-pawn-grain-b { animation: pawn-grain-drift 0.82s linear infinite -0.2s; }
-.wrecked-pawn.postit-dragging .wrecked-pawn-grain-c { animation: pawn-grain-drift 1.02s linear infinite -0.36s; }
+.wrecked-pawn.postit-dragging .wrecked-pawn-grain-a,
+.aquarium-pawn.postit-dragging .wrecked-pawn-grain-a { animation: pawn-grain-drift 0.94s linear infinite; }
+.wrecked-pawn.postit-dragging .wrecked-pawn-grain-b,
+.aquarium-pawn.postit-dragging .wrecked-pawn-grain-b { animation: pawn-grain-drift 0.82s linear infinite -0.2s; }
+.wrecked-pawn.postit-dragging .wrecked-pawn-grain-c,
+.aquarium-pawn.postit-dragging .wrecked-pawn-grain-c { animation: pawn-grain-drift 1.02s linear infinite -0.36s; }
 
-.wrecked-pawn.pawn-lift .wrecked-pawn-grain-a { animation: pawn-grain-lift 0.48s ease-out; }
-.wrecked-pawn.pawn-lift .wrecked-pawn-grain-b { animation: pawn-grain-lift 0.48s ease-out 0.04s; }
-.wrecked-pawn.pawn-lift .wrecked-pawn-grain-c { animation: pawn-grain-lift 0.48s ease-out 0.08s; }
-.wrecked-pawn.pawn-lift .wrecked-pawn-grain-d { animation: pawn-grain-lift 0.48s ease-out 0.02s; }
-.wrecked-pawn.pawn-lift .wrecked-pawn-grain-e { animation: pawn-grain-lift 0.48s ease-out 0.06s; }
-.wrecked-pawn.pawn-lift .wrecked-pawn-grain-f { animation: pawn-grain-lift 0.48s ease-out 0.1s; }
+.wrecked-pawn.pawn-lift .wrecked-pawn-grain-a,
+.aquarium-pawn.pawn-lift .wrecked-pawn-grain-a { animation: pawn-grain-lift 0.48s ease-out; }
+.wrecked-pawn.pawn-lift .wrecked-pawn-grain-b,
+.aquarium-pawn.pawn-lift .wrecked-pawn-grain-b { animation: pawn-grain-lift 0.48s ease-out 0.04s; }
+.wrecked-pawn.pawn-lift .wrecked-pawn-grain-c,
+.aquarium-pawn.pawn-lift .wrecked-pawn-grain-c { animation: pawn-grain-lift 0.48s ease-out 0.08s; }
+.wrecked-pawn.pawn-lift .wrecked-pawn-grain-d,
+.aquarium-pawn.pawn-lift .wrecked-pawn-grain-d { animation: pawn-grain-lift 0.48s ease-out 0.02s; }
+.wrecked-pawn.pawn-lift .wrecked-pawn-grain-e,
+.aquarium-pawn.pawn-lift .wrecked-pawn-grain-e { animation: pawn-grain-lift 0.48s ease-out 0.06s; }
+.wrecked-pawn.pawn-lift .wrecked-pawn-grain-f,
+.aquarium-pawn.pawn-lift .wrecked-pawn-grain-f { animation: pawn-grain-lift 0.48s ease-out 0.1s; }
 
 .pawn-drop .wrecked-pawn-grain-a { animation: pawn-grain-drop 0.72s ease-out; }
 .pawn-drop .wrecked-pawn-grain-b { animation: pawn-grain-drop 0.72s ease-out 0.03s; }
@@ -3081,8 +3138,6 @@ body.page-home .main.postit-container {
   .aquarium-pawn {
     width: 104px;
     height: 144px;
-    right: 2px;
-    bottom: 8px;
   }
 
   .aquarium-pebble-field {
@@ -3192,8 +3247,6 @@ body.page-home .main.postit-container {
   .aquarium-pawn {
     width: 88px;
     height: 122px;
-    right: 0;
-    bottom: 6px;
   }
 
   .aquarium-pebble-field {

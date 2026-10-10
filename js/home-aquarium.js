@@ -29,6 +29,7 @@
   if(!pos.plume||typeof pos.plume.x!=='number'||typeof pos.plume.y!=='number')pos.plume={x:def.plume.x,y:def.plume.y};
   if(!pos.sismo||typeof pos.sismo.x!=='number'||typeof pos.sismo.y!=='number')pos.sismo={x:def.sismo.x,y:def.sismo.y};
   if(!pos.carte||typeof pos.carte.x!=='number'||typeof pos.carte.y!=='number')pos.carte={x:0,y:0};
+  if(!pos.pion||typeof pos.pion.x!=='number'||typeof pos.pion.y!=='number')pos.pion={x:0,y:0};
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var article=document.getElementById('postit-article');
@@ -41,6 +42,7 @@
   var plume=document.getElementById('aquarium-plume');
   var sismo=document.getElementById('sismo-station');
   var carte=document.getElementById('carte-vaucluse');
+  var pion=document.getElementById('aquarium-pawn');
   var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
   var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:article,key:'article'},{el:chapter,key:'chapter'},{el:fish,key:'fish'}];
@@ -76,6 +78,8 @@
   function placeSismo(loaded){if(!sismo)return;var layout=sismoLayout();if(loaded&&loaded.sismo&&typeof loaded.sismo.x==='number'&&typeof loaded.sismo.y==='number')pos.sismo={x:loaded.sismo.x,y:loaded.sismo.y};else pos.sismo=layout;}
   function carteLayout(){var p=bounds.pad,w=carte?carte.offsetWidth:136,h=carte?carte.offsetHeight:76,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=bounds.w<720?p:clamp(Math.round(bounds.w*0.08),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?14:26)),p,maxY);return {x:x,y:y};}
   function placeCarte(){if(!carte)return;pos.carte=carteLayout();}
+  function pionLayout(){var p=bounds.pad,w=pion?pion.offsetWidth:128,h=pion?pion.offsetHeight:176,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w-w-(bounds.w<720?2:6)),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?6:10)),p,maxY);return {x:x,y:y};}
+  function placePion(loaded){if(!pion)return;var layout=pionLayout();if(loaded&&loaded.pion&&typeof loaded.pion.x==='number'&&typeof loaded.pion.y==='number')pos.pion={x:loaded.pion.x,y:loaded.pion.y};else pos.pion=layout;}
   function mobilePawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:100,h=pawn?pawn.offsetHeight:138,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.58),p,maxX),y=clamp(Math.round(bounds.h-h-10),p,maxY);return {x:x,y:y};}
   function resolveSavedPawnPos(savedPawn,layout){
     if(!savedPawn||typeof savedPawn.x!=='number'||typeof savedPawn.y!=='number')return null;
@@ -96,6 +100,7 @@
   }
   var pawnAutoDrop=null;
   var sismoAutoDrop=null;
+  var pionAutoDrop=null;
   var pawnLandingLift=3;
   function pawnIsAirborne(restY){
     if(!pawn||typeof pos.pawn.y!=='number')return false;
@@ -110,6 +115,10 @@
     if(sismoAutoDrop){
       window.requestAnimationFrame(function(){window.requestAnimationFrame(sismoAutoDrop);});
       window.setTimeout(sismoAutoDrop,140);
+    }
+    if(pionAutoDrop){
+      window.requestAnimationFrame(function(){window.requestAnimationFrame(pionAutoDrop);});
+      window.setTimeout(pionAutoDrop,140);
     }
   }
   function fishRange(el){var off=Math.max(42,Math.round(el.offsetWidth*0.46));return {minX:-el.offsetWidth-off,maxX:bounds.w+off};}
@@ -229,6 +238,7 @@
     if(pawn){pawn.classList.toggle('wrecked-pawn-hidden',!fishVisible);pawn.setAttribute('aria-hidden',fishVisible?'false':'true');}
     var carte=document.getElementById('carte-vaucluse');
     if(carte){carte.classList.toggle('carte-vaucluse-hidden',!fishVisible);carte.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    if(pion){pion.classList.toggle('aquarium-pawn-hidden',!fishVisible);pion.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
@@ -245,6 +255,7 @@
       if(pawn){pawn.classList.remove('pawn-lift','pawn-drop','pawn-sinking');}
       if(sismo){sismo.classList.remove('pawn-drop','pawn-sinking');}
       if(carte){carte.classList.remove('pawn-drop','pawn-sinking');}
+      if(pion){pion.classList.remove('pawn-lift','pawn-drop','pawn-sinking');}
     }else{
       fishState.lastTs=0;
       fishState.anchorY=pos.fish.y;
@@ -255,6 +266,7 @@
       if(pawn)clampPos(pawn,'pawn');
       if(sismo)clampPos(sismo,'sismo');
       if(carte)clampPos(carte,'carte');
+      if(pion)clampPos(pion,'pion');
     }
     saveAquariumMode(aquariumMode);
     schedulePawnAutoDrop();
@@ -340,6 +352,7 @@
       }
       placeSismo(loaded);
       placeCarte(loaded);
+      placePion(loaded);
     }else if(bounds.w<1040){
       var mediumDefaults=mediumLayout();
       posts.forEach(function(p){
@@ -371,6 +384,7 @@
       }
       placeSismo(loaded);
       placeCarte(loaded);
+      placePion(loaded);
     }else{
       var wideDefaults=desktopLayout();
       var useWideDefaults=shouldUseAquariumDefaults(loaded);
@@ -410,6 +424,7 @@
       }
       placeSismo(useWideDefaults?null:loaded);
       placeCarte(useWideDefaults?null:loaded);
+      placePion(useWideDefaults?null:loaded);
     }
     placeBlooms(loaded);
     posts.forEach(function(p){if(p.el)clampPos(p.el,p.key);});
@@ -420,6 +435,7 @@
     if(pawn)clampPos(pawn,'pawn');
     if(sismo)clampPos(sismo,'sismo');
     if(carte)clampPos(carte,'carte');
+    if(pion)clampPos(pion,'pion');
     schedulePawnAutoDrop();
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];}});
@@ -547,7 +563,7 @@
   }
   function drag(el,key){
     var startX,startY,ox,oy,moved,lastPointerX,lastPointerY,lastPointerTs,lastHitTs,waterX=0,waterY=0,waterTilt=0,waterRaf=0,dragTargetX=0,dragTargetY=0,dragRaf=0,dragActive=false,dragLastTs=0,pointerVx=0,pointerVy=0,pawnSinkFx={active:false,startTs:0,ampX:0,ampY:0,ampTilt:0,phase:0,currentTilt:0},pawnSinkMotion={active:false,vx:0,vy:0,maxVy:0,restY:0};
-    function heavyInWater(){return key==='pawn'||key==='sismo'||key==='carte';}
+    function heavyInWater(){return key==='pawn'||key==='sismo'||key==='carte'||key==='pion';}
     // Écrit pour le pion d'échecs. La radio a pris sa place, et le même
     // nuage de sable part sous les trois objets quand ils touchent le fond.
     function pulsePawnFx(className,duration){if(!heavyInWater())return;el.classList.remove(className);void el.offsetWidth;el.classList.add(className);window.setTimeout(function(){el.classList.remove(className);},duration);}
@@ -561,7 +577,7 @@
     function clearPawnSinkMotion(){if(!heavyInWater())return;pawnSinkMotion.active=false;pawnSinkMotion.vx=0;pawnSinkMotion.vy=0;pawnSinkMotion.maxVy=0;pawnSinkMotion.restY=0;}
     function startPawnSinkFx(vx,vy){if(!heavyInWater())return;pawnSinkFx.active=true;pawnSinkFx.startTs=performance.now();pawnSinkFx.ampX=clamp(4.2+Math.abs(vx)*0.0031,4.2,10.5);pawnSinkFx.ampY=clamp(1.2+Math.abs(vy)*0.001,1.2,3.2);pawnSinkFx.ampTilt=clamp(3.2+Math.abs(vx)*0.0016+Math.abs(vy)*0.0009,3.2,7.2);pawnSinkFx.phase=vx<0?Math.PI:0;pawnSinkFx.currentTilt=0;}
     function startPawnSinkMotion(vx,vy,restY){
-      if(key!=='pawn'&&key!=='sismo'&&key!=='carte')return;
+      if(!heavyInWater())return;
       var headingDown=restY>=pos[key].y;
       pawnSinkMotion.active=true;
       pawnSinkMotion.restY=restY;
@@ -587,7 +603,7 @@
       if(decay<0.05)clearPawnSinkFx();
     }
     function landPawn(){
-      if(key!=='pawn'&&key!=='sismo'&&key!=='carte')return;
+      if(!heavyInWater())return;
       var landedTilt=clamp((pawnSinkFx.currentTilt||0)*0.44 + (pawnSinkMotion.vx||0)*0.05,-2.2,2.2);
       if(Math.abs(landedTilt)<0.45)landedTilt=landedTilt<0?-0.55:0.55;
       applyPawnRestTilt(landedTilt);
@@ -712,7 +728,7 @@
         if(heavyInWater()){
           if(container)updateBounds();
           var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
-          var restLayout=key==='pawn'?(bounds.w<600?mobilePawnLayout():desktopPawnLayout()):key==='carte'?carteLayout():sismoLayout();
+          var restLayout=key==='pawn'?(bounds.w<600?mobilePawnLayout():desktopPawnLayout()):key==='carte'?carteLayout():key==='pion'?pionLayout():sismoLayout();
           var restY=clamp(restLayout.y,p,maxY);
           var driftX=clamp(pointerVx*0.0035,-5,5);
           var dropDistance=Math.max(0,restY-pos[key].y);
@@ -735,7 +751,7 @@
       setTimeout(function(){moved=false;},0);
     }
     function start(e){
-      if((key==='fish'||key==='pawn'||key==='plume'||key==='sismo'||key==='carte')&&!fishVisible)return;
+      if((key==='fish'||key==='pawn'||key==='plume'||key==='sismo'||key==='carte'||key==='pion')&&!fishVisible)return;
       e.preventDefault();
       moved=false;
       pointerVx=0;
@@ -745,8 +761,8 @@
       stopDragRaf();
       dragActive=true;
       if(key==='fish'){fishState.hitShift=0;fishState.hitLift=0;updateFishVisual();}
-      if(key==='pawn'||key==='sismo'||key==='carte'){el.classList.remove('pawn-sinking','pawn-drop');clearPawnSinkMotion();}
-      if(key==='pawn'){clearPawnSinkFx();clearPawnRestTilt();pulsePawnFx('pawn-lift',460);}
+      if(heavyInWater()){el.classList.remove('pawn-sinking','pawn-drop');clearPawnSinkMotion();}
+      if(key==='pawn'||key==='pion'){clearPawnSinkFx();clearPawnRestTilt();pulsePawnFx('pawn-lift',460);}
       var x=e.clientX||(e.touches&&e.touches[0].clientX);
       var y=e.clientY||(e.touches&&e.touches[0].clientY);
       startX=x;startY=y;
@@ -809,6 +825,24 @@
         dragTargetX=clamp(pos.sismo.x,sp,sMaxX);
         dragTargetY=restY;
         var dropDistance=Math.max(0,restY-pos.sismo.y);
+        el.classList.remove('pawn-drop');
+        armImpact(dropDistance,0);
+        startPawnSinkMotion(0,dropDistance*4,restY);
+        startPawnSinkFx(0,dropDistance*4);
+        el.classList.add('pawn-sinking');
+        if(!dragRaf)dragRaf=window.requestAnimationFrame(animateDrag);
+      };
+    }
+    if(key==='pion'){
+      pionAutoDrop=function(){
+        if(!pion||!fishVisible||el.classList.contains('postit-dragging')||el.classList.contains('pawn-sinking'))return;
+        if(container)updateBounds();
+        var pp=bounds.pad,pMaxX=Math.max(pp,bounds.w-el.offsetWidth-pp),pMaxY=Math.max(pp,bounds.h-el.offsetHeight-pp);
+        var restY=clamp(pionLayout().y,pp,pMaxY);
+        if(pos.pion.y>=restY-pawnLandingLift-2)return;
+        dragTargetX=clamp(pos.pion.x,pp,pMaxX);
+        dragTargetY=restY;
+        var dropDistance=Math.max(0,restY-pos.pion.y);
         el.classList.remove('pawn-drop');
         armImpact(dropDistance,0);
         startPawnSinkMotion(0,dropDistance*4,restY);
@@ -932,6 +966,7 @@
   if(pawn)drag(pawn,'pawn');
   if(sismo)drag(sismo,'sismo');
   if(carte)drag(carte,'carte');
+  if(pion)drag(pion,'pion');
   if(clown)dragBuddy(clown,'clown',clownState,clownMotion,updateClownVisual);
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);
