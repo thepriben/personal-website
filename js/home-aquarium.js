@@ -979,7 +979,8 @@
    LA PAROI DU FOND
    ---------------------------------------------------------------------------
    Une seule image à la fois. Le poste y met Mont Serein, la carte du
-   Vaucluse y met les routes, le sismographe y met le sien. La dernière
+   Vaucluse y met les routes, le sismographe y met le sien, le pion le
+   projet d'échecs. La dernière
    pression gagne, Échap éteint, et l'iframe n'existe que tant que
    quelque chose est allumé.
 --------------------------------------------------------------------------- */
@@ -1157,6 +1158,52 @@ var mur=(function(){
   bouton.addEventListener('click',function(){mets(!allume);});
   document.addEventListener('mur-change',function(){
     if(mur.qui()==='sismo')return;
+    if(!allume)return;
+    coupe();
+    marque();
+  });
+  if(window.MutationObserver&&bac){
+    new MutationObserver(function(){
+      if(!bac.classList.contains('aquarium-active'))mets(false);
+    }).observe(bac,{attributes:true,attributeFilter:['class']});
+  }
+  marque();
+})();
+
+/* ---------------------------------------------------------------------------
+   LE PION D'ÉCHECS
+   ---------------------------------------------------------------------------
+   Même geste que le sismographe et la carte : un clic allume la vitre du
+   fond, un second clic l'éteint. Le glisser reste ailleurs.
+--------------------------------------------------------------------------- */
+(function(){
+  var SITE='echecs-entrainement.html';
+  var station=document.getElementById('aquarium-pawn');
+  var bouton=document.getElementById('aquarium-pawn-bouton');
+  var bac=document.querySelector('.postit-container');
+  if(!station||!bouton)return;
+  var allume=false;
+
+  function marque(){
+    station.classList.toggle('pion-allume',allume);
+    bouton.setAttribute('aria-pressed',allume?'true':'false');
+    bouton.setAttribute('aria-label',allume?'Masquer le projet d’entraînement aux échecs':'Afficher le projet d’entraînement aux échecs');
+  }
+  function coupe(){allume=false;}
+  function mets(oui){
+    if(oui===allume&&(oui===false||mur.qui()==='pion'))return;
+    if(oui){
+      mur.pose('pion',SITE,'PyQt6 Chess Trainer');
+      allume=true;
+    }else{
+      coupe();
+      if(mur.qui()==='pion')mur.retire();
+    }
+    marque();
+  }
+  bouton.addEventListener('click',function(){mets(!allume);});
+  document.addEventListener('mur-change',function(){
+    if(mur.qui()==='pion')return;
     if(!allume)return;
     coupe();
     marque();

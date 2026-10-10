@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyQt6 Chess Trainer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --fond: #0d1418;
+      --texte: #e8eef2;
+      --muted: #9eb0ba;
+      --lien: #78cbdf;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 1.25rem 1.5rem 1.5rem;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      background: var(--fond);
+      color: var(--texte);
+    }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.15rem;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+    }
+    .ref {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .shot {
+      display: block;
+      width: min(100%, 420px);
+      margin: 0 0 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(120, 203, 227, 0.22);
+    }
+    p { margin: 0 0 0.75rem; max-width: 36em; }
+    ul {
+      margin: 0 0 1rem;
+      padding-left: 1.1rem;
+      max-width: 36em;
+    }
+    li { margin: 0.25rem 0; }
+    a { color: var(--lien); }
+    code {
+      font-size: 0.88em;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.12em 0.35em;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>PyQt6 Chess Trainer</h1>
+  <p class="ref"><i>Programmez!</i> n°272, 2025, pp. 31-33</p>
+  <img class="shot" src="https://raw.githubusercontent.com/thepriben/pyqt6-echecs-entrainement/main/image.png" width="420" height="280" alt="Capture de l’application d’entraînement aux échecs" loading="lazy" />
+  <p>Après chaque coup, Stockfish propose le meilleur coup du camp opposé. PyQt6, python-chess, Stockfish.</p>
+  <ul>
+    <li><a href="https://github.com/thepriben/pyqt6-echecs-entrainement" target="_blank" rel="noopener">Dépôt GitHub</a></li>
+    <li><a href="https://github.com/thepriben/pyqt6-echecs-entrainement/releases/tag/v1.0.0" target="_blank" rel="noopener">Release — parution Programmez!</a></li>
+    <li><a href="https://www.programmez.com/magazine/article/construire-une-application-dentrainement-aux-echecs-avec-pyqt6-python-chess-et-stockfish" target="_blank" rel="noopener">Article Programmez!</a></li>
+  </ul>
+  <p><code>pip install -r requirements.txt</code> puis <code>python3 main.py</code> (Stockfish installé à part).</p>
+</body>
+</html>

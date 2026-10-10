@@ -955,14 +955,27 @@ body.page-home .main.postit-container {
 
 .aquarium-pawn.pawn-sinking { --pawn-lift-y: 3px; }
 
-.aquarium-pawn-lien {
+.aquarium-pawn-bouton {
   position: absolute;
   inset: 0;
-  display: block;
-  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
 }
 
-.aquarium-pawn-lien:focus-visible { outline: none; }
+.aquarium-pawn-bouton:focus-visible {
+  outline: 3px solid rgba(120, 203, 227, 0.85);
+  outline-offset: 3px;
+}
+
+.aquarium-pawn.pion-allume .wrecked-pawn-illustration {
+  filter: brightness(0.99) sepia(0.06) saturate(0.98) contrast(0.98)
+    drop-shadow(0 0 10px rgba(120, 203, 227, 0.55));
+}
 
 [data-theme="dark"] .aquarium-plant {
   --plant-stem: #639e78;
