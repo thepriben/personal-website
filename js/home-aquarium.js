@@ -2,7 +2,7 @@
   var k='postit-pos';
   var sk='submarine-visible';
   var legacyDef={lang:{x:40,y:40},book:{x:328,y:80}};
-  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},chapter:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364},plume:{x:280,y:96},sismo:{x:360,y:420}};
+  var def={lang:{x:8,y:36},book:{x:420,y:72},article:{x:24,y:322},chapter:{x:980,y:48},fish:{x:-150,y:196},clown:{x:820,y:282},violet:{x:240,y:314},green:{x:610,y:238},pawn:{x:748,y:364},plume:{x:280,y:96},sismo:{x:360,y:420},circuit:{x:420,y:52}};
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
   function wrapCoord(value,min,max){var span=Math.max(1,max-min);if(value<min)return max-(min-value)%span;if(value>max)return min+(value-max)%span;return value;}
   function load(){try{var s=localStorage.getItem(k);return s?JSON.parse(s):def;}catch(e){return def;}}
@@ -30,6 +30,7 @@
   if(!pos.sismo||typeof pos.sismo.x!=='number'||typeof pos.sismo.y!=='number')pos.sismo={x:def.sismo.x,y:def.sismo.y};
   if(!pos.carte||typeof pos.carte.x!=='number'||typeof pos.carte.y!=='number')pos.carte={x:0,y:0};
   if(!pos.pion||typeof pos.pion.x!=='number'||typeof pos.pion.y!=='number')pos.pion={x:0,y:0};
+  if(!pos.circuit||typeof pos.circuit.x!=='number'||typeof pos.circuit.y!=='number')pos.circuit={x:def.circuit.x,y:def.circuit.y};
   var lang=document.getElementById('postit-lang');
   var book=document.getElementById('postit-book');
   var article=document.getElementById('postit-article');
@@ -43,6 +44,7 @@
   var sismo=document.getElementById('sismo-station');
   var carte=document.getElementById('carte-vaucluse');
   var pion=document.getElementById('aquarium-pawn');
+  var circuit=document.getElementById('circuit-ventouse');
   var fishToggle=document.getElementById('submarine-toggle');
   var container=document.querySelector('.postit-container');
   var posts=[{el:lang,key:'lang'},{el:book,key:'book'},{el:article,key:'article'},{el:chapter,key:'chapter'},{el:fish,key:'fish'}];
@@ -80,6 +82,42 @@
   function placeCarte(){if(!carte)return;pos.carte=carteLayout();}
   function pionLayout(){var p=bounds.pad,w=pion?pion.offsetWidth:128,h=pion?pion.offsetHeight:176,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w-w-(bounds.w<720?2:6)),p,maxX),y=clamp(Math.round(bounds.h-h-(bounds.w<720?6:10)),p,maxY);return {x:x,y:y};}
   function placePion(loaded){if(!pion)return;var layout=pionLayout();if(loaded&&loaded.pion&&typeof loaded.pion.x==='number'&&typeof loaded.pion.y==='number')pos.pion={x:loaded.pion.x,y:loaded.pion.y};else pos.pion=layout;}
+  function vitreBounds(el){
+    var scene=document.getElementById('poste-vitre-scene');
+    if(!container||!scene){
+      var inset=34,bottom=84,w=el?el.offsetWidth:112,h=el?el.offsetHeight:96;
+      return {minX:inset,minY:28,maxX:Math.max(inset,bounds.w-w-inset),maxY:Math.max(28,bounds.h-h-bottom)};
+    }
+    updateBounds();
+    var cr=container.getBoundingClientRect(),sr=scene.getBoundingClientRect(),pad=6;
+    var w=el?el.offsetWidth:112,h=el?el.offsetHeight:96;
+    return {
+      minX:sr.left-cr.left+pad,
+      minY:sr.top-cr.top+pad,
+      maxX:Math.max(sr.left-cr.left+pad,sr.left-cr.left+sr.width-w-pad),
+      maxY:Math.max(sr.top-cr.top+pad,sr.top-cr.top+sr.height-h-pad)
+    };
+  }
+  function circuitLayout(){
+    var vb=vitreBounds(circuit);
+    var w=circuit?circuit.offsetWidth:112;
+    return {x:Math.max(vb.minX,Math.min(vb.maxX,vb.maxX-w*0.06)),y:vb.minY+Math.round((vb.maxY-vb.minY)*0.14)};
+  }
+  function clampCircuitPos(){
+    if(!circuit)return;
+    var vb=vitreBounds(circuit);
+    pos.circuit.x=clamp(pos.circuit.x,vb.minX,vb.maxX);
+    pos.circuit.y=clamp(pos.circuit.y,vb.minY,vb.maxY);
+    circuit.style.left=pos.circuit.x+'px';
+    circuit.style.top=pos.circuit.y+'px';
+  }
+  function placeCircuit(loaded){
+    if(!circuit)return;
+    var layout=circuitLayout();
+    if(loaded&&loaded.circuit&&typeof loaded.circuit.x==='number'&&typeof loaded.circuit.y==='number')pos.circuit={x:loaded.circuit.x,y:loaded.circuit.y};
+    else pos.circuit=layout;
+    clampCircuitPos();
+  }
   function mobilePawnLayout(){var p=bounds.pad,w=pawn?pawn.offsetWidth:100,h=pawn?pawn.offsetHeight:138,maxX=Math.max(p,bounds.w-w-p),maxY=Math.max(p,bounds.h-h-p),x=clamp(Math.round(bounds.w*0.58),p,maxX),y=clamp(Math.round(bounds.h-h-10),p,maxY);return {x:x,y:y};}
   function resolveSavedPawnPos(savedPawn,layout){
     if(!savedPawn||typeof savedPawn.x!=='number'||typeof savedPawn.y!=='number')return null;
@@ -239,6 +277,9 @@
     var carte=document.getElementById('carte-vaucluse');
     if(carte){carte.classList.toggle('carte-vaucluse-hidden',!fishVisible);carte.setAttribute('aria-hidden',fishVisible?'false':'true');}
     if(pion){pion.classList.toggle('aquarium-pawn-hidden',!fishVisible);pion.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    if(circuit){circuit.classList.toggle('circuit-ventouse-hidden',!fishVisible);circuit.setAttribute('aria-hidden',fishVisible?'false':'true');}
+    var vitreScene=document.getElementById('poste-vitre-scene');
+    if(vitreScene)vitreScene.setAttribute('aria-hidden',fishVisible?'false':'true');
     if(plume){plume.classList.toggle('aquarium-bloom-hidden',!fishVisible);plume.setAttribute('aria-hidden',fishVisible?'false':'true');}
     syncBlooms(fishVisible);
     if(container){container.classList.toggle('aquarium-active',fishVisible);container.classList.toggle('aquarium-postits-hidden',cardsHidden);}
@@ -267,6 +308,7 @@
       if(sismo)clampPos(sismo,'sismo');
       if(carte)clampPos(carte,'carte');
       if(pion)clampPos(pion,'pion');
+      if(circuit)clampCircuitPos();
     }
     saveAquariumMode(aquariumMode);
     schedulePawnAutoDrop();
@@ -436,6 +478,7 @@
     if(sismo)clampPos(sismo,'sismo');
     if(carte)clampPos(carte,'carte');
     if(pion)clampPos(pion,'pion');
+    placeCircuit(loaded);
     schedulePawnAutoDrop();
   }
   posts.forEach(function(p){if(p.el){if(!pos[p.key])pos[p.key]=def[p.key];}});
@@ -687,13 +730,18 @@
       var minX=p;
       var maxX=Math.max(p,bounds.w-el.offsetWidth-p);
       var maxY=Math.max(p,bounds.h-el.offsetHeight-p);
+      var minY=p;
+      if(key==='circuit'){
+        var vb=vitreBounds(el);
+        minX=vb.minX;minY=vb.minY;maxX=vb.maxX;maxY=vb.maxY;
+      }
       if(key==='fish'){var fr=fishDragRange(el),fyr=fishVerticalRange(el);minX=fr.minX;maxX=Math.max(minX,fr.maxX);}
-      var nx=Math.max(p,Math.min(maxX,ox+dx));
+      var nx=Math.max(minX,Math.min(maxX,ox+dx));
       if(key==='fish')nx=Math.max(minX,Math.min(maxX,ox+dx));
       var rawNy=oy+dy;
-      var ny=Math.max(p,Math.min(maxY,rawNy));
+      var ny=Math.max(minY,Math.min(maxY,rawNy));
       if(key==='fish')ny=wrapCoord(rawNy,fyr.minY,fyr.maxY);
-      if(key==='fish'||key==='plume'){
+      if(key==='fish'||key==='plume'||key==='circuit'){
         pos[key].x=nx;pos[key].y=ny;
         dragTargetX=nx;dragTargetY=ny;
         if(key==='fish'){
@@ -705,7 +753,7 @@
         dragTargetX=nx;dragTargetY=ny;
         if(!dragRaf)dragRaf=window.requestAnimationFrame(animateDrag);
       }
-      if(lastPointerTs&&key!=='fish'&&key!=='plume'){
+      if(lastPointerTs&&key!=='fish'&&key!=='plume'&&key!=='circuit'){
         var dtMs=Math.max(16,now-lastPointerTs);
         var vx=(x-lastPointerX)/(dtMs/1000);
         var vy=(y-lastPointerY)/(dtMs/1000);
@@ -724,7 +772,7 @@
       el.style.cursor='';
       fishState.lastTs=0;
       dragActive=false;
-      if(key!=='fish'&&key!=='plume'){
+      if(key!=='fish'&&key!=='plume'&&key!=='circuit'){
         if(heavyInWater()){
           if(container)updateBounds();
           var p=bounds.pad,maxX=Math.max(p,bounds.w-el.offsetWidth-p),maxY=Math.max(p,bounds.h-el.offsetHeight-p);
@@ -747,11 +795,11 @@
         var links=el.querySelectorAll('a[href],button');
         if(x!=null)for(var i=0;i<links.length;i++){var r=links[i].getBoundingClientRect();if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){if(links[i].tagName==='BUTTON')links[i].click();else if(links[i].target==='_blank')window.open(links[i].href,'_blank');else window.location=links[i].href;break;}}
       }
-      if(key==='fish'||key==='plume'||!dragRaf)save(pos);
+      if(key==='fish'||key==='plume'||key==='circuit'||!dragRaf)save(pos);
       setTimeout(function(){moved=false;},0);
     }
     function start(e){
-      if((key==='fish'||key==='pawn'||key==='plume'||key==='sismo'||key==='carte'||key==='pion')&&!fishVisible)return;
+      if((key==='fish'||key==='pawn'||key==='plume'||key==='sismo'||key==='carte'||key==='pion'||key==='circuit')&&!fishVisible)return;
       e.preventDefault();
       moved=false;
       pointerVx=0;
@@ -971,6 +1019,7 @@
   if(violet)dragBuddy(violet,'violet',violetState,violetMotion,updateVioletVisual);
   if(green)dragBuddy(green,'green',greenState,greenMotion,updateGreenVisual);
   if(plume)drag(plume,'plume');
+  if(circuit)drag(circuit,'circuit');
   schedulePawnAutoDrop();
   window.addEventListener('load',schedulePawnAutoDrop);
 })();
@@ -980,7 +1029,7 @@
    ---------------------------------------------------------------------------
    Une seule image à la fois. Le poste y met Mont Serein, la carte du
    Vaucluse y met les routes, le sismographe y met le sien, le pion le
-   projet d'échecs. La dernière
+   projet d'échecs, le circuit ventousé l'article Springer. La dernière
    pression gagne, Échap éteint, et l'iframe n'existe que tant que
    quelque chose est allumé.
 --------------------------------------------------------------------------- */
@@ -1204,6 +1253,52 @@ var mur=(function(){
   bouton.addEventListener('click',function(){mets(!allume);});
   document.addEventListener('mur-change',function(){
     if(mur.qui()==='pion')return;
+    if(!allume)return;
+    coupe();
+    marque();
+  });
+  if(window.MutationObserver&&bac){
+    new MutationObserver(function(){
+      if(!bac.classList.contains('aquarium-active'))mets(false);
+    }).observe(bac,{attributes:true,attributeFilter:['class']});
+  }
+  marque();
+})();
+
+/* ---------------------------------------------------------------------------
+   LE CIRCUIT VENTOUSÉ
+   ---------------------------------------------------------------------------
+   Collé sur la paroi du fond (ligne claire). On le déplace sur la vitre ;
+   un clic allume la page Springer dans le même cadre que la radio.
+--------------------------------------------------------------------------- */
+(function(){
+  var SITE='quantum-springer.html';
+  var station=document.getElementById('circuit-ventouse');
+  var bouton=document.getElementById('circuit-ventouse-bouton');
+  var bac=document.querySelector('.postit-container');
+  if(!station||!bouton)return;
+  var allume=false;
+
+  function marque(){
+    station.classList.toggle('circuit-allume',allume);
+    bouton.setAttribute('aria-pressed',allume?'true':'false');
+    bouton.setAttribute('aria-label',allume?'Masquer l’article Springer (intégrité quantique)':'Afficher l’article Springer (intégrité quantique)');
+  }
+  function coupe(){allume=false;}
+  function mets(oui){
+    if(oui===allume&&(oui===false||mur.qui()==='circuit'))return;
+    if(oui){
+      mur.pose('circuit',SITE,'Quantum-Backed Integrity — Springer');
+      allume=true;
+    }else{
+      coupe();
+      if(mur.qui()==='circuit')mur.retire();
+    }
+    marque();
+  }
+  bouton.addEventListener('click',function(){mets(!allume);});
+  document.addEventListener('mur-change',function(){
+    if(mur.qui()==='circuit')return;
     if(!allume)return;
     coupe();
     marque();

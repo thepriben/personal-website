@@ -3629,12 +3629,23 @@ body.page-home .postit-container {
    tout le reste. Les poissons, le poste, les plantes et les bulles continuent
    de passer devant — c'est ce qui en fait le fond de l'aquarium et non un
    couvercle. */
-.poste-direct {
+.poste-vitre-scene {
   position: absolute;
   left: 34px;
   right: 34px;
   top: 28px;
   bottom: 84px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.postit-container.aquarium-active .poste-vitre-scene {
+  pointer-events: none;
+}
+
+.poste-direct {
+  position: absolute;
+  inset: 0;
   z-index: 0;
   border-radius: 14px;
   overflow: hidden;
@@ -3681,6 +3692,78 @@ body.page-home .postit-container {
 
 @media (prefers-reduced-motion: reduce) {
   .poste-direct { animation: none; }
+}
+
+/* Circuit quantique ventousé sur la paroi (ligne claire, bd belge) */
+.circuit-ventouse {
+  position: absolute;
+  z-index: 2;
+  width: 112px;
+  height: 96px;
+  left: 62%;
+  top: 14%;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(4, 24, 36, 0.35));
+}
+
+.postit-container.aquarium-active .circuit-ventouse {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.circuit-ventouse-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.circuit-ventouse * {
+  pointer-events: none;
+}
+
+.circuit-ventouse-bouton {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: inherit;
+  width: 112px;
+  height: 96px;
+  pointer-events: auto;
+  transform: translate(var(--drag-water-x, 0), var(--drag-water-y, 0))
+    rotate(var(--drag-water-tilt, 0deg));
+  transition: filter 0.2s ease;
+}
+
+.circuit-ventouse-bouton:focus-visible {
+  outline: 2px solid rgba(120, 203, 227, 0.85);
+  outline-offset: 3px;
+}
+
+.circuit-ventouse-illu {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.circuit-ventouse.postit-dragging .circuit-ventouse-bouton {
+  cursor: grabbing;
+  filter: brightness(1.06);
+}
+
+.circuit-ventouse.circuit-allume .circuit-ventouse-illu {
+  filter: drop-shadow(0 0 10px rgba(196, 168, 255, 0.55));
+}
+
+[data-theme="dark"] .circuit-ventouse-illu path[fill="#fff9e6"] {
+  fill: #f0e8d4;
 }
 
 /* ===========================================================================
